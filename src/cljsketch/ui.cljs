@@ -10,13 +10,6 @@
               [cljsketch.canvas-graphics :as g]
               ))
 
-(defn canvas-context [canvas] (.getContext canvas "2d"))
-
-(defn set-canvas-size! [canvas w h]
-  (set! (.-width canvas) w)
-  (set! (.-height canvas) h))
-
-
 (defn current-window-size []
   [(.-innerWidth js/window) (.-innerHeight js/window)])
 
@@ -25,10 +18,12 @@
             (apply b/dropdown {:title (menu :title)}
                    (map menu-item-dom (menu :items))))
           (menu-item-dom [menu-item]
-            (b/menu-item
-             (assoc (dissoc menu-item :label)
-                    :on-select #(put! menu-channel %))
-             (menu-item :label)))]
+            (if (:divider? menu-item)
+              (b/menu-item {:divider? true})
+              (b/menu-item
+               (assoc (dissoc menu-item :label)
+                      :on-select #(put! menu-channel %))
+               (menu-item :label))))]
     (map menu-dom navbar-menu)))
 
 (defn app-navbar [app-state-cursor component]
@@ -41,7 +36,35 @@
         {:collapsible? true}
         (navbar-menu-dom app-state-cursor (:menu-channel state)))))))
 
+(defn app-buttonbar [app-state-cursor component]
+  (reify
+    om/IRenderState
+    (render-state [this state]
+      (d/div
+       {:class "button-bar"}
+       (d/div
+        {:class "pull-right"}
+        (apply
+         b/toolbar {}
+         (map
+          (fn [mode]
+            (b/button-group
+             {}
+             (b/button
+              {:on-click
+               (fn [e]
+                 (put! (:menu-channel state) (mode :key))
+                 )
+               :active? (= (app-state-cursor :mode) (mode :key))}
+              (mode :label))))
+          (app-state-cursor :modes))))))))
 
+
+(defn mouse-handler [event-type channel]
+  (fn [event]
+    (put! channel {:type   event-type
+                   :coords [(.-offsetX event) (.-offsetY event)]
+                   :event  event})))
 
 (defn launch [app-state id run-app]
   (letfn
@@ -50,42 +73,31 @@
            om/IInitState
            (init-state [_] {:menu-channel (chan)
                             :mouse-channel (chan)})
-           ;om/IWillMount
-           ;(will-mount [_]
-           ;  (let [menu-channel (om/get-state component :menu-channel)
-           ;        mouse-channel (om/get-state component :mouse-channel)]
-           ;    (go (loop []
-           ;          (let [action (<! menu-channel)]
-           ;            (menu-item-handler action)
-           ;            (recur))))
-           ;    (go (loop []
-           ;          (let [mouse-event (<! mouse-channel)]
-           ;            (mouse-event-handler mouse-event)
-           ;            (recur))))
-           ;    ))
            om/IRenderState
            (render-state [_ state]
              (d/div {:class "wrapper"}
                     (d/div #js {:ref "navbar-wrapper"}
                            (om/build app-navbar (app-state :navbar-menu)
                                      {:init-state state}))
+                    (om/build app-buttonbar app-state {:init-state state})
                     (d/canvas #js {:ref "canvas"})))
            om/IDidMount
            (did-mount [c]
              (let [canvas                (om/get-node component "canvas")
-                   navbar-wrapper-height (.-offsetHeight  (om/get-node component
-                                                                       "navbar-wrapper"))
+                   navbar-wrapper-height (.-offsetHeight
+                                          (om/get-node component "navbar-wrapper"))
                    [w h]                 (current-window-size)
-                   mouse-channel         (om/get-state component :mouse-channel)]
-               (events/listen canvas events/EventType.MOUSEMOVE
-                              (fn [e] (put! mouse-channel {:action :move :event e})))
-               (events/listen canvas events/EventType.MOUSEDOWN
-                              (fn [e] (put! mouse-channel {:action :down :event e})))
-               
-               (set-canvas-size! canvas w (- h navbar-wrapper-height))
-               (run-app (canvas-context canvas)
-                        (om/get-state component :menu-channel)
-                        (om/get-state component :mouse-channel))
+                   mouse-channel         (om/get-state component :mouse-channel)
+                   menu-channel          (om/get-state component :menu-channel)]
+               (events/listen
+                canvas events/EventType.MOUSEMOVE
+                (mouse-handler :move mouse-channel))
+               (events/listen
+                canvas events/EventType.MOUSEDOWN
+                (mouse-handler :down mouse-channel))
+               (set! (.-width canvas) w)
+               (set! (.-height canvas) (- h navbar-wrapper-height))
+               (run-app (.getContext canvas "2d") menu-channel mouse-channel)
                ))
            ))]
     (om/root app app-state {:target (. js/document (getElementById id))})))
