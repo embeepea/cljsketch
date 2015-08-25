@@ -20,6 +20,9 @@
  {:title "File"
   :items [{:key :new-sketch           :label "New Sketch"}
           {:key :open                 :laebl "Open..."}]}
+ {:title "Edit"
+  :items [{:key :delete               :label "Delete"}
+          {:key :clear-selection      :label "Clear Selection"}]}
  {:title "Construct"
   :items [{:key :point-on-obj         :label "Point on Object"}
           {:key :midpoint             :label "Midpoint"}
@@ -42,13 +45,32 @@
   :geoms []
   }))
 
+(defn is-highlighted? [geom]
+  (and (contains? geom :highlighted) (geom :highlighted)))
+
+(defn highlighted [geom] (assoc geom :highlighted true))
+
+(defn unhighlighted [geom] (dissoc geom :highlighted))
+
+(defn is-selected? [geom]
+  (and (contains? geom :selected) (geom :selected)))
+
+(defn selected [geom] (assoc geom :selected true))
+
+(defn unselected [geom] (dissoc geom :selected))
+
+(defn toggle-selected [geom]
+  (if (is-selected? geom) (unselected geom) (selected geom)))
+
 (defn redraw-canvas []
   (g/clear-canvas @ctx)
   (doseq [geom (@app-state :geoms)]
-    (println @geom)
     (condp = (:type @geom)
       :point (let [[x y] (:coords @geom)]
-               (g/draw-point @ctx x y 3)))))
+               (g/draw-point @ctx x y 3)
+               (if (or (is-highlighted? @geom) (is-selected? @geom))
+                 (g/draw-thin-circle @ctx x y 5))
+               ))))
 
 (defn add-point [[x y]]
   (swap! app-state assoc
@@ -79,17 +101,32 @@
 
 (defmulti mouse-handler :type)
 
-(defmethod mouse-handler :move [{:keys [coords]}]
+(defn is-within-threshold? [[px py] {:keys [coords]} t]
   (let [[x y] coords]
-    #_(.log js/console (str "move[" x "," y "]"))))
+    (and (<= (.abs js/Math (- px x)) t)
+         (<= (.abs js/Math (- py y)) t))))
 
-
+(defmethod mouse-handler :move [{:keys [coords]}]
+  (if (= (@app-state :mode) :select)
+    (doseq [geom (@app-state :geoms)]
+      (if (is-within-threshold? coords @geom 5)
+        (swap! geom highlighted)
+        (swap! geom unhighlighted))
+      (redraw-canvas))))
 
 (defmethod mouse-handler :down [{:keys [coords]}]
   (let [[x y] coords]
-    (if (= (@app-state :mode) :draw-point)
-      (do (add-point [x y])
-          (redraw-canvas))
+    (condp = (@app-state :mode)
+      :draw-point  (do (add-point [x y])
+                       (redraw-canvas))
+      :select      (do
+                     (doseq [geom (@app-state :geoms)]
+                       (if (is-highlighted? @geom)
+                         (do
+                           (swap! geom toggle-selected)
+                           )
+                         ))
+                       (redraw-canvas))
       )))
 
 (defn run-app [_ctx menu-channel mouse-channel]

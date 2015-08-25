@@ -12,6 +12,12 @@
   (.arc ctx x y r 0 (* 2 js/Math.PI))
   (.fill ctx))
 
+(defn draw-thin-circle [ctx x y r]
+  (set! (.-lineWidth ctx) 1)
+  (.beginPath ctx)
+  (.arc ctx x y r 0 (* 2 js/Math.PI))
+  (.stroke ctx))
+
 (defn random-points [ctx n r]
   (let [w (-> ctx .-canvas .-width)
         h (-> ctx .-canvas .-height)]
