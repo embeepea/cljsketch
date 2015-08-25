@@ -3,6 +3,7 @@
     (:require [om.core :as om :include-macros true]
               [om.dom :as dom :include-macros true]
               [om-bootstrap.button :as b]
+              [om-bootstrap.grid :as grid]
               [om-bootstrap.nav :as n]
               [om-tools.dom :as d :include-macros true]
               [cljs.core.async :refer [put! chan <!]]
@@ -38,12 +39,28 @@
   :mode :draw-point
   :modes [{:key :select     :label "Select"}
           {:key :draw-point :label "Draw Point"}]
+  :geoms []
   }))
+
+(defn redraw-canvas []
+  (g/clear-canvas @ctx)
+  (doseq [geom (@app-state :geoms)]
+    (println @geom)
+    (condp = (:type @geom)
+      :point (let [[x y] (:coords @geom)]
+               (g/draw-point @ctx x y 3)))))
+
+(defn add-point [[x y]]
+  (swap! app-state assoc
+         :geoms (conj (@app-state :geoms) (atom {:type :point :coords [x y]}))))
+
+(defn clear-geoms [] (swap! app-state assoc :geoms []))
 
 (defmulti menu-item-handler identity)
 
 (defmethod menu-item-handler :new-sketch [key]
-  (g/clear-canvas @ctx))
+  (clear-geoms)
+  (redraw-canvas))
 
 (defmethod menu-item-handler :random-points [key]
   (g/random-points @ctx 10000 3))
@@ -66,10 +83,14 @@
   (let [[x y] coords]
     #_(.log js/console (str "move[" x "," y "]"))))
 
+
+
 (defmethod mouse-handler :down [{:keys [coords]}]
   (let [[x y] coords]
     (if (= (@app-state :mode) :draw-point)
-      (g/draw-point @ctx x y 3))))
+      (do (add-point [x y])
+          (redraw-canvas))
+      )))
 
 (defn run-app [_ctx menu-channel mouse-channel]
   (reset! ctx _ctx)
@@ -120,18 +141,23 @@ app-state {:target (. js/document (getElementById "app"))})
                      {:brand (d/a {:href "#"} "Brand")}
                      (n/nav
                       {:collapsible? true}
+
                       (b/dropdown {:key 1, :title "Menu 1"}
                                   (b/menu-item {:key 11} "Hamburger")
                                   (b/menu-item {:key 12} "Fries")
                                   )
+                      (b/button-group {}
+                                      (b/button {} "Foo")
+                                      (b/button {} "Bar"))
+
                       (b/dropdown {:key 2, :title "Menu 2"}
                                   (b/menu-item {:key 21} "Tofu")
                                   (b/menu-item {:key 22} "Salad")
                                   )
-                      )
-                     )
-                    )
 
+                      )
+                    )
+)
 
 
 
