@@ -5,26 +5,23 @@
   (handle-event [this event state] "Handle a mouse event")
 )
 
-(defrecord SelectTool [app-state redraw-canvas]
+(defrecord SelectTool [app-state redraw-canvas highlight!]
   MouseTool
   (handle-event [this event state]
-    (condp = (:type event)
-      :move  (do
-               (doseq [geom (@app-state :geoms)]
-                 (if (u/is-within-threshold? (:coords event) @geom 5)
-                   (swap! geom u/highlighted)
-                   (swap! geom u/unhighlighted)))
+    (letfn [(geom-under-mouse
+              [] (some (fn [g] (if (u/is-within-threshold? (:coords event) @g 5) g nil))
+                       (@app-state :geoms)))]
+      (condp = (:type event)
+        :move  (let [geom (geom-under-mouse)]
+                 (highlight! geom)
                  (redraw-canvas)
                  state)
-      :down    (do
-                 (doseq [geom (@app-state :geoms)]
-                   (if (u/is-highlighted? @geom)
-                       (swap! geom u/toggle-selected)
-                     ))
+        :down  (let [geom (geom-under-mouse)]
+                 (when geom (swap! geom u/toggle-selected))
                  (redraw-canvas)
                  state)
-      state
-      )))
+        state
+        ))))
 
 (defrecord DrawPointTool [app-state redraw-canvas add-point]
   MouseTool

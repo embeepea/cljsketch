@@ -6,7 +6,7 @@ GLOBAL TERMS:
    * selection: 0 or more geoms, the set of currently selected objects
      (stored as a vector, in the order in which they were selected)
 
-SELECTION TOOL:
+SELECT TOOL:
 
   Terms:
 

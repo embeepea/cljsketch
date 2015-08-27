@@ -44,8 +44,21 @@
   :mouse-tool :draw-point
   :mouse-tools [{:key :select     :label "Select"}
                 {:key :draw-point :label "Draw Point"}]
-  :geoms []
+  :geoms [] ; vector of atoms containing geoms
   }))
+
+; An object becomes the highlight object when the mouse is over it.
+; At most one object can be the highlight at any one time.
+; The value of the `highlight` atom is the atom containing the geom for
+; the highlight object.
+(defonce highlight (atom nil))
+
+; Set the current highlight geom. (highlight! nil) to
+; clear the highlight.
+(defn highlight! [geom] (reset! highlight geom))
+
+; return true iff geom is the current highlight
+(defn highlight? [geom] (= geom @highlight))
 
 (defn redraw-canvas []
   (g/clear-canvas @ctx)
@@ -53,7 +66,7 @@
     (condp = (:type @geom)
       :point (let [[x y] (:coords @geom)]
                (g/draw-point @ctx x y 3)
-               (if (or (u/is-highlighted? @geom) (u/is-selected? @geom))
+               (if (or (highlight? geom) (u/is-selected? @geom))
                  (g/draw-thin-circle @ctx x y 5))
                ))))
 
@@ -65,7 +78,7 @@
 
 (def mouse-tools
   {:draw-point (mt/->DrawPointTool app-state redraw-canvas add-point)
-   :select     (mt/->SelectTool    app-state redraw-canvas)})
+   :select     (mt/->SelectTool    app-state redraw-canvas highlight!)})
 
 (defmulti menu-item-handler identity)
 
