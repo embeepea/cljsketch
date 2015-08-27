@@ -8,6 +8,7 @@
               [om-tools.dom :as d :include-macros true]
               [cljs.core.async :refer [put! chan <!]]
               [goog.events :as events]
+              [cljsketch.util :as u]
               [cljsketch.canvas-graphics :as g]
               [cljsketch.ui :as ui]
               ))
@@ -45,30 +46,13 @@
   :geoms []
   }))
 
-(defn is-highlighted? [geom]
-  (and (contains? geom :highlighted) (geom :highlighted)))
-
-(defn highlighted [geom] (assoc geom :highlighted true))
-
-(defn unhighlighted [geom] (dissoc geom :highlighted))
-
-(defn is-selected? [geom]
-  (and (contains? geom :selected) (geom :selected)))
-
-(defn selected [geom] (assoc geom :selected true))
-
-(defn unselected [geom] (dissoc geom :selected))
-
-(defn toggle-selected [geom]
-  (if (is-selected? geom) (unselected geom) (selected geom)))
-
 (defn redraw-canvas []
   (g/clear-canvas @ctx)
   (doseq [geom (@app-state :geoms)]
     (condp = (:type @geom)
       :point (let [[x y] (:coords @geom)]
                (g/draw-point @ctx x y 3)
-               (if (or (is-highlighted? @geom) (is-selected? @geom))
+               (if (or (u/is-highlighted? @geom) (is-selected? @geom))
                  (g/draw-thin-circle @ctx x y 5))
                ))))
 
@@ -101,17 +85,12 @@
 
 (defmulti mouse-handler :type)
 
-(defn is-within-threshold? [[px py] {:keys [coords]} t]
-  (let [[x y] coords]
-    (and (<= (.abs js/Math (- px x)) t)
-         (<= (.abs js/Math (- py y)) t))))
-
 (defmethod mouse-handler :move [{:keys [coords]}]
   (if (= (@app-state :mode) :select)
     (doseq [geom (@app-state :geoms)]
-      (if (is-within-threshold? coords @geom 5)
-        (swap! geom highlighted)
-        (swap! geom unhighlighted))
+      (if (u/is-within-threshold? coords @geom 5)
+        (swap! geom u/highlighted)
+        (swap! geom u/unhighlighted))
       (redraw-canvas))))
 
 (defmethod mouse-handler :down [{:keys [coords]}]
@@ -121,13 +100,15 @@
                        (redraw-canvas))
       :select      (do
                      (doseq [geom (@app-state :geoms)]
-                       (if (is-highlighted? @geom)
+                       (if (u/is-highlighted? @geom)
                          (do
                            (swap! geom toggle-selected)
                            )
                          ))
                        (redraw-canvas))
       )))
+
+(defmethod mouse-handler :default [{:keys [coords]}])
 
 (defn run-app [_ctx menu-channel mouse-channel]
   (reset! ctx _ctx)

@@ -92,11 +92,20 @@
                    mouse-channel         (om/get-state component :mouse-channel)
                    menu-channel          (om/get-state component :menu-channel)]
                (events/listen
+                canvas events/EventType.MOUSEENTER
+                (mouse-handler :enter mouse-channel))
+               (events/listen
                 canvas events/EventType.MOUSEMOVE
                 (mouse-handler :move mouse-channel))
                (events/listen
                 canvas events/EventType.MOUSEDOWN
                 (mouse-handler :down mouse-channel))
+               (events/listen
+                canvas events/EventType.MOUSEUP
+                (mouse-handler :up mouse-channel))
+               (events/listen
+                canvas events/EventType.MOUSELEAVE
+                (mouse-handler :leave mouse-channel))
                (set! (.-width canvas) w)
                (set! (.-height canvas) (- h navbar-wrapper-height))
                (run-app (.getContext canvas "2d") menu-channel mouse-channel)
