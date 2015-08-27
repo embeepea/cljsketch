@@ -47,19 +47,19 @@
         (apply
          b/toolbar {}
          (map
-          (fn [mode]
+          (fn [mouse-tool]
             (b/button-group
              {}
              (b/button
               {:on-click
                (fn [e]
-                 (put! (:menu-channel state) (mode :key))
+                 (put! (:menu-channel state) (mouse-tool :key))
                  nil ; returning nil here quiets a browser warning about
                      ; returning false from an event handler being deprecated
                  )
-               :active? (= (app-state-cursor :mode) (mode :key))}
-              (mode :label))))
-          (app-state-cursor :modes))))))))
+               :active? (= (app-state-cursor :mouse-tool) (mouse-tool :key))}
+              (mouse-tool :label))))
+          (app-state-cursor :mouse-tools))))))))
 
 
 (defn mouse-handler [event-type channel]
