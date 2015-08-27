@@ -6,15 +6,6 @@
          (<= (.abs js/Math (- py y)) t))))
 
 
-
-(defn is-highlighted? [geom]
-  (and (contains? geom :highlighted) (geom :highlighted)))
-
-(defn highlighted [geom] (assoc geom :highlighted true))
-
-(defn unhighlighted [geom] (dissoc geom :highlighted))
-
-
 (defn is-selected? [geom]
   (and (contains? geom :selected) (geom :selected)))
 
