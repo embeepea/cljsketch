@@ -19,19 +19,19 @@ SELECT TOOL:
         * update the highlight to the object under the mouse's new position, or
           to nil if none
 
-    * mouse move (while button down):
-        * compute mouseDrag = mouseBase - current mouse position
-        * for each object in selection:
-            set :coords = :mouseDownCoords + mouseDrag
-
     * mouse down:
-        * set mouseBase to position where down even occurred
         * update the highlight to the object under the mouse's new position, or
           to nil if none
         * toggle the current highlight object's (if there is one) membership
           in the selection (add it if it is not there, or remove it if it is)
         * for each object in the selection which has a :coords:
             set :mouseDownCoords = :coords
+        * set mouse-base to position where down even occurred
+
+    * mouse move (while button down):
+        * compute mouseDrag = mouseBase - current mouse position
+        * for each object in selection:
+            set :coords = :mouseDownCoords + mouseDrag
 
     * mouse up:
         * for each object in the selection:

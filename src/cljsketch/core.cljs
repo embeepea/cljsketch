@@ -60,13 +60,34 @@
 ; return true iff geom is the current highlight
 (defn highlight? [geom] (= geom @highlight))
 
+; Selection is an atom whose value is a vector of the currently
+; selected geom atoms.
+(defonce selection (atom []))
+
+; return true iff geom is currently in the selection
+(defn selected? [geom] (some #{geom} @selection))
+
+; add geom to the selection, if it is not already in it
+(defn select! [geom]
+  (if (not (selected? geom)) (swap! selection #(conj % geom))))
+
+; remove geom from the selection
+(defn unselect! [geom]
+  (swap! selection (fn [selection] (vec (filter #(not (= % geom)) selection)))))
+
+; toggle geom's membership in the selection
+(defn toggle-selected! [geom]
+  (if (selected? geom) (unselect! geom) (select! geom)))
+
+(defn clear-selection! [] (reset! selection []))
+
 (defn redraw-canvas []
   (g/clear-canvas @ctx)
   (doseq [geom (@app-state :geoms)]
     (condp = (:type @geom)
       :point (let [[x y] (:coords @geom)]
                (g/draw-point @ctx x y 3)
-               (if (or (highlight? geom) (u/is-selected? @geom))
+               (if (or (highlight? geom) (selected? geom))
                  (g/draw-thin-circle @ctx x y 5))
                ))))
 
@@ -77,13 +98,18 @@
 (defn clear-geoms [] (swap! app-state assoc :geoms []))
 
 (def mouse-tools
-  {:draw-point (mt/->DrawPointTool app-state redraw-canvas add-point)
-   :select     (mt/->SelectTool    app-state redraw-canvas highlight!)})
+  {:draw-point (mt/->DrawPointTool  app-state redraw-canvas add-point)
+   :select     (mt/->SelectMoveTool app-state redraw-canvas highlight!
+                                    toggle-selected! selection)})
 
 (defmulti menu-item-handler identity)
 
 (defmethod menu-item-handler :new-sketch [key]
   (clear-geoms)
+  (redraw-canvas))
+
+(defmethod menu-item-handler :clear-selection [key]
+  (clear-selection!)
   (redraw-canvas))
 
 (defmethod menu-item-handler :random-points [key]
