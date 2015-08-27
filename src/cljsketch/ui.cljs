@@ -54,6 +54,8 @@
               {:on-click
                (fn [e]
                  (put! (:menu-channel state) (mode :key))
+                 nil ; returning nil here quiets a browser warning about
+                     ; returning false from an event handler being deprecated
                  )
                :active? (= (app-state-cursor :mode) (mode :key))}
               (mode :label))))
