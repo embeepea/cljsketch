@@ -111,7 +111,7 @@
 (def mouse-tools
   {:draw-point (mt/->DrawPointTool  app-state redraw-canvas add-point)
    :select     (mt/->SelectMoveTool app-state redraw-canvas highlight! highlight
-                                    selected? select! toggle-selected! selection)})
+                                    selected? select! unselect! toggle-selected! selection)})
 
 (defmulti menu-item-handler identity)
 

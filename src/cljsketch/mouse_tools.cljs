@@ -7,7 +7,7 @@
 )
 
 (defrecord SelectMoveTool [app-state redraw-canvas highlight! highlight
-                           selected? select! toggle-selected! selection]
+                           selected? select! unselect! toggle-selected! selection]
   MouseTool
   (handle-event [this event state]
     (if (= state nil) (recur this event {:button-state :down})
@@ -37,14 +37,15 @@
                                  (highlight! geom)
                                  (redraw-canvas)
                                  state)
-                        :down  (let [offset (v/sub (:coords event) (:drag-base state))]
-                                 (when (and @highlight
-                                            (not (selected? @highlight)))
+                        :down  (if (and @highlight (not (selected? @highlight)))
+                                 (do
                                    (set-geom-drag-base! @highlight)
-                                   (select! @highlight))
-                                 (each @selection #(drag-geom! % offset))
-                                 (redraw-canvas)
-                                 (assoc state :dragged true)))
+                                   (select! @highlight)
+                                   (recur this event (assoc state :highlight-selected true)))
+                                 (let [offset (v/sub (:coords event) (:drag-base state))]
+                                   (each @selection #(drag-geom! % offset))
+                                   (redraw-canvas)
+                                   (assoc state :dragged true))))
             #{:down}  (let [geom (geom-under-mouse)]
                         (highlight! geom)
                         (each @selection set-geom-drag-base!)
@@ -52,11 +53,13 @@
                         {:drag-base (:coords event) :button-state :down :dragged false})
             #{:up
               :enter
-              :leave}   (let [geom (geom-under-mouse)]
-                          (when (and geom (not (state :dragged)))
-                            (toggle-selected! geom)
-                            (when (not (selected? geom)) (highlight! nil))
-                            (redraw-canvas))
+              :leave}   (do
+                          (if (:highlight-selected state)
+                            (unselect! @highlight)
+                            (when (and @highlight (not (state :dragged)))
+                              (toggle-selected! @highlight)
+                              (when (not (selected? @highlight)) (highlight! nil))
+                              (redraw-canvas)))
                           (each @selection unset-geom-drag-base!)
                           {:button-state :up}))))))
 
