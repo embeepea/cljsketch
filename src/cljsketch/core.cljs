@@ -85,15 +85,26 @@
   (g/clear-canvas @ctx)
   (doseq [geom (@app-state :geoms)]
     (condp = (:type @geom)
-      :point (let [[x y] (:coords @geom)]
-               (g/draw-point @ctx x y 3)
-               (if (or (highlight? geom) (selected? geom))
-                 (g/draw-thin-circle @ctx x y 5))
-               ))))
+      :point   (let [[x y] (:coords @geom)]
+                 (g/draw-point @ctx x y 3)
+                 (if (or (highlight? geom) (selected? geom))
+                   (g/draw-thin-circle @ctx x y 5)))
+      :segment (let [[e0 e1] (:endpoints @geom)
+                     [x0 y0] (:coords @e0)
+                     [x1 y1] (:coords @e1)]
+                 (g/draw-line @ctx x0 y0 x1 y1))
+      )))
 
 (defn add-point [[x y]]
   (swap! app-state assoc
          :geoms (conj (@app-state :geoms) (atom {:type :point :coords [x y]}))))
+
+(defn add-segment []
+  (when (= 2 (count @selection))
+    (swap! app-state assoc
+           :geoms (conj (@app-state :geoms)
+                        (atom {:type :segment
+                               :endpoints [(first @selection) (second @selection)]})))))
 
 (defn clear-geoms [] (swap! app-state assoc :geoms []))
 
@@ -111,6 +122,8 @@
 (defmethod menu-item-handler :clear-selection [key]
   (clear-selection!)
   (redraw-canvas))
+
+(defmethod menu-item-handler :segment [key] (add-segment))
 
 (defmethod menu-item-handler :random-points [key]
   (g/random-points @ctx 10000 3))

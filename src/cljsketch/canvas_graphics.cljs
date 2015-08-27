@@ -18,6 +18,13 @@
   (.arc ctx x y r 0 (* 2 js/Math.PI))
   (.stroke ctx))
 
+(defn draw-line [ctx x0 y0 x1 y1]
+  (set! (.-lineWidth ctx) 1)
+  (.beginPath ctx)
+  (.moveTo ctx x0 y0)
+  (.lineTo ctx x1 y1)
+  (.stroke ctx))
+
 (defn random-points [ctx n r]
   (let [w (-> ctx .-canvas .-width)
         h (-> ctx .-canvas .-height)]
