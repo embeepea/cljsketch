@@ -10,6 +10,7 @@
               [goog.events :as events]
               [cljsketch.util :as u]
               [cljsketch.canvas-graphics :as g]
+              [cljsketch.vector :as v]
               [cljsketch.mouse-tools :as mt]
               [cljsketch.ui :as ui]
               ))
@@ -81,6 +82,32 @@
 
 (defn clear-selection! [] (reset! selection []))
 
+(defn draw-line [geom]
+  (let [[p0 p1]   (map #(v/toProjectiveVector (v/AffineVector. (:coords @%))) (:points geom))
+        line      (v/point-point-line p0 p1)
+        endpoints (v/line-rectangle-intersection
+                   line (v/Rectangle. 0 0
+                                      (-> @ctx .-canvas .-width)
+                                      (-> @ctx .-canvas .-height)))]
+    (if (= 2 (count endpoints))
+      (let [[e0 e1] endpoints
+            [e0x e0y] (:u e0)
+            [e1x e1y] (:u e1)]
+        (g/draw-line @ctx e0x e0y e1x e1y)))))
+
+;(defn draw-line [geom]
+;  (let [[p0 p1]   (map #(v/toProjectiveVector (v/AffineVector. @%)) (:points geom))
+;        line      (v/point-point-line p0 p1)
+;        endpoints (v/line-rectangle-intersection
+;                   line (v/Rectangle. 0 0
+;                                      (-> @ctx .-canvas .-width)
+;                                      (-> @ctx .-canvas .-height)))]
+;    (if (= 2 (count endpoints))
+;      (let [[e0 e1] endpoints
+;            [e0x e0y] (:u e0)
+;            [e1x e1y] (:u e1)]
+;        (g/draw-line @ctx e0x e0y e1x e1y)))))
+
 (defn redraw-canvas []
   (g/clear-canvas @ctx)
   (doseq [geom (@app-state :geoms)]
@@ -93,6 +120,7 @@
                      [x0 y0] (:coords @e0)
                      [x1 y1] (:coords @e1)]
                  (g/draw-line @ctx x0 y0 x1 y1))
+      :line    (draw-line @geom)
       )))
 
 (defn add-point [[x y]]
@@ -105,6 +133,13 @@
            :geoms (conj (@app-state :geoms)
                         (atom {:type :segment
                                :endpoints [(first @selection) (second @selection)]})))))
+
+(defn add-line []
+  (when (= 2 (count @selection))
+    (swap! app-state assoc
+           :geoms (conj (@app-state :geoms)
+                        (atom {:type :line
+                               :points [(first @selection) (second @selection)]})))))
 
 (defn clear-geoms [] (swap! app-state assoc :geoms []))
 
@@ -124,6 +159,8 @@
   (redraw-canvas))
 
 (defmethod menu-item-handler :segment [key] (add-segment))
+
+(defmethod menu-item-handler :line [key] (add-line))
 
 (defmethod menu-item-handler :random-points [key]
   (g/random-points @ctx 10000 3))

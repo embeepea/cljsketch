@@ -26,7 +26,7 @@
 
                 (drag-geom!
                   [geom offset] (if (contains? @geom :coords)
-                                  (swap! geom assoc :coords (v/add (:drag-base @geom) offset))))
+                                  (swap! geom assoc :coords (v/vadd (:drag-base @geom) offset))))
 
                 (each
                   [coll f] (doseq [x coll] (f x)))]
@@ -42,7 +42,7 @@
                                    (set-geom-drag-base! @highlight)
                                    (select! @highlight)
                                    (recur this event (assoc state :highlight-selected true)))
-                                 (let [offset (v/sub (:coords event) (:drag-base state))]
+                                 (let [offset (v/vsub (:coords event) (:drag-base state))]
                                    (each @selection #(drag-geom! % offset))
                                    (redraw-canvas)
                                    (assoc state :dragged true))))
