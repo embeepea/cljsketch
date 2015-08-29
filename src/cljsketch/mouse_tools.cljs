@@ -83,12 +83,14 @@
                           (each (@app-state :geoms) unset-geom-drag-base!)
                           {:button-state :up}))))))
 
-(defrecord DrawPointTool [app-state redraw-canvas add-point]
+(defrecord DrawPointTool [app-state redraw-canvas add-point clear-selection! select!]
   MouseTool
   (handle-event [this event state]
     (condp = (:type event)
-      :down    (do (add-point (:coords event))
-                   (redraw-canvas)
-                   state)
+      :down    (let [ageom (add-point (:coords event))]
+                 (clear-selection!)
+                 (select! ageom)
+                 (redraw-canvas)
+                 state)
       nil
       )))

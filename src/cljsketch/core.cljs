@@ -114,12 +114,19 @@
 
       )))
 
+;; geom is NOT an atom
+;; add an atom referring to it to the world
+;; return the new atom that wraps the newly added geom
+(defn add-geom [geom]
+  (let [ageom (atom geom)]
+    (swap! app-state assoc :geoms (conj (@app-state :geoms) ageom))
+    ageom))
+
 (defn add-point [[x y]]
-  (swap! app-state assoc
-         :geoms (conj (@app-state :geoms) (atom {:type :point :coords [x y]})))
-  (redraw-canvas)
-  )
-  
+  (let [ageom (add-geom {:type :point :coords [x y]})]
+    (redraw-canvas)
+    ageom
+  ))
 
 (defn add-segment []
   (when (= 2 (count @selection))
@@ -139,11 +146,6 @@
     (redraw-canvas)
     ))
 
-; geom is NOT an atom
-; add an atom referring to it to the world
-(defn add-geom [geom]
-  (swap! app-state assoc :geoms (conj (@app-state :geoms) (atom geom))))
-
 (defn add-perpendicular-line []
   (when (= 2 (count @selection))
     (let [pt (some #(if (= (:type @%) :point) % nil) @selection)
@@ -161,13 +163,14 @@
 (defn clear-geoms [] (swap! app-state assoc :geoms []))
 
 (def mouse-tools
-  {:draw-point (mt/->DrawPointTool  app-state redraw-canvas add-point)
+  {:draw-point (mt/->DrawPointTool  app-state redraw-canvas add-point clear-selection! select!)
    :select     (mt/->SelectMoveTool app-state redraw-canvas highlight! highlight
                                     selected? select! unselect! toggle-selected! selection)})
 
 (defmulti menu-item-handler identity)
 
 (defmethod menu-item-handler :new-sketch [key]
+  (clear-selection!)
   (clear-geoms)
   (redraw-canvas))
 
