@@ -27,15 +27,16 @@
   :items [{:key :delete               :label "Delete"}
           {:key :clear-selection      :label "Clear Selection"}]}
  {:title "Construct"
-  :items [{:key :point-on-obj         :label "Point on Object"}
-          {:key :midpoint             :label "Midpoint"}
-          {:key :intersection         :label "Intersection"}
-          {:divider? true}
-          {:key :segment              :label "Segment"}
-          {:key :ray                  :label "Ray"}
+  :items [{:key :segment              :label "Segment"}
           {:key :line                 :label "Line"}
           {:key :parallel-line        :label "Parallel Line"}
           {:key :perpendicular-line   :label "Perpendicular Line"}
+          {:divider? true}
+          {:key :ray                  :label "Ray"}
+          {:key :point-on-obj         :label "Point on Object"}
+          {:key :midpoint             :label "Midpoint"}
+          {:key :intersection         :label "Intersection"}
+          {:divider? true}
           {:key :random-points        :label "10000 Random Points"}
           {:key :random-points-colors :label "10000 Random Points and Colors"}]}
 ])
@@ -82,11 +83,30 @@
 
 (defn clear-selection! [] (reset! selection []))
 
-(defn draw-line [geom]
-  (let [[p0 p1]   (map #(v/toProjectiveVector (v/AffineVector. (:coords @%))) (:points geom))
-        line      (v/point-point-line p0 p1)
-        endpoints (v/line-rectangle-intersection
-                   line (v/Rectangle. 0 0
+(defn compute-line [geom]
+  (cond 
+    (contains? geom :points)  (let [[p0 p1]
+                                    (map #(v/toProjectiveVector
+                                           (v/AffineVector. (:coords @%)))
+                                         (:points geom))]
+                                (v/point-point-line p0 p1))
+    (contains? geom :perpendicular-line) (let [pt (v/toProjectiveVector
+                                                   (v/toAffineVector
+                                                    (:coords @(geom :point))))
+                                               ln (compute-line
+                                                   @(geom :perpendicular-line))]
+                                           (v/point-line-perpendicular pt ln))
+    (contains? geom :parallel-line) (let [pt (v/toProjectiveVector
+                                                   (v/toAffineVector
+                                                    (:coords @(geom :point))))
+                                               ln (compute-line
+                                                   @(geom :perpendicular-line))]
+                                           (v/point-line-parallel pt ln))
+))
+
+(defn draw-line [pvec]
+  (let [endpoints (v/line-rectangle-intersection
+                   pvec (v/Rectangle. 0 0
                                       (-> @ctx .-canvas .-width)
                                       (-> @ctx .-canvas .-height)))]
     (if (= 2 (count endpoints))
@@ -120,7 +140,7 @@
                      [x0 y0] (:coords @e0)
                      [x1 y1] (:coords @e1)]
                  (g/draw-line @ctx x0 y0 x1 y1))
-      :line    (draw-line @geom)
+      :line    (draw-line (compute-line @geom))
       )))
 
 (defn add-point [[x y]]
@@ -140,6 +160,26 @@
            :geoms (conj (@app-state :geoms)
                         (atom {:type :line
                                :points [(first @selection) (second @selection)]})))))
+
+(defn add-perpendicular-line []
+  (when (= 2 (count @selection))
+    (let [pt (some #(if (= (:type @%) :point) % nil) @selection)
+          ln (some #(if (= (:type @%) :line)  % nil) @selection)]
+      ; later: validate that pt and ln were found in selection
+    (swap! app-state assoc
+           :geoms (conj (@app-state :geoms)
+                        (atom {:type :line
+                               :point pt :perpendicular-line ln}))))))
+
+(defn add-parallel-line []
+  (when (= 2 (count @selection))
+    (let [pt (some #(if (= (:type @%) :point) % nil) @selection)
+          ln (some #(if (= (:type @%) :line)  % nil) @selection)]
+      ; later: validate that pt and ln were found in selection
+    (swap! app-state assoc
+           :geoms (conj (@app-state :geoms)
+                        (atom {:type :line
+                               :point pt :parallel-line ln}))))))
 
 (defn clear-geoms [] (swap! app-state assoc :geoms []))
 
@@ -161,6 +201,10 @@
 (defmethod menu-item-handler :segment [key] (add-segment))
 
 (defmethod menu-item-handler :line [key] (add-line))
+
+(defmethod menu-item-handler :perpendicular-line [key] (add-perpendicular-line))
+
+(defmethod menu-item-handler :parallel-line [key] (add-parallel-line))
 
 (defmethod menu-item-handler :random-points [key]
   (g/random-points @ctx 10000 3))

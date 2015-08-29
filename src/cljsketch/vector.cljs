@@ -150,3 +150,40 @@
         rect  (Rectangle. -2 -2 2 2)]
     (line-rectangle-intersection lP rect)
 ))
+
+; take an affine vector, and return another affine vector
+; that is perpendicular to it
+(defn affine-perpendicular [avec]
+  (let [[x y] avec.u]
+    (AffineVector. [y (- x)])))
+
+; return the affine direction vector for a line
+; given as a projective vector
+(defn affine-direction [pvec]
+  (affine-perpendicular (AffineVector. (vec (drop-last (:u pvec))))))
+
+; pt and ln are both projective vectors;
+; pt represents a point
+; ln represents a line
+; return the projective vector corresponding to the line through pt parallel to ln
+(defn point-line-parallel [pt ln]
+  (let [[a b c] (:u ln)
+        [x y]   (:u (toAffineVector pt))]
+    (ProjectiveVector. [a b (- (vdot [x y] [a b]))])))
+
+; pt is an affine point
+; dir is an affine direction
+; return the ProjectiveVector representing the line through pt having direction dir
+(defn point-dir-line [pt dir]
+  (let [[x y] (:u pt)
+        [a b] (:u dir)]
+    (ProjectiveVector. [b (- a) (- (* a y) (* b x))])))
+
+; pt and ln are both projective vectors;
+; pt represents a point
+; ln represents a line
+; return the projective vector corresponding to the line through pt perpendicular to ln
+(defn point-line-perpendicular [pt ln]
+  (let [ln-dir   (affine-direction ln)
+        perp-dir (affine-perpendicular ln-dir)]
+    (point-dir-line pt perp-dir)))
