@@ -1,25 +1,5 @@
 (ns cljsketch.vector)
 
-
-;;; ; (declare AffineVector ProjectiveVector)
-;;; ; 
-;;; ; (defprotocol Projectable
-;;; ;   (->ProjectiveVector [this] "Convert this object to a ProjectiveVector")
-;;; ;   )
-;;; ; 
-;;; ; 
-;;; ; (defrecord AffineVector [v]
-;;; ;   Projectable
-;;; ;   (->ProjectiveVector [this] (ProjectiveVector. (conj v 1))))
-;;; ; 
-;;; ; 
-;;; ; ;(defrecord ProjectiveVector [v]
-;;; ; ;  Affinable
-;;; ; ;  (->AffineVector [this] (let [z (last v)]
-;;; ; ;                           (if (= z 0) nil
-;;; ; ;                               (AffineVector. (vec (map #(/ % z) (drop-last 1 v)))))))
-;;; ; ;)
-
 (defn vsub [u v] (vec (map - u v)))
 
 (defn vadd [u v] (vec (map + u v)))
@@ -29,6 +9,12 @@
 (defn vdot [u v] (apply + (map * u v)))
 
 (defn vprj [u] (conj u 1))
+
+(defn vl2norm2 [u] (vdot u u))
+
+(defn vl2norm [u] (Math.sqrt (vl2norm2 u)))
+
+(defn vunitize [u] (vec (map #(/ % (vl2norm u)) u)))
 
 (defn vaff [u]
   (let [z (last u)]
@@ -43,10 +29,13 @@
 (declare Affine AffineVector Projective ProjectiveVector)
 
 (defprotocol IVectorSpace
-  (add [this v] "vector addition")
-  (sub [this v] "vector subtraction")
-  (dot [this v] "vector dot product")
-  (mul [this s] "scalar multiplication")
+  (add [this v]   "vector addition")
+  (sub [this v]   "vector subtraction")
+  (dot [this v]   "vector dot product")
+  (mul [this s]   "scalar multiplication")
+  (l2norm2 [this] "L2 norm squared")
+  (l2norm [this]  "L2 norm")
+  (unitize [this] "unit vector in same direction")
 )
 
 (defprotocol ICross
@@ -61,10 +50,13 @@
   IProjective
   (toAffineVector [this] (AffineVector. (vaff u)))
   IVectorSpace
-  (add [this v] (ProjectiveVector. (vadd u v.u)))
-  (sub [this v] (ProjectiveVector. (vsub u v.u)))
-  (mul [this s] (ProjectiveVector. (vmul u s)))
-  (dot [this v] (vdot u v.u))
+  (add     [this v]  (ProjectiveVector. (vadd u v.u)))
+  (sub     [this v]  (ProjectiveVector. (vsub u v.u)))
+  (mul     [this s]  (ProjectiveVector. (vmul u s)))
+  (dot     [this v]  (vdot u v.u))
+  (l2norm2 [this]    (vl2norm2 u))
+  (l2norm  [this]    (vl2norm u))
+  (unitize [this]    (ProjectiveVector. (vunitize u)))
   ICross
   (cross [this v] (ProjectiveVector. (vcross u v.u)))
   )
@@ -196,3 +188,10 @@
         [a b c] (:u prj-line)
         d       (+ (* a x) (* b y) c)]
     (/ (* d d) (+ (* a a) (* b b)))))
+
+; a, b, and c are coplanar ProjectiveVectors
+; return true iff b lies "between" a and c
+(defn ordered-collinear-triple? [a b c]
+  (let [ab (unitize (cross a b))
+        bc (unitize (cross b c))]
+    (> (l2norm (add ab bc)) 0)))
