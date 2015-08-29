@@ -83,27 +83,7 @@
 
 (defn clear-selection! [] (reset! selection []))
 
-(defn compute-line [geom]
-  (cond 
-
-    (contains? geom :points)
-    (let [[p0 p1] (map #(v/toProjectiveVector (v/AffineVector. (:coords @%)))
-                       (:points geom))]
-      (v/point-point-line p0 p1))
-
-    (contains? geom :perpendicular-line)
-    (let [pt  (v/toProjectiveVector (v/AffineVector. (:coords @(geom :point))))
-          ln  (compute-line @(geom :perpendicular-line))]
-      (v/point-line-perpendicular pt ln))
-
-    (contains? geom :parallel-line)
-    (let [pt  (v/toProjectiveVector (v/AffineVector. (:coords @(geom :point))))
-          ln  (compute-line @(geom :parallel-line))]
-      (v/point-line-parallel pt ln))
-
-))
-
-(defn draw-line [pvec]
+(defn draw-line [pvec t]
   (let [endpoints (v/line-rectangle-intersection
                    pvec (v/Rectangle. 0 0
                                       (-> @ctx .-canvas .-width)
@@ -112,7 +92,7 @@
       (let [[e0 e1] endpoints
             [e0x e0y] (:u e0)
             [e1x e1y] (:u e1)]
-        (g/draw-line @ctx e0x e0y e1x e1y)))))
+        (g/draw-line @ctx e0x e0y e1x e1y t)))))
 
 (defn redraw-canvas []
   (g/clear-canvas @ctx)
@@ -121,14 +101,15 @@
       :point   (let [[x y] (:coords @geom)]
                  (g/draw-point @ctx x y 3)
                  (if (or (highlight? geom) (selected? geom))
-                   (g/draw-thin-circle @ctx x y 5)))
+                   (g/draw-circle @ctx x y 5 1)))
       :segment (let [[e0 e1] (:endpoints @geom)
                      [x0 y0] (:coords @e0)
                      [x1 y1] (:coords @e1)]
-                 (g/draw-line @ctx x0 y0 x1 y1))
+                 (g/draw-line @ctx x0 y0 x1 y1 
+                              (if (or (highlight? geom) (selected? geom)) 3 1)))
 
-      :line    (draw-line (compute-line @geom))
-
+      :line    (draw-line (u/compute-line @geom)
+                          (if (or (highlight? geom) (selected? geom)) 3 1))
 
 
       )))

@@ -6,15 +6,32 @@
   (handle-event [this event state] "Handle a mouse event")
 )
 
+(defn gtless [t1 t2] (and (= t1 :point) (= t2 :line)))
+
+(defn geom-in-threshold [geoms mouse-pos t]
+  (loop [g  nil
+         gs geoms]
+    (if (empty? gs) g
+        (let [ng (first gs)]
+          (recur
+           (if (u/is-within-threshold? mouse-pos @ng t)
+             (if (or (not g)
+                     (gtless (:type @ng) (:type @g)))
+               ng
+               g)
+             g)
+           (rest gs))))))
+
 (defrecord SelectMoveTool [app-state redraw-canvas highlight! highlight
                            selected? select! unselect! toggle-selected! selection]
   MouseTool
   (handle-event [this event state]
     (if (= state nil) (recur this event {:button-state :down})
         (letfn [(geom-under-mouse
-                  [] (some (fn [g] (if (u/is-within-threshold?
-                                        (:coords event) @g 5) g nil))
-                           (@app-state :geoms)))
+                  [] (geom-in-threshold (@app-state :geoms) (:coords event) 16))
+                  ;[] (some (fn [g] (if (u/is-within-threshold?
+                  ;                      (:coords event) @g 5) g nil))
+                  ;         (@app-state :geoms)))
 
                 (set-geom-drag-base!
                   [geom] (if (contains? @geom :coords)

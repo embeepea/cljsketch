@@ -12,14 +12,14 @@
   (.arc ctx x y r 0 (* 2 js/Math.PI))
   (.fill ctx))
 
-(defn draw-thin-circle [ctx x y r]
-  (set! (.-lineWidth ctx) 1)
+(defn draw-circle [ctx x y r t]
+  (set! (.-lineWidth ctx) t)
   (.beginPath ctx)
   (.arc ctx x y r 0 (* 2 js/Math.PI))
   (.stroke ctx))
 
-(defn draw-line [ctx x0 y0 x1 y1]
-  (set! (.-lineWidth ctx) 1)
+(defn draw-line [ctx x0 y0 x1 y1 t]
+  (set! (.-lineWidth ctx) t)
   (.beginPath ctx)
   (.moveTo ctx x0 y0)
   (.lineTo ctx x1 y1)

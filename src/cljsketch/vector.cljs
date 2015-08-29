@@ -187,3 +187,12 @@
   (let [ln-dir   (affine-direction ln)
         perp-dir (affine-perpendicular ln-dir)]
     (point-dir-line pt perp-dir)))
+
+; return the square of the distance between
+; aff-point: a point expressed as an AffineVector
+; prj-line: a line expressed as a ProjectiveVector
+(defn point-line-distance-squared [aff-point prj-line]
+  (let [[x y]   (:u aff-point)
+        [a b c] (:u prj-line)
+        d       (+ (* a x) (* b y) c)]
+    (/ (* d d) (+ (* a a) (* b b)))))
