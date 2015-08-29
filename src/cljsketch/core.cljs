@@ -116,21 +116,28 @@
 
 (defn add-point [[x y]]
   (swap! app-state assoc
-         :geoms (conj (@app-state :geoms) (atom {:type :point :coords [x y]}))))
+         :geoms (conj (@app-state :geoms) (atom {:type :point :coords [x y]})))
+  (redraw-canvas)
+  )
+  
 
 (defn add-segment []
   (when (= 2 (count @selection))
     (swap! app-state assoc
            :geoms (conj (@app-state :geoms)
                         (atom {:type :segment
-                               :endpoints [(first @selection) (second @selection)]})))))
+                               :endpoints [(first @selection) (second @selection)]})))
+    (redraw-canvas)
+    ))
 
 (defn add-line []
   (when (= 2 (count @selection))
     (swap! app-state assoc
            :geoms (conj (@app-state :geoms)
                         (atom {:type :line
-                               :points [(first @selection) (second @selection)]})))))
+                               :points [(first @selection) (second @selection)]})))
+    (redraw-canvas)
+    ))
 
 ; geom is NOT an atom
 ; add an atom referring to it to the world

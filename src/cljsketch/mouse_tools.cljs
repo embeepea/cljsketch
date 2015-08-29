@@ -6,7 +6,10 @@
   (handle-event [this event state] "Handle a mouse event")
 )
 
-(defn gtless [t1 t2] (and (= t1 :point) (= t2 :line)))
+(defn gtless [t1 t2]
+  (#{[:point :line]
+     [:point :segment]
+     [:segment :line]} [t1 t2]))
 
 (defn geom-in-threshold [geoms mouse-pos t]
   (loop [g  nil

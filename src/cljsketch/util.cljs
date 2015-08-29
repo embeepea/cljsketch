@@ -35,9 +35,15 @@
       (< (v/point-line-distance-squared (v/AffineVector. [px py]) line) t))
 
     :segment
-    false
+    (let [[e0 e1] (map #(:coords @%) (:endpoints geom))]
+      (<
+       (v/point-segment-distance2
+        (v/toProjectiveVector. (v/AffineVector. [px py]))
+        (v/toProjectiveVector. (v/AffineVector. e0))
+        (v/toProjectiveVector. (v/AffineVector. e1)))
+      t))
 
-))
+    ))
 
 
 (defn is-selected? [geom]
