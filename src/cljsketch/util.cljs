@@ -34,6 +34,9 @@
     (let [line (compute-line geom)]
       (< (v/point-line-distance-squared (v/AffineVector. [px py]) line) t))
 
+    :segment
+    false
+
 ))
 
 
