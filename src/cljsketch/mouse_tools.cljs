@@ -60,7 +60,7 @@
                               (toggle-selected! @highlight)
                               (when (not (selected? @highlight)) (highlight! nil))
                               (redraw-canvas)))
-                          (each @selection unset-geom-drag-base!)
+                          (each (@app-state :geoms) unset-geom-drag-base!)
                           {:button-state :up}))))))
 
 (defrecord DrawPointTool [app-state redraw-canvas add-point]

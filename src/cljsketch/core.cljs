@@ -85,23 +85,22 @@
 
 (defn compute-line [geom]
   (cond 
-    (contains? geom :points)  (let [[p0 p1]
-                                    (map #(v/toProjectiveVector
-                                           (v/AffineVector. (:coords @%)))
-                                         (:points geom))]
-                                (v/point-point-line p0 p1))
-    (contains? geom :perpendicular-line) (let [pt (v/toProjectiveVector
-                                                   (v/toAffineVector
-                                                    (:coords @(geom :point))))
-                                               ln (compute-line
-                                                   @(geom :perpendicular-line))]
-                                           (v/point-line-perpendicular pt ln))
-    (contains? geom :parallel-line) (let [pt (v/toProjectiveVector
-                                                   (v/toAffineVector
-                                                    (:coords @(geom :point))))
-                                               ln (compute-line
-                                                   @(geom :perpendicular-line))]
-                                           (v/point-line-parallel pt ln))
+
+    (contains? geom :points)
+    (let [[p0 p1] (map #(v/toProjectiveVector (v/AffineVector. (:coords @%)))
+                       (:points geom))]
+      (v/point-point-line p0 p1))
+
+    (contains? geom :perpendicular-line)
+    (let [pt  (v/toProjectiveVector (v/AffineVector. (:coords @(geom :point))))
+          ln  (compute-line @(geom :perpendicular-line))]
+      (v/point-line-perpendicular pt ln))
+
+    (contains? geom :parallel-line)
+    (let [pt  (v/toProjectiveVector (v/AffineVector. (:coords @(geom :point))))
+          ln  (compute-line @(geom :parallel-line))]
+      (v/point-line-parallel pt ln))
+
 ))
 
 (defn draw-line [pvec]
@@ -115,19 +114,6 @@
             [e1x e1y] (:u e1)]
         (g/draw-line @ctx e0x e0y e1x e1y)))))
 
-;(defn draw-line [geom]
-;  (let [[p0 p1]   (map #(v/toProjectiveVector (v/AffineVector. @%)) (:points geom))
-;        line      (v/point-point-line p0 p1)
-;        endpoints (v/line-rectangle-intersection
-;                   line (v/Rectangle. 0 0
-;                                      (-> @ctx .-canvas .-width)
-;                                      (-> @ctx .-canvas .-height)))]
-;    (if (= 2 (count endpoints))
-;      (let [[e0 e1] endpoints
-;            [e0x e0y] (:u e0)
-;            [e1x e1y] (:u e1)]
-;        (g/draw-line @ctx e0x e0y e1x e1y)))))
-
 (defn redraw-canvas []
   (g/clear-canvas @ctx)
   (doseq [geom (@app-state :geoms)]
@@ -140,7 +126,11 @@
                      [x0 y0] (:coords @e0)
                      [x1 y1] (:coords @e1)]
                  (g/draw-line @ctx x0 y0 x1 y1))
+
       :line    (draw-line (compute-line @geom))
+
+
+
       )))
 
 (defn add-point [[x y]]
@@ -161,25 +151,24 @@
                         (atom {:type :line
                                :points [(first @selection) (second @selection)]})))))
 
+; geom is NOT an atom
+; add an atom referring to it to the world
+(defn add-geom [geom]
+  (swap! app-state assoc :geoms (conj (@app-state :geoms) (atom geom))))
+
 (defn add-perpendicular-line []
   (when (= 2 (count @selection))
     (let [pt (some #(if (= (:type @%) :point) % nil) @selection)
           ln (some #(if (= (:type @%) :line)  % nil) @selection)]
       ; later: validate that pt and ln were found in selection
-    (swap! app-state assoc
-           :geoms (conj (@app-state :geoms)
-                        (atom {:type :line
-                               :point pt :perpendicular-line ln}))))))
+      (add-geom {:type :line :point pt :perpendicular-line ln}))))
 
 (defn add-parallel-line []
   (when (= 2 (count @selection))
     (let [pt (some #(if (= (:type @%) :point) % nil) @selection)
           ln (some #(if (= (:type @%) :line)  % nil) @selection)]
       ; later: validate that pt and ln were found in selection
-    (swap! app-state assoc
-           :geoms (conj (@app-state :geoms)
-                        (atom {:type :line
-                               :point pt :parallel-line ln}))))))
+      (add-geom {:type :line :point pt :parallel-line ln}))))
 
 (defn clear-geoms [] (swap! app-state assoc :geoms []))
 
