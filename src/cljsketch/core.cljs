@@ -13,6 +13,7 @@
               [cljsketch.vector :as v]
               [cljsketch.mouse-tools :as mt]
               [cljsketch.ui :as ui]
+              [cljsketch.construction-tools :as c]
               ))
 
 (enable-console-print!)
@@ -31,14 +32,12 @@
           {:key :line                 :label "Line"}
           {:key :parallel-line        :label "Parallel Line"}
           {:key :perpendicular-line   :label "Perpendicular Line"}
-          {:divider? true}
-          {:key :ray                  :label "Ray"}
-          {:key :point-on-obj         :label "Point on Object"}
-          {:key :midpoint             :label "Midpoint"}
-          {:key :intersection         :label "Intersection"}
-          {:divider? true}
-          {:key :random-points        :label "10000 Random Points"}
-          {:key :random-points-colors :label "10000 Random Points and Colors"}]}
+          ;{:divider? true}
+          ;{:key :ray                  :label "Ray"}
+          ;{:key :point-on-obj         :label "Point on Object"}
+          ;{:key :midpoint             :label "Midpoint"}
+          ;{:key :intersection         :label "Intersection"}
+          ]}
 ])
 
 (defonce app-state (atom
@@ -128,37 +127,21 @@
     ageom
   ))
 
-(defn add-segment []
-  (when (= 2 (count @selection))
-    (swap! app-state assoc
-           :geoms (conj (@app-state :geoms)
-                        (atom {:type :segment
-                               :endpoints [(first @selection) (second @selection)]})))
-    (redraw-canvas)
-    ))
+(def construction-tools
+  {
+   :segment            (c/SegmentConstructionTool. add-geom)
+   :line               (c/LineConstructionTool. add-geom)
+   :parallel-line      (c/ParallelLineConstructionTool. add-geom)
+   :perpendicular-line (c/PerpendicularLineConstructionTool. add-geom)
+   })
 
-(defn add-line []
-  (when (= 2 (count @selection))
-    (swap! app-state assoc
-           :geoms (conj (@app-state :geoms)
-                        (atom {:type :line
-                               :points [(first @selection) (second @selection)]})))
-    (redraw-canvas)
-    ))
-
-(defn add-perpendicular-line []
-  (when (= 2 (count @selection))
-    (let [pt (some #(if (= (:type @%) :point) % nil) @selection)
-          ln (some #(if (= (:type @%) :line)  % nil) @selection)]
-      ; later: validate that pt and ln were found in selection
-      (add-geom {:type :line :point pt :perpendicular-line ln}))))
-
-(defn add-parallel-line []
-  (when (= 2 (count @selection))
-    (let [pt (some #(if (= (:type @%) :point) % nil) @selection)
-          ln (some #(if (= (:type @%) :line)  % nil) @selection)]
-      ; later: validate that pt and ln were found in selection
-      (add-geom {:type :line :point pt :parallel-line ln}))))
+;; Call construct-redraw to execute a tool and then redraw the canvas; this
+;; is what the menu handlers call when the user picks a construction
+;; from the menu.
+(defn construct-and-redraw [tool]
+  (when (c/selection-fits tool @selection)
+    (c/construct tool @selection)
+    (redraw-canvas)))
 
 (defn clear-geoms [] (swap! app-state assoc :geoms []))
 
@@ -178,19 +161,17 @@
   (clear-selection!)
   (redraw-canvas))
 
-(defmethod menu-item-handler :segment [key] (add-segment))
+(defmethod menu-item-handler :segment [key]
+  (construct-and-redraw (construction-tools :segment)))
 
-(defmethod menu-item-handler :line [key] (add-line))
+(defmethod menu-item-handler :line [key]
+  (construct-and-redraw (construction-tools :line)))
 
-(defmethod menu-item-handler :perpendicular-line [key] (add-perpendicular-line))
+(defmethod menu-item-handler :parallel-line [key]
+  (construct-and-redraw (construction-tools :parallel-line)))
 
-(defmethod menu-item-handler :parallel-line [key] (add-parallel-line))
-
-(defmethod menu-item-handler :random-points [key]
-  (g/random-points @ctx 10000 3))
-
-(defmethod menu-item-handler :random-points-colors [key]
-  (g/random-points-colors @ctx 10000 3))
+(defmethod menu-item-handler :perpendicular-line [key]
+  (construct-and-redraw (construction-tools :perpendicular-line)))
 
 (defmethod menu-item-handler :draw-point [key]
   (swap! app-state assoc :mouse-tool :draw-point))
@@ -216,4 +197,5 @@
 (ui/launch app-state "app" run-app)
 
 (defn on-js-reload []
+  (redraw-canvas)
 )
