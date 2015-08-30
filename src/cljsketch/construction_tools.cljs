@@ -15,29 +15,27 @@
   (selection-fits [this selected]
     "true iff the objects in a collection fit the needs of this tool")
   (construct [this selected]
-    "executes this tool on the current selection")
+    "executes this tool on the current selection, returning the newly
+     constructed object")
 )
 
-(defrecord SegmentConstructionTool [add-geom]
+(defrecord SegmentConstructionTool []
   IConstructionTool
   (selection-fits [this selected]
     (and (= 2 (count selected))
          (= (set (types selected)) #{:point})))
   (construct [this selected]
-    (add-geom {:type :segment :endpoints [(first selected) (second selected)]}))
-  )
+    {:type :segment :endpoints [(first selected) (second selected)]}))
 
-(defrecord LineConstructionTool [add-geom]
+(defrecord LineConstructionTool []
   IConstructionTool
   (selection-fits [this selected]
     (and (= 2 (count selected))
          (= (set (types selected)) #{:point})))
   (construct [this selected]
-    (add-geom {:type :line
-               :points [(first selected) (second selected)]}))
-  )
+    {:type :line :points [(first selected) (second selected)]}))
 
-(defrecord ParallelLineConstructionTool [add-geom]
+(defrecord ParallelLineConstructionTool []
   IConstructionTool
   (selection-fits [this selected]
     (and (= 2 (count selected))
@@ -45,10 +43,9 @@
   (construct [this selected]
     (let [pt (first-object-of-type :point selected)
           ln (first-object-of-type :line selected)]
-      (add-geom {:type :line :point pt :parallel-line ln})))
-  )
+      {:type :line :point pt :parallel-line ln})))
 
-(defrecord PerpendicularLineConstructionTool [add-geom]
+(defrecord PerpendicularLineConstructionTool []
   IConstructionTool
   (selection-fits [this selected]
     (and (= 2 (count selected))
@@ -56,5 +53,4 @@
   (construct [this selected]
     (let [pt (first-object-of-type :point selected)
           ln (first-object-of-type :line selected)]
-      (add-geom {:type :line :point pt :perpendicular-line ln})))
-  )
+      {:type :line :point pt :perpendicular-line ln})))

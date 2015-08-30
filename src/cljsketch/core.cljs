@@ -140,7 +140,7 @@
 ;; from the menu.
 (defn construct-and-redraw [tool]
   (when (c/selection-fits tool @selection)
-    (c/construct tool @selection)
+    (add-geom (c/construct tool @selection))
     (redraw-canvas)))
 
 (defn clear-geoms [] (swap! app-state assoc :geoms []))
