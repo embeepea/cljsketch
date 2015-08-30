@@ -30,10 +30,14 @@
   :items [{:key :delete               :label "Delete"}
           {:key :clear-selection      :label "Clear Selection"}]}
  {:title "Construct"
-  :items [{:key :segment              :label "Segment"}
-          {:key :line                 :label "Line"}
-          {:key :parallel-line        :label "Parallel Line"}
-          {:key :perpendicular-line   :label "Perpendicular Line"}
+  :items [{:key :segment              :label "Segment"
+           :className "disabled"}
+          {:key :line                 :label "Line"
+           :className "disabled"}
+          {:key :parallel-line        :label "Parallel Line"
+           :className "disabled"}
+          {:key :perpendicular-line   :label "Perpendicular Line"
+           :className "disabled"}
           ;{:divider? true}
           ;{:key :ray                  :label "Ray"}
           ;{:key :point-on-obj         :label "Point on Object"}
@@ -217,7 +221,6 @@
         (let [mouse-event (<! mouse-channel)]
           (recur (mt/handle-event
                   (mouse-tools (@app-state :mouse-tool)) mouse-event state)))))
-  (enable-fitting-tools) ; why doesn't this trigger an om re-render???
 )
 
 (ui/launch app-state "app" run-app)
