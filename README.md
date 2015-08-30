@@ -1,39 +1,43 @@
-# cljsketch
+# CljSketch
 
-FIXME: Write a one-line description of your library/project.
+CljSketch is a 2D geometry sketchpad program written in ClojureScript.
 
-## Overview
+The idea is that you construct geometric objects which are defined in
+terms of other geometric objects, and as you move objects around, all their
+dependent objects update accordingly.
 
-FIXME: Write a paragraph about the library/project and highlight its goals.
+For example, if you draw two points, then select them and construct the
+line through them, then drag one of the points, the constructed line will move
+with it.
 
-## Setup
+At the moment only the following basics are implemented:
 
-To get an interactive development environment run:
+  * draw points
+  * select two points and construct
+    * the line through them, or
+    * the segment connecting them
+  * select one point and one line and construct
+    * the line through the point that is parallel to the selected line
+    * the line through the point that is perpendicular to the selected line
 
-    lein figwheel
+## Running CljSketch
 
-and open your browser at [localhost:3449](http://localhost:3449/).
-This will auto compile and send all changes to the browser without the
-need to reload. After the compilation process is complete, you will
-get a Browser Connected REPL. An easy way to try it is:
+To run CljSketch:
 
-    (js/alert "Am I connected?")
+  1. clone the repo
+  2. point your browser to `resources/public/index.html`
+  
+## Interactive Development Environment
 
-and you should see an alert in the browser window.
+To play with the CljSketch source code in an interactive REPL:
 
-To clean all compiled files:
-
-    lein clean
-
-To create a production build run:
-
-    lein cljsbuild once min
-
-And open your browser in `resources/public/index.html`. You will not
-get live reloading, nor a REPL. 
+  1. clone the repo
+  2. install [Leiningen](http://leiningen.org)
+  3. from the top level directory in the repo, type `lein figwheel`
+  4. point your browser to http://localhost:3449
 
 ## License
 
-Copyright © 2014 FIXME
+Copyright © 2015 Mark Phillips (mbp@geomtech.com)
 
 Distributed under the Eclipse Public License either version 1.0 or (at your option) any later version.

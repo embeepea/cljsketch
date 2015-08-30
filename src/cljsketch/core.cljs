@@ -13,6 +13,7 @@
               [cljsketch.vector :as v]
               [cljsketch.mouse-tools :as mt]
               [cljsketch.ui :as ui]
+              [cljsketch.geom :as geom]
               [cljsketch.construction-tools :as c]
               ))
 
