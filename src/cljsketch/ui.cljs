@@ -108,7 +108,9 @@
                 (mouse-handler :leave mouse-channel))
                (set! (.-width canvas) w)
                (set! (.-height canvas) (- h navbar-wrapper-height))
-               (run-app (.getContext canvas "2d") menu-channel mouse-channel)
+               (run-app (.getContext canvas "2d")
+                        menu-channel
+                        mouse-channel)
                ))
            ))]
     (om/root app app-state {:target (. js/document (getElementById id))})))

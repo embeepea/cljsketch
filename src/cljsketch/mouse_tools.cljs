@@ -32,9 +32,6 @@
     (if (= state nil) (recur this event {:button-state :down})
         (letfn [(geom-under-mouse
                   [] (geom-in-threshold (@app-state :geoms) (:coords event) 16))
-                  ;[] (some (fn [g] (if (u/is-within-threshold?
-                  ;                      (:coords event) @g 5) g nil))
-                  ;         (@app-state :geoms)))
 
                 (set-geom-drag-base!
                   [geom] (if (contains? @geom :coords)

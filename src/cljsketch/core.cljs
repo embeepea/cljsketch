@@ -18,6 +18,8 @@
 
 (enable-console-print!)
 
+(declare enable-fitting-tools)
+
 (def ctx (atom {}))
 
 (def navbar-menu [
@@ -70,17 +72,21 @@
 
 ; add geom to the selection, if it is not already in it
 (defn select! [geom]
-  (if (not (selected? geom)) (swap! selection #(conj % geom))))
+  (if (not (selected? geom)) (swap! selection #(conj % geom)))
+  (enable-fitting-tools))
 
 ; remove geom from the selection
 (defn unselect! [geom]
-  (swap! selection (fn [selection] (vec (filter #(not (= % geom)) selection)))))
+  (swap! selection (fn [selection] (vec (filter #(not (= % geom)) selection))))
+  (enable-fitting-tools))
 
 ; toggle geom's membership in the selection
 (defn toggle-selected! [geom]
-  (if (selected? geom) (unselect! geom) (select! geom)))
+  (if (selected? geom) (unselect! geom) (select! geom))
+  (enable-fitting-tools))
 
-(defn clear-selection! [] (reset! selection []))
+(defn clear-selection! [] (reset! selection [])
+  (enable-fitting-tools))
 
 (defn draw-line [pvec t]
   (let [endpoints (v/line-rectangle-intersection
@@ -129,11 +135,29 @@
 
 (def construction-tools
   {
-   :segment            (c/SegmentConstructionTool. add-geom)
-   :line               (c/LineConstructionTool. add-geom)
-   :parallel-line      (c/ParallelLineConstructionTool. add-geom)
-   :perpendicular-line (c/PerpendicularLineConstructionTool. add-geom)
+   :segment            (c/SegmentConstructionTool.)
+   :line               (c/LineConstructionTool.)
+   :parallel-line      (c/ParallelLineConstructionTool.)
+   :perpendicular-line (c/PerpendicularLineConstructionTool.)
    })
+
+;; return the index of the first item x in collection coll for which
+;; (pred x) returns true
+(defn index-of-first [pred coll]
+  (first (keep-indexed (fn [i x] (when (pred x) i)) coll)))
+
+(defn enable-fitting-tools []
+  (let [construction-menu-ks  [:navbar-menu
+                               (index-of-first #(= (:title %) "Construct")
+                                               (@app-state :navbar-menu))
+                               :items]
+        construction-menu-len (count (get-in @app-state construction-menu-ks))]
+    (doseq [i (range construction-menu-len)]
+      (let [key       (get-in @app-state (conj construction-menu-ks i :key))
+            className (if (c/selection-fits (construction-tools key) @selection)
+                        "" "disabled")]
+        (swap! app-state assoc-in (conj construction-menu-ks i :className)
+               className)))))
 
 ;; Call construct-redraw to execute a tool and then redraw the canvas; this
 ;; is what the menu handlers call when the user picks a construction
@@ -192,7 +216,9 @@
   (go (loop [state nil]
         (let [mouse-event (<! mouse-channel)]
           (recur (mt/handle-event
-                  (mouse-tools (@app-state :mouse-tool)) mouse-event state))))))
+                  (mouse-tools (@app-state :mouse-tool)) mouse-event state)))))
+  (enable-fitting-tools) ; why doesn't this trigger an om re-render???
+)
 
 (ui/launch app-state "app" run-app)
 
