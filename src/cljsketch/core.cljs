@@ -52,7 +52,7 @@
   :mouse-tool :draw-point
   :mouse-tools [{:key :select     :label "Select"}
                 {:key :draw-point :label "Draw Point"}]
-  :geoms [] ; vector of atoms containing geoms
+  :world [] ; vector of atoms containing geoms
   }))
 
 ; An object becomes the highlight object when the mouse is over it.
@@ -106,7 +106,7 @@
 
 (defn redraw-canvas []
   (g/clear-canvas @ctx)
-  (doseq [geom (@app-state :geoms)]
+  (doseq [geom (@app-state :world)]
     (condp = (:type @geom)
       :point   (let [[x y] (:coords @geom)]
                  (g/draw-point @ctx x y 3)
@@ -129,7 +129,7 @@
 ;; return the new atom that wraps the newly added geom
 (defn add-geom [geom]
   (let [ageom (atom geom)]
-    (swap! app-state assoc :geoms (conj (@app-state :geoms) ageom))
+    (swap! app-state assoc :world (conj (@app-state :world) ageom))
     ageom))
 
 (defn add-point [[x y]]
@@ -172,7 +172,7 @@
     (add-geom (c/construct tool @selection))
     (redraw-canvas)))
 
-(defn clear-geoms [] (swap! app-state assoc :geoms []))
+(defn clear-geoms [] (swap! app-state assoc :world []))
 
 (def mouse-tools
   {:draw-point (mt/->DrawPointTool  app-state redraw-canvas add-point clear-selection! select!)

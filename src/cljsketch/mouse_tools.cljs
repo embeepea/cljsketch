@@ -31,7 +31,7 @@
   (handle-event [this event state]
     (if (= state nil) (recur this event {:button-state :down})
         (letfn [(geom-under-mouse
-                  [] (geom-in-threshold (@app-state :geoms) (:coords event) 16))
+                  [] (geom-in-threshold (@app-state :world) (:coords event) 16))
 
                 (set-geom-drag-base!
                   [geom] (if (contains? @geom :coords)
@@ -78,7 +78,7 @@
                               (toggle-selected! @highlight)
                               (when (not (selected? @highlight)) (highlight! nil))
                               (redraw-canvas)))
-                          (each (@app-state :geoms) unset-geom-drag-base!)
+                          (each (@app-state :world) unset-geom-drag-base!)
                           {:button-state :up}))))))
 
 (defrecord DrawPointTool [app-state redraw-canvas add-point clear-selection! select!]

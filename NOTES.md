@@ -1,19 +1,30 @@
 Geometry Types
 
-a `Geom` is a basic geometry primitive that can be directly rendered
-  If this were an OO language, I'd say that the geom has a 'render' method.
-  But perhaps a more Clojurey approach would be to say that there is a 'render'
-  function that works for all Geom objects.
+A `Geom` is a basic geometry primitive that can be directly rendered
+If this were an OO language, I'd say that the geom has a 'render' method.
+But perhaps a more Clojurey approach would be to say that there is a 'render'
+function that works for all Geom objects.
    
-  `Geom`s include:
-       `Point`   (includes x,y coords)
-       `Line`    (includes [a,b,c] projective vector coordinates of the line)
-       `Segment` (includes x,y coords of 2 endpoints)
+Geoms include:
+  * `Point`   (includes x,y coords)
+  * `Line`    (includes [a,b,c] projective vector coordinates of the line)
+  * `Segment` (includes x,y coords of 2 endpoints)
    
-a `RefGeom` is a higher level geometry object expressed in terms of other objects.
-  The 'world' consists of a list of objects which are either RefGeoms or Geoms (typically
-  the only Geoms are the Points); the objects in the world form a graph in which
-  the edges indicate dependency relationships.
+A `RefGeom` is a higher level geometry object expressed in terms of other objects
+which it depends on -- for example the line between two points is expressed
+in terms of (depends on) those two points
+RefGeoms correspond
+
+The `world` is a Clojure vector containing the geometric objects in the current
+sketch, in the order in which the user created them.  Elements of the world
+vector are atoms which refer to either Geoms, in the case of points drawn
+by the user, or 
+
+
+The 'world' consists of a list of objects which are either RefGeoms or Geoms (typically
+the only Geoms are the Points); the objects in the world form a graph in which
+the edges indicate dependency relationships.
+
 
 ------------------------------------------------------------------------
 
