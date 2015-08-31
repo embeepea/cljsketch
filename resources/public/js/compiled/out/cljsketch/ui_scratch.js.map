@@ -1,1 +1,0 @@
-{"version":3,"file":"\/home\/mbp\/cljsketch\/resources\/public\/js\/compiled\/out\/cljsketch\/ui_scratch.js","sources":["ui_scratch.cljs?rel=1440655364824"],"lineCount":16,"mappings":";AAAA;;;;;;;;;;AAaA,8BAAA,9BAAMA,oEAAQC,UAAUC,GAAGC;AAA3B,AAAA","names":["cljsketch.ui-scratch\/launch","app-state","id","run-app"]}

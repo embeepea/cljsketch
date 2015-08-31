@@ -1,2 +1,0 @@
-;; Analyzed by ClojureScript 0.0-3297
-{:name om-tools.mixin, :doc "Mixins for Om made easy", :excludes #{}, :use-macros nil, :require-macros {om om.core, om.core om.core}, :uses nil, :requires {om om.core, om.core om.core}, :imports nil}
