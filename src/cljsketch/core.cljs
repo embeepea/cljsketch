@@ -9,11 +9,11 @@
               [cljs.core.async :refer [put! chan <!]]
               [goog.events :as events]
               [cljsketch.util :as u]
-              [cljsketch.canvas-graphics :as g]
+              [cljsketch.canvas-graphics :as gr]
               [cljsketch.vector :as v]
               [cljsketch.mouse-tools :as mt]
               [cljsketch.ui :as ui]
-              [cljsketch.geom :as geom]
+              [cljsketch.geom :as g]
               [cljsketch.construction-tools :as c]
               ))
 
@@ -102,24 +102,28 @@
       (let [[e0 e1] endpoints
             [e0x e0y] (:u e0)
             [e1x e1y] (:u e1)]
-        (g/draw-line @ctx e0x e0y e1x e1y t)))))
+        (gr/draw-line @ctx e0x e0y e1x e1y t)))))
 
 (defn redraw-canvas []
-  (g/clear-canvas @ctx)
+  (gr/clear-canvas @ctx)
   (doseq [geom (@app-state :world)]
-    (condp = (:type @geom)
-      :point   (let [[x y] (:coords @geom)]
-                 (g/draw-point @ctx x y 3)
-                 (if (or (highlight? geom) (selected? geom))
-                   (g/draw-circle @ctx x y 5 1)))
-      :segment (let [[e0 e1] (:endpoints @geom)
-                     [x0 y0] (:coords @e0)
-                     [x1 y1] (:coords @e1)]
-                 (g/draw-line @ctx x0 y0 x1 y1 
-                              (if (or (highlight? geom) (selected? geom)) 3 1)))
+    (cond
+      (instance? g/Point @geom)
+      (let [[x y] (:p @geom)]
+        (gr/draw-point @ctx x y 3)
+        (if (or (highlight? geom) (selected? geom))
+          (gr/draw-circle @ctx x y 5 1)))
 
-      :line    (draw-line (u/compute-line @geom)
-                          (if (or (highlight? geom) (selected? geom)) 3 1))
+      (= (:type @geom) :segment)
+      (let [[e0 e1] (:endpoints @geom)
+            [x0 y0] (:p @e0)
+            [x1 y1] (:p @e1)]
+        (gr/draw-line @ctx x0 y0 x1 y1 
+                     (if (or (highlight? geom) (selected? geom)) 3 1)))
+
+      (= (:type @geom) :line)
+      (draw-line (u/compute-line @geom)
+                 (if (or (highlight? geom) (selected? geom)) 3 1))
 
 
       )))
@@ -133,7 +137,7 @@
     ageom))
 
 (defn add-point [[x y]]
-  (let [ageom (add-geom {:type :point :coords [x y]})]
+  (let [ageom (add-geom (g/Point. [x y]))]
     (redraw-canvas)
     ageom
   ))
@@ -213,7 +217,7 @@
 
 (defn run-app [_ctx menu-channel mouse-channel]
   (reset! ctx _ctx)
-  (g/clear-canvas @ctx)
+  (gr/clear-canvas @ctx)
   (go (loop []
         (let [action (<! menu-channel)]
           (menu-item-handler action)

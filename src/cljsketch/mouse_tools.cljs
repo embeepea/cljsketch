@@ -1,6 +1,7 @@
 (ns cljsketch.mouse-tools
   (:require [cljsketch.util :as u]
-            [cljsketch.vector :as v]))
+            [cljsketch.vector :as v]
+            [cljsketch.geom :as g]))
 
 (defprotocol MouseTool
   (handle-event [this event state] "Handle a mouse event")
@@ -34,8 +35,8 @@
                   [] (geom-in-threshold (@app-state :world) (:coords event) 16))
 
                 (drag-geom!
-                  [geom offset] (if (contains? @geom :coords)
-                                  (swap! geom assoc :coords (v/vadd ((:geom-drag-base state) geom) offset))))
+                  [geom offset] (if (instance? g/Point @geom)
+                                  (reset! geom (g/Point. (v/vadd ((:geom-drag-base state) geom) offset)))))
 
                 (each
                   [coll f] (doseq [x coll] (f x)))]
@@ -52,8 +53,9 @@
                                    (recur this event
                                           (assoc state
                                                  :highlight-selected true
-                                                 :geom-drag-base (assoc (:geom-drag-base state)
-                                                                        @highlight (@@highlight :coords)))))
+                                                 :geom-drag-base (if (instance? g/Point @@highlight)
+                                                                   (assoc (:geom-drag-base state) @highlight (:p @@highlight))
+                                                                   (:geom-drag-base state)))))
                                  (let [offset (v/vsub (:coords event) (:drag-base state))]
                                    (each @selection #(drag-geom! % offset))
                                    (redraw-canvas)
@@ -66,9 +68,14 @@
                          :button-state :down
                          :dragged false
                          :geom-drag-base  (reduce
-                                           (fn [geom-drag-base geom] (assoc geom-drag-base geom (:coords @geom)))
+                                           (fn [geom-drag-base geom]
+                                             (if (instance? g/Point @geom)
+                                               (assoc geom-drag-base geom (:p @geom))
+                                               geom-drag-base))
                                            {}
                                            @selection)})
+
+
 
             #{:up
               :enter

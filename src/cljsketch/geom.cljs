@@ -5,7 +5,7 @@
   (render [this ctx] "render this geom in the given graphics context")
 )
 
-(defrecord Point [x y]
+(defrecord Point [p]
   IGeom
   (render [this ctx] #_... )
 )
