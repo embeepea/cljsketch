@@ -22,7 +22,11 @@ At the moment only the following basics are implemented:
 
 ## Running CljSketch
 
-To run CljSketch:
+To run CljSketch, it's online at
+
+    http://embeepea.github.com/cljsketch
+  
+justpoint your browser to that URL.  Or, to run a local copy:
 
   1. clone the repo
   2. point your browser to `resources/public/index.html`
