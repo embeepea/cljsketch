@@ -8,12 +8,14 @@
   (toGeom [this geommap] "return a geom for this refgeom")
   (deps [this] "return a sequence of atoms referring to the objects
     (Geoms or RefGeoms) that this RefGeom depends on")
+  (geom-type [this] "")
 )
 
 ;; segment connecting two points
 (defrecord PointPointSegment [pt0 pt1] 
   IRefGeom
   (deps [this] '(pt0 pt1))
+  (geom-type [this] g/Segment)
   (toGeom [this geommap]
     (let [gpt0 (:p (geommap pt0))
           gpt1 (:p (geommap pt1))]
@@ -23,6 +25,7 @@
 (defrecord PointPointLine [pt0 pt1]
   IRefGeom
   (deps [this] '(pt0 pt1))
+  (geom-type [this] g/Line)
   (toGeom [this geommap]
     (let [p0 (v/toProjectiveVector (v/AffineVector. (:p (geommap pt0))))
           p1 (v/toProjectiveVector (v/AffineVector. (:p (geommap pt1))))]
@@ -33,6 +36,7 @@
 (defrecord PointPerpendicularLine [pt ln] 
   IRefGeom
   (deps [this] '(pt ln))
+  (geom-type [this] g/Line)
   (toGeom [this geommap]
     (let [ptv  (v/toProjectiveVector (v/AffineVector. (:p (geommap pt))))
           lnv  (:u (geommap ln))]
@@ -42,10 +46,22 @@
 (defrecord PointParallelLine [pt ln] 
   IRefGeom
   (deps [this] '(pt ln))
+  (geom-type [this] g/Line)
   (toGeom [this geommap]
     (let [ptv  (v/toProjectiveVector (v/AffineVector. (:p (geommap pt))))
           lnv  (:u (geommap ln))]
       (g/Line. (v/point-line-parallel ptv lnv)))))
+
+;; intersection point of two lines
+(defrecord LineLinePoint [ln0 ln1]
+  IRefGeom
+  (deps [this] '(ln0 ln1))
+  (geom-type [this] g/Point)
+  (toGeom [this geommap]
+    (let [lnv0  (:u (geommap ln0))
+          lnv1  (:u (geommap ln1))
+          c     (v/line-line-intersection lnv0 lnv1)]
+      (if (= (last c.u) 0) (g/Null.) (g/Point. (:u (v/toAffineVector c)))))))
 
 ;; Take a list of atoms refering to either Geoms or RefGeoms,
 ;; and return a map which associates to each of those atoms

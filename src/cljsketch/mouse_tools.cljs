@@ -3,6 +3,9 @@
             [cljsketch.geom :as g]
             [cljsketch.refgeom :as rg]))
 
+(defn gtype [geom]
+  (if (satisfies? rg/IRefGeom @geom) (rg/geom-type @geom) (type @geom)))
+
 (defprotocol MouseTool
   (handle-event [this event state] "Handle a mouse event")
 )
@@ -19,7 +22,7 @@
       (if (empty? gs) g
           (let [ng (first gs)]
             (recur
-             (if (<= (g/point-distance2 (geommap ng) mouse-pos) t) (if (or (not g) (gtless (type @ng) (type @g))) ng g) g)
+             (if (<= (g/point-distance2 (geommap ng) mouse-pos) t) (if (or (not g) (gtless (gtype ng) (gtype g))) ng g) g)
              (rest gs)))))))
 
 (defrecord SelectMoveTool [app-state redraw-canvas highlight! highlight

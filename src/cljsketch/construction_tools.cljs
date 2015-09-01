@@ -2,14 +2,17 @@
     (:require [cljsketch.geom :as g]
               [cljsketch.refgeom :as rg]))
 
+(defn gtype [geom]
+  (if (satisfies? rg/IRefGeom @geom) (rg/geom-type @geom) (type @geom)))
+
 ;; return a sequence of the types of the objects in a collection
 ;; geoms should be a collection of atoms wrapping objects
-(defn types [geoms] (map type geoms))
+(defn types [geoms] (map gtype geoms))
 
 ;; return the first object in a collection which is of the given type
 ;; geoms should be a collection of atoms wrapping objects
 (defn first-object-of-type [typ geoms]
-  (some #(if (= (type %) typ) % nil) geoms))
+  (some #(if (= (gtype %) typ) % nil) geoms))
 
 (defprotocol IConstructionTool
   ;; NOTE: `selected` should be a collection of atoms wrapping objects;
@@ -41,18 +44,26 @@
   IConstructionTool
   (selection-fits [this selected]
     (and (= 2 (count selected))
-         (= (set (types selected)) #{g/Point :line})))
+         (= (set (types selected)) #{g/Point g/Line})))
   (construct [this selected]
     (let [pt (first-object-of-type g/Point selected)
-          ln (first-object-of-type :line selected)]
+          ln (first-object-of-type g/Line selected)]
       (rg/PointParallelLine. pt ln))))
 
 (defrecord PerpendicularLineConstructionTool []
   IConstructionTool
   (selection-fits [this selected]
     (and (= 2 (count selected))
-         (= (set (types selected)) #{g/Point :line})))
+         (= (set (types selected)) #{g/Point g/Line})))
   (construct [this selected]
     (let [pt (first-object-of-type g/Point selected)
-          ln (first-object-of-type :line selected)]
+          ln (first-object-of-type g/Line selected)]
       (rg/PointPerpendicularLine. pt ln))))
+
+(defrecord LineIntersectionConstructionTool []
+  IConstructionTool
+  (selection-fits [this selected]
+    (and (= 2 (count selected))
+         (= (set (types selected)) #{g/Line})))
+  (construct [this selected]
+    (rg/LineLinePoint. (first selected) (second selected))))
