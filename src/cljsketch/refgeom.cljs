@@ -39,24 +39,34 @@
       (g/Line. (v/point-point-line p0 p1)))))
 
 
-;; line through a point perp to another line
-(defrecord PointPerpendicularLine [pt ln] 
+;; take a refgeom `rg` that is either a refgeom/Line or refgeom/Segment, and
+;; return a ProjectiveVector representing the line containing it
+(defn lineal-projective-vector [geommap ln-sg]
+  (condp = (geom-type @ln-sg)
+    g/Line     (:u (geommap ln-sg))
+    g/Segment  (let [sg (geommap ln-sg)
+                     p0 (v/toProjectiveVector (v/AffineVector. [(:x0 sg) (:y0 sg)]))
+                     p1 (v/toProjectiveVector (v/AffineVector. [(:x1 sg) (:y1 sg)]))]
+                 (v/point-point-line p0 p1))))
+
+;; line through a point perpendicular to another line or segment
+(defrecord PointPerpendicularLine [pt ln-sg] 
   IRefGeom
-  (deps [this] [pt ln])
+  (deps [this] [pt ln-sg])
   (geom-type [this] g/Line)
   (toGeom [this geommap]
     (let [ptv  (v/toProjectiveVector (v/AffineVector. (:p (geommap pt))))
-          lnv  (:u (geommap ln))]
+          lnv  (lineal-projective-vector geommap ln-sg)]
       (g/Line. (v/point-line-perpendicular ptv lnv)))))
 
-;; line through a point parallel to another line
-(defrecord PointParallelLine [pt ln] 
+;; line through a point parallel to another line or segment
+(defrecord PointParallelLine [pt ln-sg] 
   IRefGeom
-  (deps [this] [pt ln])
+  (deps [this] [pt ln-sg])
   (geom-type [this] g/Line)
   (toGeom [this geommap]
     (let [ptv  (v/toProjectiveVector (v/AffineVector. (:p (geommap pt))))
-          lnv  (:u (geommap ln))]
+          lnv  (lineal-projective-vector geommap ln-sg)]
       (g/Line. (v/point-line-parallel ptv lnv)))))
 
 ;; intersection point of two lines
