@@ -31,11 +31,21 @@
                   [] (geom-in-threshold (@app-state :world) (:coords event) 16))
 
                 (drag-geom!
-                  [geom offset] (if (instance? rg/Point @geom)
-                                  (reset! geom (rg/Point. (v/vadd ((:geom-drag-base state) geom) offset)))))
+                  [geom offset]
+                  (if (instance? rg/Point @geom)
+                    (reset! geom (rg/Point. (v/vadd ((:geom-drag-base state) geom) offset)))))
 
                 (each
-                  [coll f] (doseq [x coll] (f x)))]
+                  [coll f] (doseq [x coll] (f x)))
+
+                (geom-drag-base
+                  [atoms gdb] (reduce
+                               (fn [gdb at]
+                                 (if (instance? rg/Point @at)
+                                   (assoc gdb at (:p @at))
+                                   gdb))
+                               gdb
+                               atoms))]
 
           (condp contains? (:type event)
             #{:move}  (condp = (:button-state state)
@@ -49,13 +59,14 @@
                                    (recur this event
                                           (assoc state
                                                  :highlight-selected true
-                                                 :geom-drag-base (if (instance? rg/Point @@highlight)
-                                                                   (assoc (:geom-drag-base state) @highlight (:p @@highlight))
-                                                                   (:geom-drag-base state)))))
-                                 (let [offset (v/vsub (:coords event) (:drag-base state))]
-                                   (each @selection #(drag-geom! % offset))
+                                                 :geom-drag-base (geom-drag-base (rg/dependencies @highlight) (:geom-drag-base state)))))
+                                 (let [offset (v/vsub (:coords event) (:drag-base state))
+                                       ds (rg/dependencies @selection)
+                                       ]
+                                   (each ds #(drag-geom! % offset))
                                    (redraw-canvas)
                                    (assoc state :dragged true))))
+
             #{:down}  (let [geom (geom-under-mouse)]
                         (highlight! geom)
                         (if (not geom) (clear-selection!))
@@ -63,15 +74,7 @@
                         {:drag-base (:coords event)
                          :button-state :down
                          :dragged false
-                         :geom-drag-base  (reduce
-                                           (fn [geom-drag-base geom]
-                                             (if (instance? rg/Point @geom)
-                                               (assoc geom-drag-base geom (:p @geom))
-                                               geom-drag-base))
-                                           {}
-                                           @selection)})
-
-
+                         :geom-drag-base  (geom-drag-base (rg/dependencies @selection) {})})
 
             #{:up
               :enter
