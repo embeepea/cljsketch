@@ -7,7 +7,6 @@
               [om-tools.dom :as d :include-macros true]
               [cljs.core.async :refer [put! chan <!]]
               [goog.events :as events]
-              [cljsketch.canvas-graphics :as g]
               ))
 
 

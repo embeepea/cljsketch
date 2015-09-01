@@ -4,8 +4,8 @@ goog.require('cljs.core');
 goog.require('cljsketch.vector');
 goog.require('cljsketch.geom');
 
-cljsketch.refgeom.IRefGeom = (function (){var obj73221 = {};
-return obj73221;
+cljsketch.refgeom.IRefGeom = (function (){var obj27820 = {};
+return obj27820;
 })();
 
 /**
@@ -94,11 +94,11 @@ var this__16664__auto____$1 = this;
 return cljs.core._lookup.call(null,this__16664__auto____$1,k__16665__auto__,null);
 });
 
-cljsketch.refgeom.PointPointSegment.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k73223,else__16667__auto__){
+cljsketch.refgeom.PointPointSegment.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k27822,else__16667__auto__){
 var self__ = this;
 var this__16666__auto____$1 = this;
-var G__73225 = (((k73223 instanceof cljs.core.Keyword))?k73223.fqn:null);
-switch (G__73225) {
+var G__27824 = (((k27822 instanceof cljs.core.Keyword))?k27822.fqn:null);
+switch (G__27824) {
 case "pt0":
 return self__.pt0;
 
@@ -108,7 +108,7 @@ return self__.pt1;
 
 break;
 default:
-return cljs.core.get.call(null,self__.__extmap,k73223,else__16667__auto__);
+return cljs.core.get.call(null,self__.__extmap,k27822,else__16667__auto__);
 
 }
 });
@@ -179,16 +179,18 @@ return false;
 
 cljsketch.refgeom.PointPointSegment.prototype.cljsketch$refgeom$IRefGeom$ = true;
 
-cljsketch.refgeom.PointPointSegment.prototype.cljsketch$refgeom$IRefGeom$toGeom$arity$2 = (function (this$,geomap){
-var self__ = this;
-var this$__$1 = this;
-return null;
-});
-
 cljsketch.refgeom.PointPointSegment.prototype.cljsketch$refgeom$IRefGeom$deps$arity$1 = (function (this$){
 var self__ = this;
 var this$__$1 = this;
 return cljs.core.list(new cljs.core.Symbol(null,"pt0","pt0",466700398,null),new cljs.core.Symbol(null,"pt1","pt1",-1742729545,null));
+});
+
+cljsketch.refgeom.PointPointSegment.prototype.cljsketch$refgeom$IRefGeom$toGeom$arity$2 = (function (this$,geommap){
+var self__ = this;
+var this$__$1 = this;
+var gpt0 = new cljs.core.Keyword(null,"p","p",151049309).cljs$core$IFn$_invoke$arity$1(geommap.call(null,self__.pt0));
+var gpt1 = new cljs.core.Keyword(null,"p","p",151049309).cljs$core$IFn$_invoke$arity$1(geommap.call(null,self__.pt1));
+return (new cljsketch.geom.Segment(gpt0.call(null,(0)),gpt0.call(null,(1)),gpt1.call(null,(0)),gpt1.call(null,(1)),null,null,null));
 });
 
 cljsketch.refgeom.PointPointSegment.prototype.cljs$core$IMap$_dissoc$arity$2 = (function (this__16673__auto__,k__16674__auto__){
@@ -201,18 +203,18 @@ return (new cljsketch.refgeom.PointPointSegment(self__.pt0,self__.pt1,self__.__m
 }
 });
 
-cljsketch.refgeom.PointPointSegment.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__73222){
+cljsketch.refgeom.PointPointSegment.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__27821){
 var self__ = this;
 var this__16671__auto____$1 = this;
-var pred__73226 = cljs.core.keyword_identical_QMARK_;
-var expr__73227 = k__16672__auto__;
-if(cljs.core.truth_(pred__73226.call(null,new cljs.core.Keyword(null,"pt0","pt0",-1173831129),expr__73227))){
-return (new cljsketch.refgeom.PointPointSegment(G__73222,self__.pt1,self__.__meta,self__.__extmap,null));
+var pred__27825 = cljs.core.keyword_identical_QMARK_;
+var expr__27826 = k__16672__auto__;
+if(cljs.core.truth_(pred__27825.call(null,new cljs.core.Keyword(null,"pt0","pt0",-1173831129),expr__27826))){
+return (new cljsketch.refgeom.PointPointSegment(G__27821,self__.pt1,self__.__meta,self__.__extmap,null));
 } else {
-if(cljs.core.truth_(pred__73226.call(null,new cljs.core.Keyword(null,"pt1","pt1",911706224),expr__73227))){
-return (new cljsketch.refgeom.PointPointSegment(self__.pt0,G__73222,self__.__meta,self__.__extmap,null));
+if(cljs.core.truth_(pred__27825.call(null,new cljs.core.Keyword(null,"pt1","pt1",911706224),expr__27826))){
+return (new cljsketch.refgeom.PointPointSegment(self__.pt0,G__27821,self__.__meta,self__.__extmap,null));
 } else {
-return (new cljsketch.refgeom.PointPointSegment(self__.pt0,self__.pt1,self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__73222),null));
+return (new cljsketch.refgeom.PointPointSegment(self__.pt0,self__.pt1,self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__27821),null));
 }
 }
 });
@@ -223,10 +225,10 @@ var this__16676__auto____$1 = this;
 return cljs.core.seq.call(null,cljs.core.concat.call(null,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"pt0","pt0",-1173831129),self__.pt0],null)),(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"pt1","pt1",911706224),self__.pt1],null))], null),self__.__extmap));
 });
 
-cljsketch.refgeom.PointPointSegment.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__73222){
+cljsketch.refgeom.PointPointSegment.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__27821){
 var self__ = this;
 var this__16663__auto____$1 = this;
-return (new cljsketch.refgeom.PointPointSegment(self__.pt0,self__.pt1,G__73222,self__.__extmap,self__.__hash));
+return (new cljsketch.refgeom.PointPointSegment(self__.pt0,self__.pt1,G__27821,self__.__extmap,self__.__hash));
 });
 
 cljsketch.refgeom.PointPointSegment.prototype.cljs$core$ICollection$_conj$arity$2 = (function (this__16669__auto__,entry__16670__auto__){
@@ -257,8 +259,8 @@ cljsketch.refgeom.__GT_PointPointSegment = (function cljsketch$refgeom$__GT_Poin
 return (new cljsketch.refgeom.PointPointSegment(pt0,pt1,null,null,null));
 });
 
-cljsketch.refgeom.map__GT_PointPointSegment = (function cljsketch$refgeom$map__GT_PointPointSegment(G__73224){
-return (new cljsketch.refgeom.PointPointSegment(new cljs.core.Keyword(null,"pt0","pt0",-1173831129).cljs$core$IFn$_invoke$arity$1(G__73224),new cljs.core.Keyword(null,"pt1","pt1",911706224).cljs$core$IFn$_invoke$arity$1(G__73224),null,cljs.core.dissoc.call(null,G__73224,new cljs.core.Keyword(null,"pt0","pt0",-1173831129),new cljs.core.Keyword(null,"pt1","pt1",911706224)),null));
+cljsketch.refgeom.map__GT_PointPointSegment = (function cljsketch$refgeom$map__GT_PointPointSegment(G__27823){
+return (new cljsketch.refgeom.PointPointSegment(new cljs.core.Keyword(null,"pt0","pt0",-1173831129).cljs$core$IFn$_invoke$arity$1(G__27823),new cljs.core.Keyword(null,"pt1","pt1",911706224).cljs$core$IFn$_invoke$arity$1(G__27823),null,cljs.core.dissoc.call(null,G__27823,new cljs.core.Keyword(null,"pt0","pt0",-1173831129),new cljs.core.Keyword(null,"pt1","pt1",911706224)),null));
 });
 
 
@@ -288,11 +290,11 @@ var this__16664__auto____$1 = this;
 return cljs.core._lookup.call(null,this__16664__auto____$1,k__16665__auto__,null);
 });
 
-cljsketch.refgeom.PointPointLine.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k73231,else__16667__auto__){
+cljsketch.refgeom.PointPointLine.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k27830,else__16667__auto__){
 var self__ = this;
 var this__16666__auto____$1 = this;
-var G__73233 = (((k73231 instanceof cljs.core.Keyword))?k73231.fqn:null);
-switch (G__73233) {
+var G__27832 = (((k27830 instanceof cljs.core.Keyword))?k27830.fqn:null);
+switch (G__27832) {
 case "pt0":
 return self__.pt0;
 
@@ -302,7 +304,7 @@ return self__.pt1;
 
 break;
 default:
-return cljs.core.get.call(null,self__.__extmap,k73231,else__16667__auto__);
+return cljs.core.get.call(null,self__.__extmap,k27830,else__16667__auto__);
 
 }
 });
@@ -373,16 +375,18 @@ return false;
 
 cljsketch.refgeom.PointPointLine.prototype.cljsketch$refgeom$IRefGeom$ = true;
 
-cljsketch.refgeom.PointPointLine.prototype.cljsketch$refgeom$IRefGeom$toGeom$arity$2 = (function (this$,geomap){
-var self__ = this;
-var this$__$1 = this;
-return null;
-});
-
 cljsketch.refgeom.PointPointLine.prototype.cljsketch$refgeom$IRefGeom$deps$arity$1 = (function (this$){
 var self__ = this;
 var this$__$1 = this;
 return cljs.core.list(new cljs.core.Symbol(null,"pt0","pt0",466700398,null),new cljs.core.Symbol(null,"pt1","pt1",-1742729545,null));
+});
+
+cljsketch.refgeom.PointPointLine.prototype.cljsketch$refgeom$IRefGeom$toGeom$arity$2 = (function (this$,geommap){
+var self__ = this;
+var this$__$1 = this;
+var p0 = (new cljsketch.vector.AffineVector(new cljs.core.Keyword(null,"p","p",151049309).cljs$core$IFn$_invoke$arity$1(geommap.call(null,self__.pt0)),null,null,null)).cljsketch$vector$IAffine$toProjectiveVector$arity$1(null);
+var p1 = (new cljsketch.vector.AffineVector(new cljs.core.Keyword(null,"p","p",151049309).cljs$core$IFn$_invoke$arity$1(geommap.call(null,self__.pt1)),null,null,null)).cljsketch$vector$IAffine$toProjectiveVector$arity$1(null);
+return (new cljsketch.geom.Line(cljsketch.vector.point_point_line.call(null,p0,p1),null,null,null));
 });
 
 cljsketch.refgeom.PointPointLine.prototype.cljs$core$IMap$_dissoc$arity$2 = (function (this__16673__auto__,k__16674__auto__){
@@ -395,18 +399,18 @@ return (new cljsketch.refgeom.PointPointLine(self__.pt0,self__.pt1,self__.__meta
 }
 });
 
-cljsketch.refgeom.PointPointLine.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__73230){
+cljsketch.refgeom.PointPointLine.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__27829){
 var self__ = this;
 var this__16671__auto____$1 = this;
-var pred__73234 = cljs.core.keyword_identical_QMARK_;
-var expr__73235 = k__16672__auto__;
-if(cljs.core.truth_(pred__73234.call(null,new cljs.core.Keyword(null,"pt0","pt0",-1173831129),expr__73235))){
-return (new cljsketch.refgeom.PointPointLine(G__73230,self__.pt1,self__.__meta,self__.__extmap,null));
+var pred__27833 = cljs.core.keyword_identical_QMARK_;
+var expr__27834 = k__16672__auto__;
+if(cljs.core.truth_(pred__27833.call(null,new cljs.core.Keyword(null,"pt0","pt0",-1173831129),expr__27834))){
+return (new cljsketch.refgeom.PointPointLine(G__27829,self__.pt1,self__.__meta,self__.__extmap,null));
 } else {
-if(cljs.core.truth_(pred__73234.call(null,new cljs.core.Keyword(null,"pt1","pt1",911706224),expr__73235))){
-return (new cljsketch.refgeom.PointPointLine(self__.pt0,G__73230,self__.__meta,self__.__extmap,null));
+if(cljs.core.truth_(pred__27833.call(null,new cljs.core.Keyword(null,"pt1","pt1",911706224),expr__27834))){
+return (new cljsketch.refgeom.PointPointLine(self__.pt0,G__27829,self__.__meta,self__.__extmap,null));
 } else {
-return (new cljsketch.refgeom.PointPointLine(self__.pt0,self__.pt1,self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__73230),null));
+return (new cljsketch.refgeom.PointPointLine(self__.pt0,self__.pt1,self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__27829),null));
 }
 }
 });
@@ -417,10 +421,10 @@ var this__16676__auto____$1 = this;
 return cljs.core.seq.call(null,cljs.core.concat.call(null,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"pt0","pt0",-1173831129),self__.pt0],null)),(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"pt1","pt1",911706224),self__.pt1],null))], null),self__.__extmap));
 });
 
-cljsketch.refgeom.PointPointLine.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__73230){
+cljsketch.refgeom.PointPointLine.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__27829){
 var self__ = this;
 var this__16663__auto____$1 = this;
-return (new cljsketch.refgeom.PointPointLine(self__.pt0,self__.pt1,G__73230,self__.__extmap,self__.__hash));
+return (new cljsketch.refgeom.PointPointLine(self__.pt0,self__.pt1,G__27829,self__.__extmap,self__.__hash));
 });
 
 cljsketch.refgeom.PointPointLine.prototype.cljs$core$ICollection$_conj$arity$2 = (function (this__16669__auto__,entry__16670__auto__){
@@ -451,8 +455,8 @@ cljsketch.refgeom.__GT_PointPointLine = (function cljsketch$refgeom$__GT_PointPo
 return (new cljsketch.refgeom.PointPointLine(pt0,pt1,null,null,null));
 });
 
-cljsketch.refgeom.map__GT_PointPointLine = (function cljsketch$refgeom$map__GT_PointPointLine(G__73232){
-return (new cljsketch.refgeom.PointPointLine(new cljs.core.Keyword(null,"pt0","pt0",-1173831129).cljs$core$IFn$_invoke$arity$1(G__73232),new cljs.core.Keyword(null,"pt1","pt1",911706224).cljs$core$IFn$_invoke$arity$1(G__73232),null,cljs.core.dissoc.call(null,G__73232,new cljs.core.Keyword(null,"pt0","pt0",-1173831129),new cljs.core.Keyword(null,"pt1","pt1",911706224)),null));
+cljsketch.refgeom.map__GT_PointPointLine = (function cljsketch$refgeom$map__GT_PointPointLine(G__27831){
+return (new cljsketch.refgeom.PointPointLine(new cljs.core.Keyword(null,"pt0","pt0",-1173831129).cljs$core$IFn$_invoke$arity$1(G__27831),new cljs.core.Keyword(null,"pt1","pt1",911706224).cljs$core$IFn$_invoke$arity$1(G__27831),null,cljs.core.dissoc.call(null,G__27831,new cljs.core.Keyword(null,"pt0","pt0",-1173831129),new cljs.core.Keyword(null,"pt1","pt1",911706224)),null));
 });
 
 
@@ -482,11 +486,11 @@ var this__16664__auto____$1 = this;
 return cljs.core._lookup.call(null,this__16664__auto____$1,k__16665__auto__,null);
 });
 
-cljsketch.refgeom.PointPerpendicularLine.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k73239,else__16667__auto__){
+cljsketch.refgeom.PointPerpendicularLine.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k27838,else__16667__auto__){
 var self__ = this;
 var this__16666__auto____$1 = this;
-var G__73241 = (((k73239 instanceof cljs.core.Keyword))?k73239.fqn:null);
-switch (G__73241) {
+var G__27840 = (((k27838 instanceof cljs.core.Keyword))?k27838.fqn:null);
+switch (G__27840) {
 case "pt":
 return self__.pt;
 
@@ -496,7 +500,7 @@ return self__.ln;
 
 break;
 default:
-return cljs.core.get.call(null,self__.__extmap,k73239,else__16667__auto__);
+return cljs.core.get.call(null,self__.__extmap,k27838,else__16667__auto__);
 
 }
 });
@@ -567,16 +571,18 @@ return false;
 
 cljsketch.refgeom.PointPerpendicularLine.prototype.cljsketch$refgeom$IRefGeom$ = true;
 
-cljsketch.refgeom.PointPerpendicularLine.prototype.cljsketch$refgeom$IRefGeom$toGeom$arity$2 = (function (this$,geomap){
-var self__ = this;
-var this$__$1 = this;
-return null;
-});
-
 cljsketch.refgeom.PointPerpendicularLine.prototype.cljsketch$refgeom$IRefGeom$deps$arity$1 = (function (this$){
 var self__ = this;
 var this$__$1 = this;
 return cljs.core.list(new cljs.core.Symbol(null,"pt","pt",-2097974902,null),new cljs.core.Symbol(null,"ln","ln",-679541329,null));
+});
+
+cljsketch.refgeom.PointPerpendicularLine.prototype.cljsketch$refgeom$IRefGeom$toGeom$arity$2 = (function (this$,geommap){
+var self__ = this;
+var this$__$1 = this;
+var ptv = (new cljsketch.vector.AffineVector(new cljs.core.Keyword(null,"p","p",151049309).cljs$core$IFn$_invoke$arity$1(geommap.call(null,self__.pt)),null,null,null)).cljsketch$vector$IAffine$toProjectiveVector$arity$1(null);
+var lnv = new cljs.core.Keyword(null,"u","u",-1156634785).cljs$core$IFn$_invoke$arity$1(geommap.call(null,self__.ln));
+return (new cljsketch.geom.Line(cljsketch.vector.point_line_perpendicular.call(null,ptv,lnv),null,null,null));
 });
 
 cljsketch.refgeom.PointPerpendicularLine.prototype.cljs$core$IMap$_dissoc$arity$2 = (function (this__16673__auto__,k__16674__auto__){
@@ -589,18 +595,18 @@ return (new cljsketch.refgeom.PointPerpendicularLine(self__.pt,self__.ln,self__.
 }
 });
 
-cljsketch.refgeom.PointPerpendicularLine.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__73238){
+cljsketch.refgeom.PointPerpendicularLine.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__27837){
 var self__ = this;
 var this__16671__auto____$1 = this;
-var pred__73242 = cljs.core.keyword_identical_QMARK_;
-var expr__73243 = k__16672__auto__;
-if(cljs.core.truth_(pred__73242.call(null,new cljs.core.Keyword(null,"pt","pt",556460867),expr__73243))){
-return (new cljsketch.refgeom.PointPerpendicularLine(G__73238,self__.ln,self__.__meta,self__.__extmap,null));
+var pred__27841 = cljs.core.keyword_identical_QMARK_;
+var expr__27842 = k__16672__auto__;
+if(cljs.core.truth_(pred__27841.call(null,new cljs.core.Keyword(null,"pt","pt",556460867),expr__27842))){
+return (new cljsketch.refgeom.PointPerpendicularLine(G__27837,self__.ln,self__.__meta,self__.__extmap,null));
 } else {
-if(cljs.core.truth_(pred__73242.call(null,new cljs.core.Keyword(null,"ln","ln",1974894440),expr__73243))){
-return (new cljsketch.refgeom.PointPerpendicularLine(self__.pt,G__73238,self__.__meta,self__.__extmap,null));
+if(cljs.core.truth_(pred__27841.call(null,new cljs.core.Keyword(null,"ln","ln",1974894440),expr__27842))){
+return (new cljsketch.refgeom.PointPerpendicularLine(self__.pt,G__27837,self__.__meta,self__.__extmap,null));
 } else {
-return (new cljsketch.refgeom.PointPerpendicularLine(self__.pt,self__.ln,self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__73238),null));
+return (new cljsketch.refgeom.PointPerpendicularLine(self__.pt,self__.ln,self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__27837),null));
 }
 }
 });
@@ -611,10 +617,10 @@ var this__16676__auto____$1 = this;
 return cljs.core.seq.call(null,cljs.core.concat.call(null,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"pt","pt",556460867),self__.pt],null)),(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"ln","ln",1974894440),self__.ln],null))], null),self__.__extmap));
 });
 
-cljsketch.refgeom.PointPerpendicularLine.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__73238){
+cljsketch.refgeom.PointPerpendicularLine.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__27837){
 var self__ = this;
 var this__16663__auto____$1 = this;
-return (new cljsketch.refgeom.PointPerpendicularLine(self__.pt,self__.ln,G__73238,self__.__extmap,self__.__hash));
+return (new cljsketch.refgeom.PointPerpendicularLine(self__.pt,self__.ln,G__27837,self__.__extmap,self__.__hash));
 });
 
 cljsketch.refgeom.PointPerpendicularLine.prototype.cljs$core$ICollection$_conj$arity$2 = (function (this__16669__auto__,entry__16670__auto__){
@@ -645,8 +651,8 @@ cljsketch.refgeom.__GT_PointPerpendicularLine = (function cljsketch$refgeom$__GT
 return (new cljsketch.refgeom.PointPerpendicularLine(pt,ln,null,null,null));
 });
 
-cljsketch.refgeom.map__GT_PointPerpendicularLine = (function cljsketch$refgeom$map__GT_PointPerpendicularLine(G__73240){
-return (new cljsketch.refgeom.PointPerpendicularLine(new cljs.core.Keyword(null,"pt","pt",556460867).cljs$core$IFn$_invoke$arity$1(G__73240),new cljs.core.Keyword(null,"ln","ln",1974894440).cljs$core$IFn$_invoke$arity$1(G__73240),null,cljs.core.dissoc.call(null,G__73240,new cljs.core.Keyword(null,"pt","pt",556460867),new cljs.core.Keyword(null,"ln","ln",1974894440)),null));
+cljsketch.refgeom.map__GT_PointPerpendicularLine = (function cljsketch$refgeom$map__GT_PointPerpendicularLine(G__27839){
+return (new cljsketch.refgeom.PointPerpendicularLine(new cljs.core.Keyword(null,"pt","pt",556460867).cljs$core$IFn$_invoke$arity$1(G__27839),new cljs.core.Keyword(null,"ln","ln",1974894440).cljs$core$IFn$_invoke$arity$1(G__27839),null,cljs.core.dissoc.call(null,G__27839,new cljs.core.Keyword(null,"pt","pt",556460867),new cljs.core.Keyword(null,"ln","ln",1974894440)),null));
 });
 
 
@@ -676,11 +682,11 @@ var this__16664__auto____$1 = this;
 return cljs.core._lookup.call(null,this__16664__auto____$1,k__16665__auto__,null);
 });
 
-cljsketch.refgeom.PointParallelLine.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k73247,else__16667__auto__){
+cljsketch.refgeom.PointParallelLine.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k27846,else__16667__auto__){
 var self__ = this;
 var this__16666__auto____$1 = this;
-var G__73249 = (((k73247 instanceof cljs.core.Keyword))?k73247.fqn:null);
-switch (G__73249) {
+var G__27848 = (((k27846 instanceof cljs.core.Keyword))?k27846.fqn:null);
+switch (G__27848) {
 case "pt":
 return self__.pt;
 
@@ -690,7 +696,7 @@ return self__.ln;
 
 break;
 default:
-return cljs.core.get.call(null,self__.__extmap,k73247,else__16667__auto__);
+return cljs.core.get.call(null,self__.__extmap,k27846,else__16667__auto__);
 
 }
 });
@@ -761,16 +767,18 @@ return false;
 
 cljsketch.refgeom.PointParallelLine.prototype.cljsketch$refgeom$IRefGeom$ = true;
 
-cljsketch.refgeom.PointParallelLine.prototype.cljsketch$refgeom$IRefGeom$toGeom$arity$2 = (function (this$,geomap){
-var self__ = this;
-var this$__$1 = this;
-return null;
-});
-
 cljsketch.refgeom.PointParallelLine.prototype.cljsketch$refgeom$IRefGeom$deps$arity$1 = (function (this$){
 var self__ = this;
 var this$__$1 = this;
 return cljs.core.list(new cljs.core.Symbol(null,"pt","pt",-2097974902,null),new cljs.core.Symbol(null,"ln","ln",-679541329,null));
+});
+
+cljsketch.refgeom.PointParallelLine.prototype.cljsketch$refgeom$IRefGeom$toGeom$arity$2 = (function (this$,geommap){
+var self__ = this;
+var this$__$1 = this;
+var ptv = (new cljsketch.vector.AffineVector(new cljs.core.Keyword(null,"p","p",151049309).cljs$core$IFn$_invoke$arity$1(geommap.call(null,self__.pt)),null,null,null)).cljsketch$vector$IAffine$toProjectiveVector$arity$1(null);
+var lnv = new cljs.core.Keyword(null,"u","u",-1156634785).cljs$core$IFn$_invoke$arity$1(geommap.call(null,self__.ln));
+return (new cljsketch.geom.Line(cljsketch.vector.point_line_parallel.call(null,ptv,lnv),null,null,null));
 });
 
 cljsketch.refgeom.PointParallelLine.prototype.cljs$core$IMap$_dissoc$arity$2 = (function (this__16673__auto__,k__16674__auto__){
@@ -783,18 +791,18 @@ return (new cljsketch.refgeom.PointParallelLine(self__.pt,self__.ln,self__.__met
 }
 });
 
-cljsketch.refgeom.PointParallelLine.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__73246){
+cljsketch.refgeom.PointParallelLine.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__27845){
 var self__ = this;
 var this__16671__auto____$1 = this;
-var pred__73250 = cljs.core.keyword_identical_QMARK_;
-var expr__73251 = k__16672__auto__;
-if(cljs.core.truth_(pred__73250.call(null,new cljs.core.Keyword(null,"pt","pt",556460867),expr__73251))){
-return (new cljsketch.refgeom.PointParallelLine(G__73246,self__.ln,self__.__meta,self__.__extmap,null));
+var pred__27849 = cljs.core.keyword_identical_QMARK_;
+var expr__27850 = k__16672__auto__;
+if(cljs.core.truth_(pred__27849.call(null,new cljs.core.Keyword(null,"pt","pt",556460867),expr__27850))){
+return (new cljsketch.refgeom.PointParallelLine(G__27845,self__.ln,self__.__meta,self__.__extmap,null));
 } else {
-if(cljs.core.truth_(pred__73250.call(null,new cljs.core.Keyword(null,"ln","ln",1974894440),expr__73251))){
-return (new cljsketch.refgeom.PointParallelLine(self__.pt,G__73246,self__.__meta,self__.__extmap,null));
+if(cljs.core.truth_(pred__27849.call(null,new cljs.core.Keyword(null,"ln","ln",1974894440),expr__27850))){
+return (new cljsketch.refgeom.PointParallelLine(self__.pt,G__27845,self__.__meta,self__.__extmap,null));
 } else {
-return (new cljsketch.refgeom.PointParallelLine(self__.pt,self__.ln,self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__73246),null));
+return (new cljsketch.refgeom.PointParallelLine(self__.pt,self__.ln,self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__27845),null));
 }
 }
 });
@@ -805,10 +813,10 @@ var this__16676__auto____$1 = this;
 return cljs.core.seq.call(null,cljs.core.concat.call(null,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"pt","pt",556460867),self__.pt],null)),(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"ln","ln",1974894440),self__.ln],null))], null),self__.__extmap));
 });
 
-cljsketch.refgeom.PointParallelLine.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__73246){
+cljsketch.refgeom.PointParallelLine.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__27845){
 var self__ = this;
 var this__16663__auto____$1 = this;
-return (new cljsketch.refgeom.PointParallelLine(self__.pt,self__.ln,G__73246,self__.__extmap,self__.__hash));
+return (new cljsketch.refgeom.PointParallelLine(self__.pt,self__.ln,G__27845,self__.__extmap,self__.__hash));
 });
 
 cljsketch.refgeom.PointParallelLine.prototype.cljs$core$ICollection$_conj$arity$2 = (function (this__16669__auto__,entry__16670__auto__){
@@ -839,9 +847,35 @@ cljsketch.refgeom.__GT_PointParallelLine = (function cljsketch$refgeom$__GT_Poin
 return (new cljsketch.refgeom.PointParallelLine(pt,ln,null,null,null));
 });
 
-cljsketch.refgeom.map__GT_PointParallelLine = (function cljsketch$refgeom$map__GT_PointParallelLine(G__73248){
-return (new cljsketch.refgeom.PointParallelLine(new cljs.core.Keyword(null,"pt","pt",556460867).cljs$core$IFn$_invoke$arity$1(G__73248),new cljs.core.Keyword(null,"ln","ln",1974894440).cljs$core$IFn$_invoke$arity$1(G__73248),null,cljs.core.dissoc.call(null,G__73248,new cljs.core.Keyword(null,"pt","pt",556460867),new cljs.core.Keyword(null,"ln","ln",1974894440)),null));
+cljsketch.refgeom.map__GT_PointParallelLine = (function cljsketch$refgeom$map__GT_PointParallelLine(G__27847){
+return (new cljsketch.refgeom.PointParallelLine(new cljs.core.Keyword(null,"pt","pt",556460867).cljs$core$IFn$_invoke$arity$1(G__27847),new cljs.core.Keyword(null,"ln","ln",1974894440).cljs$core$IFn$_invoke$arity$1(G__27847),null,cljs.core.dissoc.call(null,G__27847,new cljs.core.Keyword(null,"pt","pt",556460867),new cljs.core.Keyword(null,"ln","ln",1974894440)),null));
 });
 
+cljsketch.refgeom.geommap = (function cljsketch$refgeom$geommap(atoms){
+return cljs.core.reduce.call(null,(function (gmap,at){
+return cljs.core.assoc.call(null,gmap,at,(((function (){var G__27854 = cljs.core.deref.call(null,at);
+if(G__27854){
+var bit__16743__auto__ = null;
+if(cljs.core.truth_((function (){var or__16069__auto__ = bit__16743__auto__;
+if(cljs.core.truth_(or__16069__auto__)){
+return or__16069__auto__;
+} else {
+return G__27854.cljsketch$geom$IGeom$;
+}
+})())){
+return true;
+} else {
+if((!G__27854.cljs$lang$protocol_mask$partition$)){
+return cljs.core.native_satisfies_QMARK_.call(null,cljsketch.geom.IGeom,G__27854);
+} else {
+return false;
+}
+}
+} else {
+return cljs.core.native_satisfies_QMARK_.call(null,cljsketch.geom.IGeom,G__27854);
+}
+})())?cljs.core.deref.call(null,at):cljsketch.refgeom.toGeom.call(null,cljs.core.deref.call(null,at),gmap)));
+}),cljs.core.PersistentArrayMap.EMPTY,atoms);
+});
 
-//# sourceMappingURL=refgeom.js.map?rel=1440992411933
+//# sourceMappingURL=refgeom.js.map?rel=1441066850909

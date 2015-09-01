@@ -1,23 +1,23 @@
 // Compiled by ClojureScript 0.0-3297 {}
 goog.provide('cljsketch.construction_tools');
 goog.require('cljs.core');
+goog.require('cljsketch.geom');
+goog.require('cljsketch.refgeom');
 cljsketch.construction_tools.types = (function cljsketch$construction_tools$types(geoms){
-return cljs.core.map.call(null,(function (p1__68501_SHARP_){
-return new cljs.core.Keyword(null,"type","type",1174270348).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,p1__68501_SHARP_));
-}),geoms);
+return cljs.core.map.call(null,cljs.core.type,geoms);
 });
-cljsketch.construction_tools.first_object_of_type = (function cljsketch$construction_tools$first_object_of_type(type,geoms){
-return cljs.core.some.call(null,(function (p1__68502_SHARP_){
-if(cljs.core._EQ_.call(null,new cljs.core.Keyword(null,"type","type",1174270348).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,p1__68502_SHARP_)),type)){
-return p1__68502_SHARP_;
+cljsketch.construction_tools.first_object_of_type = (function cljsketch$construction_tools$first_object_of_type(typ,geoms){
+return cljs.core.some.call(null,(function (p1__27625_SHARP_){
+if(cljs.core._EQ_.call(null,cljs.core.type.call(null,p1__27625_SHARP_),typ)){
+return p1__27625_SHARP_;
 } else {
 return null;
 }
 }),geoms);
 });
 
-cljsketch.construction_tools.IConstructionTool = (function (){var obj68504 = {};
-return obj68504;
+cljsketch.construction_tools.IConstructionTool = (function (){var obj27627 = {};
+return obj27627;
 })();
 
 /**
@@ -102,13 +102,13 @@ var this__16664__auto____$1 = this;
 return cljs.core._lookup.call(null,this__16664__auto____$1,k__16665__auto__,null);
 });
 
-cljsketch.construction_tools.SegmentConstructionTool.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k68506,else__16667__auto__){
+cljsketch.construction_tools.SegmentConstructionTool.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k27629,else__16667__auto__){
 var self__ = this;
 var this__16666__auto____$1 = this;
-var G__68508 = k68506;
-switch (G__68508) {
+var G__27631 = k27629;
+switch (G__27631) {
 default:
-return cljs.core.get.call(null,self__.__extmap,k68506,else__16667__auto__);
+return cljs.core.get.call(null,self__.__extmap,k27629,else__16667__auto__);
 
 }
 });
@@ -187,12 +187,12 @@ return (new cljsketch.construction_tools.SegmentConstructionTool(self__.__meta,c
 }
 });
 
-cljsketch.construction_tools.SegmentConstructionTool.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__68505){
+cljsketch.construction_tools.SegmentConstructionTool.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__27628){
 var self__ = this;
 var this__16671__auto____$1 = this;
-var pred__68509 = cljs.core.keyword_identical_QMARK_;
-var expr__68510 = k__16672__auto__;
-return (new cljsketch.construction_tools.SegmentConstructionTool(self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__68505),null));
+var pred__27632 = cljs.core.keyword_identical_QMARK_;
+var expr__27633 = k__16672__auto__;
+return (new cljsketch.construction_tools.SegmentConstructionTool(self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__27628),null));
 });
 
 cljsketch.construction_tools.SegmentConstructionTool.prototype.cljs$core$ISeqable$_seq$arity$1 = (function (this__16676__auto__){
@@ -206,19 +206,19 @@ cljsketch.construction_tools.SegmentConstructionTool.prototype.cljsketch$constru
 cljsketch.construction_tools.SegmentConstructionTool.prototype.cljsketch$construction_tools$IConstructionTool$selection_fits$arity$2 = (function (this$,selected){
 var self__ = this;
 var this$__$1 = this;
-return (cljs.core._EQ_.call(null,(2),cljs.core.count.call(null,selected))) && (cljs.core._EQ_.call(null,cljs.core.set.call(null,cljsketch.construction_tools.types.call(null,selected)),new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"point","point",1813198264),null], null), null)));
+return (cljs.core._EQ_.call(null,(2),cljs.core.count.call(null,selected))) && (cljs.core._EQ_.call(null,cljs.core.set.call(null,cljsketch.construction_tools.types.call(null,selected)),cljs.core.PersistentHashSet.fromArray([cljsketch.geom.Point], true)));
 });
 
 cljsketch.construction_tools.SegmentConstructionTool.prototype.cljsketch$construction_tools$IConstructionTool$construct$arity$2 = (function (this$,selected){
 var self__ = this;
 var this$__$1 = this;
-return new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"type","type",1174270348),new cljs.core.Keyword(null,"segment","segment",-964921196),new cljs.core.Keyword(null,"endpoints","endpoints",274088209),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.first.call(null,selected),cljs.core.second.call(null,selected)], null)], null);
+return (new cljsketch.refgeom.PointPointSegment(cljs.core.first.call(null,selected),cljs.core.second.call(null,selected),null,null,null));
 });
 
-cljsketch.construction_tools.SegmentConstructionTool.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__68505){
+cljsketch.construction_tools.SegmentConstructionTool.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__27628){
 var self__ = this;
 var this__16663__auto____$1 = this;
-return (new cljsketch.construction_tools.SegmentConstructionTool(G__68505,self__.__extmap,self__.__hash));
+return (new cljsketch.construction_tools.SegmentConstructionTool(G__27628,self__.__extmap,self__.__hash));
 });
 
 cljsketch.construction_tools.SegmentConstructionTool.prototype.cljs$core$ICollection$_conj$arity$2 = (function (this__16669__auto__,entry__16670__auto__){
@@ -249,8 +249,8 @@ cljsketch.construction_tools.__GT_SegmentConstructionTool = (function cljsketch$
 return (new cljsketch.construction_tools.SegmentConstructionTool(null,null,null));
 });
 
-cljsketch.construction_tools.map__GT_SegmentConstructionTool = (function cljsketch$construction_tools$map__GT_SegmentConstructionTool(G__68507){
-return (new cljsketch.construction_tools.SegmentConstructionTool(null,cljs.core.dissoc.call(null,G__68507),null));
+cljsketch.construction_tools.map__GT_SegmentConstructionTool = (function cljsketch$construction_tools$map__GT_SegmentConstructionTool(G__27630){
+return (new cljsketch.construction_tools.SegmentConstructionTool(null,cljs.core.dissoc.call(null,G__27630),null));
 });
 
 
@@ -276,13 +276,13 @@ var this__16664__auto____$1 = this;
 return cljs.core._lookup.call(null,this__16664__auto____$1,k__16665__auto__,null);
 });
 
-cljsketch.construction_tools.LineConstructionTool.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k68514,else__16667__auto__){
+cljsketch.construction_tools.LineConstructionTool.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k27637,else__16667__auto__){
 var self__ = this;
 var this__16666__auto____$1 = this;
-var G__68516 = k68514;
-switch (G__68516) {
+var G__27639 = k27637;
+switch (G__27639) {
 default:
-return cljs.core.get.call(null,self__.__extmap,k68514,else__16667__auto__);
+return cljs.core.get.call(null,self__.__extmap,k27637,else__16667__auto__);
 
 }
 });
@@ -361,12 +361,12 @@ return (new cljsketch.construction_tools.LineConstructionTool(self__.__meta,cljs
 }
 });
 
-cljsketch.construction_tools.LineConstructionTool.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__68513){
+cljsketch.construction_tools.LineConstructionTool.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__27636){
 var self__ = this;
 var this__16671__auto____$1 = this;
-var pred__68517 = cljs.core.keyword_identical_QMARK_;
-var expr__68518 = k__16672__auto__;
-return (new cljsketch.construction_tools.LineConstructionTool(self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__68513),null));
+var pred__27640 = cljs.core.keyword_identical_QMARK_;
+var expr__27641 = k__16672__auto__;
+return (new cljsketch.construction_tools.LineConstructionTool(self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__27636),null));
 });
 
 cljsketch.construction_tools.LineConstructionTool.prototype.cljs$core$ISeqable$_seq$arity$1 = (function (this__16676__auto__){
@@ -380,19 +380,19 @@ cljsketch.construction_tools.LineConstructionTool.prototype.cljsketch$constructi
 cljsketch.construction_tools.LineConstructionTool.prototype.cljsketch$construction_tools$IConstructionTool$selection_fits$arity$2 = (function (this$,selected){
 var self__ = this;
 var this$__$1 = this;
-return (cljs.core._EQ_.call(null,(2),cljs.core.count.call(null,selected))) && (cljs.core._EQ_.call(null,cljs.core.set.call(null,cljsketch.construction_tools.types.call(null,selected)),new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"point","point",1813198264),null], null), null)));
+return (cljs.core._EQ_.call(null,(2),cljs.core.count.call(null,selected))) && (cljs.core._EQ_.call(null,cljs.core.set.call(null,cljsketch.construction_tools.types.call(null,selected)),cljs.core.PersistentHashSet.fromArray([cljsketch.geom.Point], true)));
 });
 
 cljsketch.construction_tools.LineConstructionTool.prototype.cljsketch$construction_tools$IConstructionTool$construct$arity$2 = (function (this$,selected){
 var self__ = this;
 var this$__$1 = this;
-return new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"type","type",1174270348),new cljs.core.Keyword(null,"line","line",212345235),new cljs.core.Keyword(null,"points","points",-1486596883),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.first.call(null,selected),cljs.core.second.call(null,selected)], null)], null);
+return (new cljsketch.refgeom.PointPointLine(cljs.core.first.call(null,selected),cljs.core.second.call(null,selected),null,null,null));
 });
 
-cljsketch.construction_tools.LineConstructionTool.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__68513){
+cljsketch.construction_tools.LineConstructionTool.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__27636){
 var self__ = this;
 var this__16663__auto____$1 = this;
-return (new cljsketch.construction_tools.LineConstructionTool(G__68513,self__.__extmap,self__.__hash));
+return (new cljsketch.construction_tools.LineConstructionTool(G__27636,self__.__extmap,self__.__hash));
 });
 
 cljsketch.construction_tools.LineConstructionTool.prototype.cljs$core$ICollection$_conj$arity$2 = (function (this__16669__auto__,entry__16670__auto__){
@@ -423,8 +423,8 @@ cljsketch.construction_tools.__GT_LineConstructionTool = (function cljsketch$con
 return (new cljsketch.construction_tools.LineConstructionTool(null,null,null));
 });
 
-cljsketch.construction_tools.map__GT_LineConstructionTool = (function cljsketch$construction_tools$map__GT_LineConstructionTool(G__68515){
-return (new cljsketch.construction_tools.LineConstructionTool(null,cljs.core.dissoc.call(null,G__68515),null));
+cljsketch.construction_tools.map__GT_LineConstructionTool = (function cljsketch$construction_tools$map__GT_LineConstructionTool(G__27638){
+return (new cljsketch.construction_tools.LineConstructionTool(null,cljs.core.dissoc.call(null,G__27638),null));
 });
 
 
@@ -450,13 +450,13 @@ var this__16664__auto____$1 = this;
 return cljs.core._lookup.call(null,this__16664__auto____$1,k__16665__auto__,null);
 });
 
-cljsketch.construction_tools.ParallelLineConstructionTool.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k68522,else__16667__auto__){
+cljsketch.construction_tools.ParallelLineConstructionTool.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k27645,else__16667__auto__){
 var self__ = this;
 var this__16666__auto____$1 = this;
-var G__68524 = k68522;
-switch (G__68524) {
+var G__27647 = k27645;
+switch (G__27647) {
 default:
-return cljs.core.get.call(null,self__.__extmap,k68522,else__16667__auto__);
+return cljs.core.get.call(null,self__.__extmap,k27645,else__16667__auto__);
 
 }
 });
@@ -535,12 +535,12 @@ return (new cljsketch.construction_tools.ParallelLineConstructionTool(self__.__m
 }
 });
 
-cljsketch.construction_tools.ParallelLineConstructionTool.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__68521){
+cljsketch.construction_tools.ParallelLineConstructionTool.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__27644){
 var self__ = this;
 var this__16671__auto____$1 = this;
-var pred__68525 = cljs.core.keyword_identical_QMARK_;
-var expr__68526 = k__16672__auto__;
-return (new cljsketch.construction_tools.ParallelLineConstructionTool(self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__68521),null));
+var pred__27648 = cljs.core.keyword_identical_QMARK_;
+var expr__27649 = k__16672__auto__;
+return (new cljsketch.construction_tools.ParallelLineConstructionTool(self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__27644),null));
 });
 
 cljsketch.construction_tools.ParallelLineConstructionTool.prototype.cljs$core$ISeqable$_seq$arity$1 = (function (this__16676__auto__){
@@ -554,21 +554,21 @@ cljsketch.construction_tools.ParallelLineConstructionTool.prototype.cljsketch$co
 cljsketch.construction_tools.ParallelLineConstructionTool.prototype.cljsketch$construction_tools$IConstructionTool$selection_fits$arity$2 = (function (this$,selected){
 var self__ = this;
 var this$__$1 = this;
-return (cljs.core._EQ_.call(null,(2),cljs.core.count.call(null,selected))) && (cljs.core._EQ_.call(null,cljs.core.set.call(null,cljsketch.construction_tools.types.call(null,selected)),new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"line","line",212345235),null,new cljs.core.Keyword(null,"point","point",1813198264),null], null), null)));
+return (cljs.core._EQ_.call(null,(2),cljs.core.count.call(null,selected))) && (cljs.core._EQ_.call(null,cljs.core.set.call(null,cljsketch.construction_tools.types.call(null,selected)),cljs.core.PersistentHashSet.fromArray([new cljs.core.Keyword(null,"line","line",212345235),cljsketch.geom.Point], true)));
 });
 
 cljsketch.construction_tools.ParallelLineConstructionTool.prototype.cljsketch$construction_tools$IConstructionTool$construct$arity$2 = (function (this$,selected){
 var self__ = this;
 var this$__$1 = this;
-var pt = cljsketch.construction_tools.first_object_of_type.call(null,new cljs.core.Keyword(null,"point","point",1813198264),selected);
+var pt = cljsketch.construction_tools.first_object_of_type.call(null,cljsketch.geom.Point,selected);
 var ln = cljsketch.construction_tools.first_object_of_type.call(null,new cljs.core.Keyword(null,"line","line",212345235),selected);
-return new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"type","type",1174270348),new cljs.core.Keyword(null,"line","line",212345235),new cljs.core.Keyword(null,"point","point",1813198264),pt,new cljs.core.Keyword(null,"parallel-line","parallel-line",-976840390),ln], null);
+return (new cljsketch.refgeom.PointParallelLine(pt,ln,null,null,null));
 });
 
-cljsketch.construction_tools.ParallelLineConstructionTool.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__68521){
+cljsketch.construction_tools.ParallelLineConstructionTool.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__27644){
 var self__ = this;
 var this__16663__auto____$1 = this;
-return (new cljsketch.construction_tools.ParallelLineConstructionTool(G__68521,self__.__extmap,self__.__hash));
+return (new cljsketch.construction_tools.ParallelLineConstructionTool(G__27644,self__.__extmap,self__.__hash));
 });
 
 cljsketch.construction_tools.ParallelLineConstructionTool.prototype.cljs$core$ICollection$_conj$arity$2 = (function (this__16669__auto__,entry__16670__auto__){
@@ -599,8 +599,8 @@ cljsketch.construction_tools.__GT_ParallelLineConstructionTool = (function cljsk
 return (new cljsketch.construction_tools.ParallelLineConstructionTool(null,null,null));
 });
 
-cljsketch.construction_tools.map__GT_ParallelLineConstructionTool = (function cljsketch$construction_tools$map__GT_ParallelLineConstructionTool(G__68523){
-return (new cljsketch.construction_tools.ParallelLineConstructionTool(null,cljs.core.dissoc.call(null,G__68523),null));
+cljsketch.construction_tools.map__GT_ParallelLineConstructionTool = (function cljsketch$construction_tools$map__GT_ParallelLineConstructionTool(G__27646){
+return (new cljsketch.construction_tools.ParallelLineConstructionTool(null,cljs.core.dissoc.call(null,G__27646),null));
 });
 
 
@@ -626,13 +626,13 @@ var this__16664__auto____$1 = this;
 return cljs.core._lookup.call(null,this__16664__auto____$1,k__16665__auto__,null);
 });
 
-cljsketch.construction_tools.PerpendicularLineConstructionTool.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k68530,else__16667__auto__){
+cljsketch.construction_tools.PerpendicularLineConstructionTool.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k27653,else__16667__auto__){
 var self__ = this;
 var this__16666__auto____$1 = this;
-var G__68532 = k68530;
-switch (G__68532) {
+var G__27655 = k27653;
+switch (G__27655) {
 default:
-return cljs.core.get.call(null,self__.__extmap,k68530,else__16667__auto__);
+return cljs.core.get.call(null,self__.__extmap,k27653,else__16667__auto__);
 
 }
 });
@@ -711,12 +711,12 @@ return (new cljsketch.construction_tools.PerpendicularLineConstructionTool(self_
 }
 });
 
-cljsketch.construction_tools.PerpendicularLineConstructionTool.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__68529){
+cljsketch.construction_tools.PerpendicularLineConstructionTool.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__27652){
 var self__ = this;
 var this__16671__auto____$1 = this;
-var pred__68533 = cljs.core.keyword_identical_QMARK_;
-var expr__68534 = k__16672__auto__;
-return (new cljsketch.construction_tools.PerpendicularLineConstructionTool(self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__68529),null));
+var pred__27656 = cljs.core.keyword_identical_QMARK_;
+var expr__27657 = k__16672__auto__;
+return (new cljsketch.construction_tools.PerpendicularLineConstructionTool(self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__27652),null));
 });
 
 cljsketch.construction_tools.PerpendicularLineConstructionTool.prototype.cljs$core$ISeqable$_seq$arity$1 = (function (this__16676__auto__){
@@ -730,21 +730,21 @@ cljsketch.construction_tools.PerpendicularLineConstructionTool.prototype.cljsket
 cljsketch.construction_tools.PerpendicularLineConstructionTool.prototype.cljsketch$construction_tools$IConstructionTool$selection_fits$arity$2 = (function (this$,selected){
 var self__ = this;
 var this$__$1 = this;
-return (cljs.core._EQ_.call(null,(2),cljs.core.count.call(null,selected))) && (cljs.core._EQ_.call(null,cljs.core.set.call(null,cljsketch.construction_tools.types.call(null,selected)),new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"line","line",212345235),null,new cljs.core.Keyword(null,"point","point",1813198264),null], null), null)));
+return (cljs.core._EQ_.call(null,(2),cljs.core.count.call(null,selected))) && (cljs.core._EQ_.call(null,cljs.core.set.call(null,cljsketch.construction_tools.types.call(null,selected)),cljs.core.PersistentHashSet.fromArray([new cljs.core.Keyword(null,"line","line",212345235),cljsketch.geom.Point], true)));
 });
 
 cljsketch.construction_tools.PerpendicularLineConstructionTool.prototype.cljsketch$construction_tools$IConstructionTool$construct$arity$2 = (function (this$,selected){
 var self__ = this;
 var this$__$1 = this;
-var pt = cljsketch.construction_tools.first_object_of_type.call(null,new cljs.core.Keyword(null,"point","point",1813198264),selected);
+var pt = cljsketch.construction_tools.first_object_of_type.call(null,cljsketch.geom.Point,selected);
 var ln = cljsketch.construction_tools.first_object_of_type.call(null,new cljs.core.Keyword(null,"line","line",212345235),selected);
-return new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"type","type",1174270348),new cljs.core.Keyword(null,"line","line",212345235),new cljs.core.Keyword(null,"point","point",1813198264),pt,new cljs.core.Keyword(null,"perpendicular-line","perpendicular-line",1264791920),ln], null);
+return (new cljsketch.refgeom.PointPerpendicularLine(pt,ln,null,null,null));
 });
 
-cljsketch.construction_tools.PerpendicularLineConstructionTool.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__68529){
+cljsketch.construction_tools.PerpendicularLineConstructionTool.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__27652){
 var self__ = this;
 var this__16663__auto____$1 = this;
-return (new cljsketch.construction_tools.PerpendicularLineConstructionTool(G__68529,self__.__extmap,self__.__hash));
+return (new cljsketch.construction_tools.PerpendicularLineConstructionTool(G__27652,self__.__extmap,self__.__hash));
 });
 
 cljsketch.construction_tools.PerpendicularLineConstructionTool.prototype.cljs$core$ICollection$_conj$arity$2 = (function (this__16669__auto__,entry__16670__auto__){
@@ -775,9 +775,9 @@ cljsketch.construction_tools.__GT_PerpendicularLineConstructionTool = (function 
 return (new cljsketch.construction_tools.PerpendicularLineConstructionTool(null,null,null));
 });
 
-cljsketch.construction_tools.map__GT_PerpendicularLineConstructionTool = (function cljsketch$construction_tools$map__GT_PerpendicularLineConstructionTool(G__68531){
-return (new cljsketch.construction_tools.PerpendicularLineConstructionTool(null,cljs.core.dissoc.call(null,G__68531),null));
+cljsketch.construction_tools.map__GT_PerpendicularLineConstructionTool = (function cljsketch$construction_tools$map__GT_PerpendicularLineConstructionTool(G__27654){
+return (new cljsketch.construction_tools.PerpendicularLineConstructionTool(null,cljs.core.dissoc.call(null,G__27654),null));
 });
 
 
-//# sourceMappingURL=construction_tools.js.map?rel=1440902448725
+//# sourceMappingURL=construction_tools.js.map?rel=1441066529996
