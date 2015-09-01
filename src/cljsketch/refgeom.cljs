@@ -11,6 +11,13 @@
   (geom-type [this] "")
 )
 
+;; a point
+(defrecord Point [p] 
+  IRefGeom
+  (deps [this] '())
+  (geom-type [this] g/Point)
+  (toGeom [this geommap] (g/Point. p)))
+
 ;; segment connecting two points
 (defrecord PointPointSegment [pt0 pt1] 
   IRefGeom
@@ -75,6 +82,6 @@
 ;;
 (defn geommap [atoms]
   (reduce
-   (fn [gmap at] (assoc gmap at (if (satisfies? g/IGeom @at) @at (toGeom @at gmap))))
+   (fn [gmap at] (assoc gmap at (toGeom @at gmap)))
    {}
    atoms))
