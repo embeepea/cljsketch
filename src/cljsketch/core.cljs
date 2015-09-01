@@ -180,8 +180,10 @@
   (redraw-canvas))
 
 (defmethod menu-item-handler :delete [key]
-  (clear-selection!)
-  (redraw-canvas))
+  (let [trash (rg/dependents (@app-state :world) @selection)]
+    (swap! app-state assoc :world (vec (remove (set trash) (@app-state :world))))
+    (clear-selection!)
+    (redraw-canvas)))
 
 (defmethod menu-item-handler :segment [key]
   (construct-and-redraw (construction-tools :segment)))
