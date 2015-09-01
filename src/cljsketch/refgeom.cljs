@@ -70,6 +70,20 @@
           c     (v/line-line-intersection lnv0 lnv1)]
       (if (= (last c.u) 0) (g/Null.) (g/Point. (:u (v/toAffineVector c)))))))
 
+;; midpoint of a segment
+(defrecord SegmentMidPoint [sg]
+  IRefGeom
+  (deps [this] [sg])
+  (geom-type [this] g/Point)
+  (toGeom [this geommap]
+    (let [s   (geommap sg)
+          x0  (:x0 s)
+          y0  (:y0 s)
+          x1  (:x1 s)
+          y1  (:y1 s)]
+      (g/Point. (v/vmul (v/vadd [x0 y0] [x1 y1]) 0.5)))))
+
+
 ;; Take a list of atoms refering to either Geoms or RefGeoms,
 ;; and return a map which associates to each of those atoms
 ;; a Geom corresponding to it.  In the returned map, the keys

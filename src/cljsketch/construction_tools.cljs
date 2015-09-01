@@ -64,3 +64,11 @@
          (= (set (types selected)) #{g/Line})))
   (construct [this selected]
     (rg/LineLinePoint. (first selected) (second selected))))
+
+(defrecord SegmentMidPointConstructionTool []
+  IConstructionTool
+  (selection-fits [this selected]
+    (and (= 1 (count selected))
+         (= (set (types selected)) #{g/Segment})))
+  (construct [this selected]
+    (rg/SegmentMidPoint. (first selected))))
