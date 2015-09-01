@@ -81,3 +81,11 @@
          (= (set (types selected)) #{g/Segment})))
   (construct [this selected]
     (rg/SegmentMidPoint. (first selected))))
+
+(defrecord CircleConstructionTool []
+  IConstructionTool
+  (selection-fits [this selected]
+    (and (= 2 (count selected))
+         (= (set (types selected)) #{g/Point})))
+  (construct [this selected]
+    (rg/CenterPointCircle. (first selected) (second selected))))
