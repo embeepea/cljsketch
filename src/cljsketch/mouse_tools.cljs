@@ -7,19 +7,34 @@
   (handle-event [this event state] "Handle a mouse event")
 )
 
-(defn gtless [t1 t2]
-  (#{[g/Point g/Line]
-     [g/Point g/Segment]
-     [g/Segment g/Line]} [t1 t2]))
+(def mouse-threshold 16)
 
-(defn geom-in-threshold [geoms mouse-pos t]
-  (let [geommap (rg/geommap geoms)]
+;; The g< function defines an ordering among geom types that's used
+;; in deciding which geom to favor in situations where there are multiple
+;; geoms within the mouse threshold: favor the one whose type is
+;; "smallest" according to the g< ordering.  (If there are multiple
+;; ones of that type, take the first one.)
+(defn g< [t1 t2]
+  (#{[g/Point g/Line]     ; points should be favored over lines
+     [g/Point g/Segment]  ; points should be favored over segments
+     [g/Segment g/Line]   ; segments should be favored over lines
+     } [t1 t2]))
+
+;; Return the atom for the first geom in the world of the most
+;; favored type that is within threshold t (distance squared metric)
+;; of the given mouse position.
+(defn geom-in-threshold [world mouse-pos t]
+  (let [geommap (rg/geommap world)]
     (loop [g  nil
-           gs geoms]
+           gs world]
       (if (empty? gs) g
           (let [ng (first gs)]
             (recur
-             (if (<= (g/point-distance2 (geommap ng) mouse-pos) t) (if (or (not g) (gtless (rg/geom-type @ng) (rg/geom-type @g))) ng g) g)
+             (if (<= (g/point-distance2 (geommap ng) mouse-pos) t)
+               (if (or (not g) (g< (rg/geom-type @ng) (rg/geom-type @g)))
+                 ng
+                 g)
+               g)
              (rest gs)))))))
 
 (defrecord SelectMoveTool [app-state redraw-canvas highlight! highlight
@@ -28,7 +43,7 @@
   (handle-event [this event state]
     (if (= state nil) (recur this event {:button-state :down})
         (letfn [(geom-under-mouse
-                  [] (geom-in-threshold (@app-state :world) (:coords event) 16))
+                  [] (geom-in-threshold (@app-state :world) (:coords event) mouse-threshold))
 
                 (drag-geom!
                   [geom offset]
