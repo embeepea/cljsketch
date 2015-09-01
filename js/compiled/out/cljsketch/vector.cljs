@@ -14,7 +14,13 @@
 
 (defn vl2norm [u] (Math.sqrt (vl2norm2 u)))
 
+(defn vl2dist2 [u v] (let [w (vsub u v)] (vdot w w)))
+
+(defn vl2dist [u v] (Math.sqrt (vl2dist2 u v)))
+
 (defn vunitize [u] (vec (map #(/ % (vl2norm u)) u)))
+
+(defn square [x] (* x x))
 
 (defn vaff [u]
   (let [z (last u)]

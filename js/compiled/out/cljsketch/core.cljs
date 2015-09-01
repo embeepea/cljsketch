@@ -37,6 +37,7 @@
           {:key :perpendicular-line   :label "Perpendicular Line"  :className "disabled"}
           {:key :intersection-point   :label "Intersection Point"  :className "disabled"}
           {:key :midpoint             :label "Midpoint"            :className "disabled"}
+          {:key :circle               :label "Circle"              :className "disabled"}
           ;{:divider? true}
           ;{:key :ray                  :label "Ray"}
           ;{:key :point-on-obj         :label "Point on Object"}
@@ -129,6 +130,7 @@
    :perpendicular-line (c/PerpendicularLineConstructionTool.)
    :intersection-point (c/LineIntersectionConstructionTool.)
    :midpoint           (c/SegmentMidPointConstructionTool.)
+   :circle             (c/CircleConstructionTool.)
    })
 
 ;; return the index of the first item x in collection coll for which
@@ -198,6 +200,9 @@
 
 (defmethod menu-item-handler :midpoint [key]
   (construct-and-redraw (construction-tools :midpoint)))
+
+(defmethod menu-item-handler :circle [key]
+  (construct-and-redraw (construction-tools :circle)))
 
 (defmethod menu-item-handler :draw-point [key]
   (swap! app-state assoc :mouse-tool :draw-point))

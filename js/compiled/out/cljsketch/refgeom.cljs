@@ -93,6 +93,15 @@
           y1  (:y1 s)]
       (g/Point. (v/vmul (v/vadd [x0 y0] [x1 y1]) 0.5)))))
 
+;; circle centered at point 'c' passing through point 'p'
+(defrecord CenterPointCircle [c p]
+  IRefGeom
+  (deps [this] [c p])
+  (geom-type [this] g/Circle)
+  (toGeom [this geommap]
+    (let [[cx cy] (:p (geommap c))
+          [px py] (:p (geommap p))]
+      (g/Circle. cx cy (v/vl2dist [cx cy] [px py])))))
 
 ;; Take a list of atoms refering to either Geoms or RefGeoms,
 ;; and return a map which associates to each of those atoms

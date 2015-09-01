@@ -8,8 +8,8 @@ cljsketch.vector.vadd = (function cljsketch$vector$vadd(u,v){
 return cljs.core.vec.call(null,cljs.core.map.call(null,cljs.core._PLUS_,u,v));
 });
 cljsketch.vector.vmul = (function cljsketch$vector$vmul(u,s){
-return cljs.core.vec.call(null,cljs.core.map.call(null,(function (p1__61410_SHARP_){
-return (p1__61410_SHARP_ * s);
+return cljs.core.vec.call(null,cljs.core.map.call(null,(function (p1__24620_SHARP_){
+return (p1__24620_SHARP_ * s);
 }),u));
 });
 cljsketch.vector.vdot = (function cljsketch$vector$vdot(u,v){
@@ -24,10 +24,20 @@ return cljsketch.vector.vdot.call(null,u,u);
 cljsketch.vector.vl2norm = (function cljsketch$vector$vl2norm(u){
 return Math.sqrt(cljsketch.vector.vl2norm2.call(null,u));
 });
+cljsketch.vector.vl2dist2 = (function cljsketch$vector$vl2dist2(u,v){
+var w = cljsketch.vector.vsub.call(null,u,v);
+return cljsketch.vector.vdot.call(null,w,w);
+});
+cljsketch.vector.vl2dist = (function cljsketch$vector$vl2dist(u,v){
+return Math.sqrt(cljsketch.vector.vl2dist2.call(null,u,v));
+});
 cljsketch.vector.vunitize = (function cljsketch$vector$vunitize(u){
-return cljs.core.vec.call(null,cljs.core.map.call(null,(function (p1__61411_SHARP_){
-return (p1__61411_SHARP_ / cljsketch.vector.vl2norm.call(null,u));
+return cljs.core.vec.call(null,cljs.core.map.call(null,(function (p1__24621_SHARP_){
+return (p1__24621_SHARP_ / cljsketch.vector.vl2norm.call(null,u));
 }),u));
+});
+cljsketch.vector.square = (function cljsketch$vector$square(x){
+return (x * x);
 });
 cljsketch.vector.vaff = (function cljsketch$vector$vaff(u){
 var z = cljs.core.last.call(null,u);
@@ -35,29 +45,29 @@ if(cljs.core._EQ_.call(null,z,(0))){
 return null;
 } else {
 return cljs.core.vec.call(null,cljs.core.map.call(null,((function (z){
-return (function (p1__61412_SHARP_){
-return (p1__61412_SHARP_ / z);
+return (function (p1__24622_SHARP_){
+return (p1__24622_SHARP_ / z);
 });})(z))
 ,cljs.core.drop_last.call(null,(1),u)));
 }
 });
-cljsketch.vector.vcross = (function cljsketch$vector$vcross(p__61413,p__61414){
-var vec__61417 = p__61413;
-var x0 = cljs.core.nth.call(null,vec__61417,(0),null);
-var y0 = cljs.core.nth.call(null,vec__61417,(1),null);
-var z0 = cljs.core.nth.call(null,vec__61417,(2),null);
-var vec__61418 = p__61414;
-var x1 = cljs.core.nth.call(null,vec__61418,(0),null);
-var y1 = cljs.core.nth.call(null,vec__61418,(1),null);
-var z1 = cljs.core.nth.call(null,vec__61418,(2),null);
+cljsketch.vector.vcross = (function cljsketch$vector$vcross(p__24623,p__24624){
+var vec__24627 = p__24623;
+var x0 = cljs.core.nth.call(null,vec__24627,(0),null);
+var y0 = cljs.core.nth.call(null,vec__24627,(1),null);
+var z0 = cljs.core.nth.call(null,vec__24627,(2),null);
+var vec__24628 = p__24624;
+var x1 = cljs.core.nth.call(null,vec__24628,(0),null);
+var y1 = cljs.core.nth.call(null,vec__24628,(1),null);
+var z1 = cljs.core.nth.call(null,vec__24628,(2),null);
 return new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [((y0 * z1) - (z0 * y1)),((z0 * x1) - (x0 * z1)),((x0 * y1) - (y0 * x1))], null);
 });
 
 
 
 
-cljsketch.vector.IVectorSpace = (function (){var obj61420 = {};
-return obj61420;
+cljsketch.vector.IVectorSpace = (function (){var obj24630 = {};
+return obj24630;
 })();
 
 /**
@@ -322,8 +332,8 @@ throw cljs.core.missing_protocol.call(null,"IVectorSpace.unitize",this$);
 });
 
 
-cljsketch.vector.ICross = (function (){var obj61422 = {};
-return obj61422;
+cljsketch.vector.ICross = (function (){var obj24632 = {};
+return obj24632;
 })();
 
 /**
@@ -356,8 +366,8 @@ throw cljs.core.missing_protocol.call(null,"ICross.cross",this$);
 });
 
 
-cljsketch.vector.IProjective = (function (){var obj61424 = {};
-return obj61424;
+cljsketch.vector.IProjective = (function (){var obj24634 = {};
+return obj24634;
 })();
 
 /**
@@ -414,17 +424,17 @@ var this__16664__auto____$1 = this;
 return cljs.core._lookup.call(null,this__16664__auto____$1,k__16665__auto__,null);
 });
 
-cljsketch.vector.ProjectiveVector.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k61426,else__16667__auto__){
+cljsketch.vector.ProjectiveVector.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k24636,else__16667__auto__){
 var self__ = this;
 var this__16666__auto____$1 = this;
-var G__61428 = (((k61426 instanceof cljs.core.Keyword))?k61426.fqn:null);
-switch (G__61428) {
+var G__24638 = (((k24636 instanceof cljs.core.Keyword))?k24636.fqn:null);
+switch (G__24638) {
 case "u":
 return self__.u;
 
 break;
 default:
-return cljs.core.get.call(null,self__.__extmap,k61426,else__16667__auto__);
+return cljs.core.get.call(null,self__.__extmap,k24636,else__16667__auto__);
 
 }
 });
@@ -575,15 +585,15 @@ var this$__$1 = this;
 return (new cljsketch.vector.AffineVector(cljsketch.vector.vaff.call(null,self__.u)));
 });
 
-cljsketch.vector.ProjectiveVector.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__61425){
+cljsketch.vector.ProjectiveVector.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__24635){
 var self__ = this;
 var this__16671__auto____$1 = this;
-var pred__61429 = cljs.core.keyword_identical_QMARK_;
-var expr__61430 = k__16672__auto__;
-if(cljs.core.truth_(pred__61429.call(null,new cljs.core.Keyword(null,"u","u",-1156634785),expr__61430))){
-return (new cljsketch.vector.ProjectiveVector(G__61425,self__.__meta,self__.__extmap,null));
+var pred__24639 = cljs.core.keyword_identical_QMARK_;
+var expr__24640 = k__16672__auto__;
+if(cljs.core.truth_(pred__24639.call(null,new cljs.core.Keyword(null,"u","u",-1156634785),expr__24640))){
+return (new cljsketch.vector.ProjectiveVector(G__24635,self__.__meta,self__.__extmap,null));
 } else {
-return (new cljsketch.vector.ProjectiveVector(self__.u,self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__61425),null));
+return (new cljsketch.vector.ProjectiveVector(self__.u,self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__24635),null));
 }
 });
 
@@ -593,10 +603,10 @@ var this__16676__auto____$1 = this;
 return cljs.core.seq.call(null,cljs.core.concat.call(null,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"u","u",-1156634785),self__.u],null))], null),self__.__extmap));
 });
 
-cljsketch.vector.ProjectiveVector.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__61425){
+cljsketch.vector.ProjectiveVector.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__24635){
 var self__ = this;
 var this__16663__auto____$1 = this;
-return (new cljsketch.vector.ProjectiveVector(self__.u,G__61425,self__.__extmap,self__.__hash));
+return (new cljsketch.vector.ProjectiveVector(self__.u,G__24635,self__.__extmap,self__.__hash));
 });
 
 cljsketch.vector.ProjectiveVector.prototype.cljs$core$ICollection$_conj$arity$2 = (function (this__16669__auto__,entry__16670__auto__){
@@ -627,13 +637,13 @@ cljsketch.vector.__GT_ProjectiveVector = (function cljsketch$vector$__GT_Project
 return (new cljsketch.vector.ProjectiveVector(u,null,null,null));
 });
 
-cljsketch.vector.map__GT_ProjectiveVector = (function cljsketch$vector$map__GT_ProjectiveVector(G__61427){
-return (new cljsketch.vector.ProjectiveVector(new cljs.core.Keyword(null,"u","u",-1156634785).cljs$core$IFn$_invoke$arity$1(G__61427),null,cljs.core.dissoc.call(null,G__61427,new cljs.core.Keyword(null,"u","u",-1156634785)),null));
+cljsketch.vector.map__GT_ProjectiveVector = (function cljsketch$vector$map__GT_ProjectiveVector(G__24637){
+return (new cljsketch.vector.ProjectiveVector(new cljs.core.Keyword(null,"u","u",-1156634785).cljs$core$IFn$_invoke$arity$1(G__24637),null,cljs.core.dissoc.call(null,G__24637,new cljs.core.Keyword(null,"u","u",-1156634785)),null));
 });
 
 
-cljsketch.vector.IAffine = (function (){var obj61434 = {};
-return obj61434;
+cljsketch.vector.IAffine = (function (){var obj24644 = {};
+return obj24644;
 })();
 
 /**
@@ -690,17 +700,17 @@ var this__16664__auto____$1 = this;
 return cljs.core._lookup.call(null,this__16664__auto____$1,k__16665__auto__,null);
 });
 
-cljsketch.vector.AffineVector.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k61436,else__16667__auto__){
+cljsketch.vector.AffineVector.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k24646,else__16667__auto__){
 var self__ = this;
 var this__16666__auto____$1 = this;
-var G__61438 = (((k61436 instanceof cljs.core.Keyword))?k61436.fqn:null);
-switch (G__61438) {
+var G__24648 = (((k24646 instanceof cljs.core.Keyword))?k24646.fqn:null);
+switch (G__24648) {
 case "u":
 return self__.u;
 
 break;
 default:
-return cljs.core.get.call(null,self__.__extmap,k61436,else__16667__auto__);
+return cljs.core.get.call(null,self__.__extmap,k24646,else__16667__auto__);
 
 }
 });
@@ -829,15 +839,15 @@ return (new cljsketch.vector.AffineVector(self__.u,self__.__meta,cljs.core.not_e
 }
 });
 
-cljsketch.vector.AffineVector.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__61435){
+cljsketch.vector.AffineVector.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__24645){
 var self__ = this;
 var this__16671__auto____$1 = this;
-var pred__61439 = cljs.core.keyword_identical_QMARK_;
-var expr__61440 = k__16672__auto__;
-if(cljs.core.truth_(pred__61439.call(null,new cljs.core.Keyword(null,"u","u",-1156634785),expr__61440))){
-return (new cljsketch.vector.AffineVector(G__61435,self__.__meta,self__.__extmap,null));
+var pred__24649 = cljs.core.keyword_identical_QMARK_;
+var expr__24650 = k__16672__auto__;
+if(cljs.core.truth_(pred__24649.call(null,new cljs.core.Keyword(null,"u","u",-1156634785),expr__24650))){
+return (new cljsketch.vector.AffineVector(G__24645,self__.__meta,self__.__extmap,null));
 } else {
-return (new cljsketch.vector.AffineVector(self__.u,self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__61435),null));
+return (new cljsketch.vector.AffineVector(self__.u,self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__24645),null));
 }
 });
 
@@ -847,10 +857,10 @@ var this__16676__auto____$1 = this;
 return cljs.core.seq.call(null,cljs.core.concat.call(null,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"u","u",-1156634785),self__.u],null))], null),self__.__extmap));
 });
 
-cljsketch.vector.AffineVector.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__61435){
+cljsketch.vector.AffineVector.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__24645){
 var self__ = this;
 var this__16663__auto____$1 = this;
-return (new cljsketch.vector.AffineVector(self__.u,G__61435,self__.__extmap,self__.__hash));
+return (new cljsketch.vector.AffineVector(self__.u,G__24645,self__.__extmap,self__.__hash));
 });
 
 cljsketch.vector.AffineVector.prototype.cljs$core$ICollection$_conj$arity$2 = (function (this__16669__auto__,entry__16670__auto__){
@@ -889,8 +899,8 @@ cljsketch.vector.__GT_AffineVector = (function cljsketch$vector$__GT_AffineVecto
 return (new cljsketch.vector.AffineVector(u,null,null,null));
 });
 
-cljsketch.vector.map__GT_AffineVector = (function cljsketch$vector$map__GT_AffineVector(G__61437){
-return (new cljsketch.vector.AffineVector(new cljs.core.Keyword(null,"u","u",-1156634785).cljs$core$IFn$_invoke$arity$1(G__61437),null,cljs.core.dissoc.call(null,G__61437,new cljs.core.Keyword(null,"u","u",-1156634785)),null));
+cljsketch.vector.map__GT_AffineVector = (function cljsketch$vector$map__GT_AffineVector(G__24647){
+return (new cljsketch.vector.AffineVector(new cljs.core.Keyword(null,"u","u",-1156634785).cljs$core$IFn$_invoke$arity$1(G__24647),null,cljs.core.dissoc.call(null,G__24647,new cljs.core.Keyword(null,"u","u",-1156634785)),null));
 });
 
 cljsketch.vector.line_line_intersection = cljsketch.vector.cross;
@@ -939,11 +949,11 @@ var this__16664__auto____$1 = this;
 return cljs.core._lookup.call(null,this__16664__auto____$1,k__16665__auto__,null);
 });
 
-cljsketch.vector.Rectangle.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k61444,else__16667__auto__){
+cljsketch.vector.Rectangle.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k24654,else__16667__auto__){
 var self__ = this;
 var this__16666__auto____$1 = this;
-var G__61446 = (((k61444 instanceof cljs.core.Keyword))?k61444.fqn:null);
-switch (G__61446) {
+var G__24656 = (((k24654 instanceof cljs.core.Keyword))?k24654.fqn:null);
+switch (G__24656) {
 case "xMin":
 return self__.xMin;
 
@@ -961,7 +971,7 @@ return self__.yMax;
 
 break;
 default:
-return cljs.core.get.call(null,self__.__extmap,k61444,else__16667__auto__);
+return cljs.core.get.call(null,self__.__extmap,k24654,else__16667__auto__);
 
 }
 });
@@ -1040,24 +1050,24 @@ return (new cljsketch.vector.Rectangle(self__.xMin,self__.yMin,self__.xMax,self_
 }
 });
 
-cljsketch.vector.Rectangle.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__61443){
+cljsketch.vector.Rectangle.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__24653){
 var self__ = this;
 var this__16671__auto____$1 = this;
-var pred__61447 = cljs.core.keyword_identical_QMARK_;
-var expr__61448 = k__16672__auto__;
-if(cljs.core.truth_(pred__61447.call(null,new cljs.core.Keyword(null,"xMin","xMin",513480452),expr__61448))){
-return (new cljsketch.vector.Rectangle(G__61443,self__.yMin,self__.xMax,self__.yMax,self__.__meta,self__.__extmap,null));
+var pred__24657 = cljs.core.keyword_identical_QMARK_;
+var expr__24658 = k__16672__auto__;
+if(cljs.core.truth_(pred__24657.call(null,new cljs.core.Keyword(null,"xMin","xMin",513480452),expr__24658))){
+return (new cljsketch.vector.Rectangle(G__24653,self__.yMin,self__.xMax,self__.yMax,self__.__meta,self__.__extmap,null));
 } else {
-if(cljs.core.truth_(pred__61447.call(null,new cljs.core.Keyword(null,"yMin","yMin",1047682135),expr__61448))){
-return (new cljsketch.vector.Rectangle(self__.xMin,G__61443,self__.xMax,self__.yMax,self__.__meta,self__.__extmap,null));
+if(cljs.core.truth_(pred__24657.call(null,new cljs.core.Keyword(null,"yMin","yMin",1047682135),expr__24658))){
+return (new cljsketch.vector.Rectangle(self__.xMin,G__24653,self__.xMax,self__.yMax,self__.__meta,self__.__extmap,null));
 } else {
-if(cljs.core.truth_(pred__61447.call(null,new cljs.core.Keyword(null,"xMax","xMax",-576281018),expr__61448))){
-return (new cljsketch.vector.Rectangle(self__.xMin,self__.yMin,G__61443,self__.yMax,self__.__meta,self__.__extmap,null));
+if(cljs.core.truth_(pred__24657.call(null,new cljs.core.Keyword(null,"xMax","xMax",-576281018),expr__24658))){
+return (new cljsketch.vector.Rectangle(self__.xMin,self__.yMin,G__24653,self__.yMax,self__.__meta,self__.__extmap,null));
 } else {
-if(cljs.core.truth_(pred__61447.call(null,new cljs.core.Keyword(null,"yMax","yMax",426890305),expr__61448))){
-return (new cljsketch.vector.Rectangle(self__.xMin,self__.yMin,self__.xMax,G__61443,self__.__meta,self__.__extmap,null));
+if(cljs.core.truth_(pred__24657.call(null,new cljs.core.Keyword(null,"yMax","yMax",426890305),expr__24658))){
+return (new cljsketch.vector.Rectangle(self__.xMin,self__.yMin,self__.xMax,G__24653,self__.__meta,self__.__extmap,null));
 } else {
-return (new cljsketch.vector.Rectangle(self__.xMin,self__.yMin,self__.xMax,self__.yMax,self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__61443),null));
+return (new cljsketch.vector.Rectangle(self__.xMin,self__.yMin,self__.xMax,self__.yMax,self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__24653),null));
 }
 }
 }
@@ -1070,10 +1080,10 @@ var this__16676__auto____$1 = this;
 return cljs.core.seq.call(null,cljs.core.concat.call(null,new cljs.core.PersistentVector(null, 4, 5, cljs.core.PersistentVector.EMPTY_NODE, [(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"xMin","xMin",513480452),self__.xMin],null)),(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"yMin","yMin",1047682135),self__.yMin],null)),(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"xMax","xMax",-576281018),self__.xMax],null)),(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"yMax","yMax",426890305),self__.yMax],null))], null),self__.__extmap));
 });
 
-cljsketch.vector.Rectangle.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__61443){
+cljsketch.vector.Rectangle.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__24653){
 var self__ = this;
 var this__16663__auto____$1 = this;
-return (new cljsketch.vector.Rectangle(self__.xMin,self__.yMin,self__.xMax,self__.yMax,G__61443,self__.__extmap,self__.__hash));
+return (new cljsketch.vector.Rectangle(self__.xMin,self__.yMin,self__.xMax,self__.yMax,G__24653,self__.__extmap,self__.__hash));
 });
 
 cljsketch.vector.Rectangle.prototype.cljs$core$ICollection$_conj$arity$2 = (function (this__16669__auto__,entry__16670__auto__){
@@ -1104,8 +1114,8 @@ cljsketch.vector.__GT_Rectangle = (function cljsketch$vector$__GT_Rectangle(xMin
 return (new cljsketch.vector.Rectangle(xMin,yMin,xMax,yMax,null,null,null));
 });
 
-cljsketch.vector.map__GT_Rectangle = (function cljsketch$vector$map__GT_Rectangle(G__61445){
-return (new cljsketch.vector.Rectangle(new cljs.core.Keyword(null,"xMin","xMin",513480452).cljs$core$IFn$_invoke$arity$1(G__61445),new cljs.core.Keyword(null,"yMin","yMin",1047682135).cljs$core$IFn$_invoke$arity$1(G__61445),new cljs.core.Keyword(null,"xMax","xMax",-576281018).cljs$core$IFn$_invoke$arity$1(G__61445),new cljs.core.Keyword(null,"yMax","yMax",426890305).cljs$core$IFn$_invoke$arity$1(G__61445),null,cljs.core.dissoc.call(null,G__61445,new cljs.core.Keyword(null,"xMin","xMin",513480452),new cljs.core.Keyword(null,"yMin","yMin",1047682135),new cljs.core.Keyword(null,"xMax","xMax",-576281018),new cljs.core.Keyword(null,"yMax","yMax",426890305)),null));
+cljsketch.vector.map__GT_Rectangle = (function cljsketch$vector$map__GT_Rectangle(G__24655){
+return (new cljsketch.vector.Rectangle(new cljs.core.Keyword(null,"xMin","xMin",513480452).cljs$core$IFn$_invoke$arity$1(G__24655),new cljs.core.Keyword(null,"yMin","yMin",1047682135).cljs$core$IFn$_invoke$arity$1(G__24655),new cljs.core.Keyword(null,"xMax","xMax",-576281018).cljs$core$IFn$_invoke$arity$1(G__24655),new cljs.core.Keyword(null,"yMax","yMax",426890305).cljs$core$IFn$_invoke$arity$1(G__24655),null,cljs.core.dissoc.call(null,G__24655,new cljs.core.Keyword(null,"xMin","xMin",513480452),new cljs.core.Keyword(null,"yMin","yMin",1047682135),new cljs.core.Keyword(null,"xMax","xMax",-576281018),new cljs.core.Keyword(null,"yMax","yMax",426890305)),null));
 });
 
 cljsketch.vector.rectangle_vertices = (function cljsketch$vector$rectangle_vertices(rect){
@@ -1114,20 +1124,20 @@ return new cljs.core.PersistentVector(null, 4, 5, cljs.core.PersistentVector.EMP
 cljsketch.vector.line_rectangle_intersection = (function cljsketch$vector$line_rectangle_intersection(line,rect){
 var verts = cljsketch.vector.rectangle_vertices.call(null,rect);
 var signs = cljs.core.vec.call(null,cljs.core.map.call(null,((function (verts){
-return (function (p1__61451_SHARP_){
-return cljsketch.vector.dot.call(null,line,p1__61451_SHARP_);
+return (function (p1__24661_SHARP_){
+return cljsketch.vector.dot.call(null,line,p1__24661_SHARP_);
 });})(verts))
 ,verts));
 return cljs.core.map.call(null,cljsketch.vector.toAffineVector,new cljs.core.Keyword(null,"hits","hits",-2120002930).cljs$core$IFn$_invoke$arity$1(cljs.core.reduce.call(null,((function (verts,signs){
-return (function (p__61456,p__61457){
-var map__61458 = p__61456;
-var map__61458__$1 = ((cljs.core.seq_QMARK_.call(null,map__61458))?cljs.core.apply.call(null,cljs.core.hash_map,map__61458):map__61458);
-var last_sign = cljs.core.get.call(null,map__61458__$1,new cljs.core.Keyword(null,"last-sign","last-sign",-1555135543));
-var last_vert = cljs.core.get.call(null,map__61458__$1,new cljs.core.Keyword(null,"last-vert","last-vert",-2033819966));
-var hits = cljs.core.get.call(null,map__61458__$1,new cljs.core.Keyword(null,"hits","hits",-2120002930));
-var vec__61459 = p__61457;
-var vert = cljs.core.nth.call(null,vec__61459,(0),null);
-var sign = cljs.core.nth.call(null,vec__61459,(1),null);
+return (function (p__24666,p__24667){
+var map__24668 = p__24666;
+var map__24668__$1 = ((cljs.core.seq_QMARK_.call(null,map__24668))?cljs.core.apply.call(null,cljs.core.hash_map,map__24668):map__24668);
+var last_sign = cljs.core.get.call(null,map__24668__$1,new cljs.core.Keyword(null,"last-sign","last-sign",-1555135543));
+var last_vert = cljs.core.get.call(null,map__24668__$1,new cljs.core.Keyword(null,"last-vert","last-vert",-2033819966));
+var hits = cljs.core.get.call(null,map__24668__$1,new cljs.core.Keyword(null,"hits","hits",-2120002930));
+var vec__24669 = p__24667;
+var vert = cljs.core.nth.call(null,vec__24669,(0),null);
+var sign = cljs.core.nth.call(null,vec__24669,(1),null);
 return new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"last-sign","last-sign",-1555135543),sign,new cljs.core.Keyword(null,"last-vert","last-vert",-2033819966),vert,new cljs.core.Keyword(null,"hits","hits",-2120002930),((cljs.core._EQ_.call(null,(0),sign))?cljs.core.conj.call(null,hits,vert):((((last_sign * sign) < (0)))?cljs.core.conj.call(null,hits,cljsketch.vector.line_line_intersection.call(null,cljsketch.vector.point_point_line.call(null,vert,last_vert),line)):hits
 ))], null);
 });})(verts,signs))
@@ -1141,31 +1151,31 @@ var rect = (new cljsketch.vector.Rectangle((-2),(-2),(2),(2),null,null,null));
 return cljsketch.vector.line_rectangle_intersection.call(null,lP,rect);
 });
 cljsketch.vector.affine_perpendicular = (function cljsketch$vector$affine_perpendicular(avec){
-var vec__61461 = avec.u;
-var x = cljs.core.nth.call(null,vec__61461,(0),null);
-var y = cljs.core.nth.call(null,vec__61461,(1),null);
+var vec__24671 = avec.u;
+var x = cljs.core.nth.call(null,vec__24671,(0),null);
+var y = cljs.core.nth.call(null,vec__24671,(1),null);
 return (new cljsketch.vector.AffineVector(new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [y,(- x)], null),null,null,null));
 });
 cljsketch.vector.affine_direction = (function cljsketch$vector$affine_direction(pvec){
 return cljsketch.vector.affine_perpendicular.call(null,(new cljsketch.vector.AffineVector(cljs.core.vec.call(null,cljs.core.drop_last.call(null,new cljs.core.Keyword(null,"u","u",-1156634785).cljs$core$IFn$_invoke$arity$1(pvec))),null,null,null)));
 });
 cljsketch.vector.point_line_parallel = (function cljsketch$vector$point_line_parallel(pt,ln){
-var vec__61464 = new cljs.core.Keyword(null,"u","u",-1156634785).cljs$core$IFn$_invoke$arity$1(ln);
-var a = cljs.core.nth.call(null,vec__61464,(0),null);
-var b = cljs.core.nth.call(null,vec__61464,(1),null);
-var c = cljs.core.nth.call(null,vec__61464,(2),null);
-var vec__61465 = new cljs.core.Keyword(null,"u","u",-1156634785).cljs$core$IFn$_invoke$arity$1(cljsketch.vector.toAffineVector.call(null,pt));
-var x = cljs.core.nth.call(null,vec__61465,(0),null);
-var y = cljs.core.nth.call(null,vec__61465,(1),null);
+var vec__24674 = new cljs.core.Keyword(null,"u","u",-1156634785).cljs$core$IFn$_invoke$arity$1(ln);
+var a = cljs.core.nth.call(null,vec__24674,(0),null);
+var b = cljs.core.nth.call(null,vec__24674,(1),null);
+var c = cljs.core.nth.call(null,vec__24674,(2),null);
+var vec__24675 = new cljs.core.Keyword(null,"u","u",-1156634785).cljs$core$IFn$_invoke$arity$1(cljsketch.vector.toAffineVector.call(null,pt));
+var x = cljs.core.nth.call(null,vec__24675,(0),null);
+var y = cljs.core.nth.call(null,vec__24675,(1),null);
 return (new cljsketch.vector.ProjectiveVector(new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [a,b,(- cljsketch.vector.vdot.call(null,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [x,y], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [a,b], null)))], null),null,null,null));
 });
 cljsketch.vector.point_dir_line = (function cljsketch$vector$point_dir_line(pt,dir){
-var vec__61468 = new cljs.core.Keyword(null,"u","u",-1156634785).cljs$core$IFn$_invoke$arity$1(pt);
-var x = cljs.core.nth.call(null,vec__61468,(0),null);
-var y = cljs.core.nth.call(null,vec__61468,(1),null);
-var vec__61469 = new cljs.core.Keyword(null,"u","u",-1156634785).cljs$core$IFn$_invoke$arity$1(dir);
-var a = cljs.core.nth.call(null,vec__61469,(0),null);
-var b = cljs.core.nth.call(null,vec__61469,(1),null);
+var vec__24678 = new cljs.core.Keyword(null,"u","u",-1156634785).cljs$core$IFn$_invoke$arity$1(pt);
+var x = cljs.core.nth.call(null,vec__24678,(0),null);
+var y = cljs.core.nth.call(null,vec__24678,(1),null);
+var vec__24679 = new cljs.core.Keyword(null,"u","u",-1156634785).cljs$core$IFn$_invoke$arity$1(dir);
+var a = cljs.core.nth.call(null,vec__24679,(0),null);
+var b = cljs.core.nth.call(null,vec__24679,(1),null);
 return (new cljsketch.vector.ProjectiveVector(new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [b,(- a),((a * y) - (b * x))], null),null,null,null));
 });
 cljsketch.vector.point_line_perpendicular = (function cljsketch$vector$point_line_perpendicular(pt,ln){
@@ -1174,19 +1184,19 @@ var perp_dir = cljsketch.vector.affine_perpendicular.call(null,ln_dir);
 return cljsketch.vector.point_dir_line.call(null,pt,perp_dir);
 });
 cljsketch.vector.point_line_distance_squared = (function cljsketch$vector$point_line_distance_squared(aff_point,prj_line){
-var vec__61472 = new cljs.core.Keyword(null,"u","u",-1156634785).cljs$core$IFn$_invoke$arity$1(aff_point);
-var x = cljs.core.nth.call(null,vec__61472,(0),null);
-var y = cljs.core.nth.call(null,vec__61472,(1),null);
-var vec__61473 = new cljs.core.Keyword(null,"u","u",-1156634785).cljs$core$IFn$_invoke$arity$1(prj_line);
-var a = cljs.core.nth.call(null,vec__61473,(0),null);
-var b = cljs.core.nth.call(null,vec__61473,(1),null);
-var c = cljs.core.nth.call(null,vec__61473,(2),null);
+var vec__24682 = new cljs.core.Keyword(null,"u","u",-1156634785).cljs$core$IFn$_invoke$arity$1(aff_point);
+var x = cljs.core.nth.call(null,vec__24682,(0),null);
+var y = cljs.core.nth.call(null,vec__24682,(1),null);
+var vec__24683 = new cljs.core.Keyword(null,"u","u",-1156634785).cljs$core$IFn$_invoke$arity$1(prj_line);
+var a = cljs.core.nth.call(null,vec__24683,(0),null);
+var b = cljs.core.nth.call(null,vec__24683,(1),null);
+var c = cljs.core.nth.call(null,vec__24683,(2),null);
 var d = (((a * x) + (b * y)) + c);
 return ((d * d) / ((a * a) + (b * b)));
 });
 cljsketch.vector.linear_opposites_QMARK_ = (function cljsketch$vector$linear_opposites_QMARK_(a,b){
-return cljs.core.every_QMARK_.call(null,(function (p1__61474_SHARP_){
-return cljs.core._EQ_.call(null,p1__61474_SHARP_,(0));
+return cljs.core.every_QMARK_.call(null,(function (p1__24684_SHARP_){
+return cljs.core._EQ_.call(null,p1__24684_SHARP_,(0));
 }),new cljs.core.Keyword(null,"u","u",-1156634785).cljs$core$IFn$_invoke$arity$1(cljsketch.vector.add.call(null,a,b)));
 });
 cljsketch.vector.ordered_collinear_triple_QMARK_ = (function cljsketch$vector$ordered_collinear_triple_QMARK_(a,b,c){
@@ -1215,4 +1225,4 @@ return cljsketch.vector.l2dist2.call(null,cljsketch.vector.toAffineVector.call(n
 }
 });
 
-//# sourceMappingURL=vector.js.map?rel=1440892445857
+//# sourceMappingURL=vector.js.map?rel=1441127762729

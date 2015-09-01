@@ -43,3 +43,10 @@
                                  (v/toProjectiveVector. (v/AffineVector. [x y]))
                                  (v/toProjectiveVector. (v/AffineVector. [x0 y0]))
                                  (v/toProjectiveVector. (v/AffineVector. [x1 y1])))))
+
+(defrecord Circle [x0 y0 r]
+  IGeom
+  (render [this ctx highlighted?]
+    (gr/draw-circle ctx x0 y0 r (if highlighted? 3 1)))
+  (point-distance2 [this [x y]]
+    (v/square (- (v/l2dist (v/AffineVector. [x y]) (v/AffineVector. [x0 y0])) r))))
