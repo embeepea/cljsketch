@@ -91,7 +91,8 @@
   (if (selected? geom) (unselect! geom) (select! geom))
   (enable-fitting-tools))
 
-(defn clear-selection! [] (reset! selection [])
+(defn clear-selection! []
+  (reset! selection [])
   (enable-fitting-tools))
 
 (defn draw-line [pvec t]
@@ -120,7 +121,7 @@
     ageom))
 
 (defn add-point [[x y]]
-  (let [ageom (add-geom (g/Point. [x y]))]
+  (let [ageom (add-geom (rg/Point. [x y]))]
     (redraw-canvas)
     ageom
   ))
@@ -177,6 +178,12 @@
 (defmethod menu-item-handler :clear-selection [key]
   (clear-selection!)
   (redraw-canvas))
+
+(defmethod menu-item-handler :delete [key]
+  (let [trash (rg/dependents (@app-state :world) @selection)]
+    (swap! app-state assoc :world (vec (remove (set trash) (@app-state :world))))
+    (clear-selection!)
+    (redraw-canvas)))
 
 (defmethod menu-item-handler :segment [key]
   (construct-and-redraw (construction-tools :segment)))

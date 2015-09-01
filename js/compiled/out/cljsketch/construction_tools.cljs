@@ -2,17 +2,14 @@
     (:require [cljsketch.geom :as g]
               [cljsketch.refgeom :as rg]))
 
-(defn gtype [geom]
-  (if (satisfies? rg/IRefGeom @geom) (rg/geom-type @geom) (type @geom)))
-
 ;; return a sequence of the types of the objects in a collection
 ;; geoms should be a collection of atoms wrapping objects
-(defn types [geoms] (map gtype geoms))
+(defn types [geoms] (map #(rg/geom-type @%) geoms))
 
 ;; return the first object in a collection which is of the given type
 ;; geoms should be a collection of atoms wrapping objects
 (defn first-object-of-type [typ geoms]
-  (some #(if (= (gtype %) typ) % nil) geoms))
+  (some #(if (= (rg/geom-type @%) typ) % nil) geoms))
 
 (defprotocol IConstructionTool
   ;; NOTE: `selected` should be a collection of atoms wrapping objects;

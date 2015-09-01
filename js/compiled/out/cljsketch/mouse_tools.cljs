@@ -3,9 +3,6 @@
             [cljsketch.geom :as g]
             [cljsketch.refgeom :as rg]))
 
-(defn gtype [geom]
-  (if (satisfies? rg/IRefGeom @geom) (rg/geom-type @geom) (type @geom)))
-
 (defprotocol MouseTool
   (handle-event [this event state] "Handle a mouse event")
 )
@@ -22,7 +19,7 @@
       (if (empty? gs) g
           (let [ng (first gs)]
             (recur
-             (if (<= (g/point-distance2 (geommap ng) mouse-pos) t) (if (or (not g) (gtless (gtype ng) (gtype g))) ng g) g)
+             (if (<= (g/point-distance2 (geommap ng) mouse-pos) t) (if (or (not g) (gtless (rg/geom-type @ng) (rg/geom-type @g))) ng g) g)
              (rest gs)))))))
 
 (defrecord SelectMoveTool [app-state redraw-canvas highlight! highlight
@@ -34,8 +31,8 @@
                   [] (geom-in-threshold (@app-state :world) (:coords event) 16))
 
                 (drag-geom!
-                  [geom offset] (if (instance? g/Point @geom)
-                                  (reset! geom (g/Point. (v/vadd ((:geom-drag-base state) geom) offset)))))
+                  [geom offset] (if (instance? rg/Point @geom)
+                                  (reset! geom (rg/Point. (v/vadd ((:geom-drag-base state) geom) offset)))))
 
                 (each
                   [coll f] (doseq [x coll] (f x)))]
@@ -52,7 +49,7 @@
                                    (recur this event
                                           (assoc state
                                                  :highlight-selected true
-                                                 :geom-drag-base (if (instance? g/Point @@highlight)
+                                                 :geom-drag-base (if (instance? rg/Point @@highlight)
                                                                    (assoc (:geom-drag-base state) @highlight (:p @@highlight))
                                                                    (:geom-drag-base state)))))
                                  (let [offset (v/vsub (:coords event) (:drag-base state))]
@@ -68,7 +65,7 @@
                          :dragged false
                          :geom-drag-base  (reduce
                                            (fn [geom-drag-base geom]
-                                             (if (instance? g/Point @geom)
+                                             (if (instance? rg/Point @geom)
                                                (assoc geom-drag-base geom (:p @geom))
                                                geom-drag-base))
                                            {}

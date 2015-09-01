@@ -11,10 +11,17 @@
   (geom-type [this] "")
 )
 
+;; a point
+(defrecord Point [p] 
+  IRefGeom
+  (deps [this] ())
+  (geom-type [this] g/Point)
+  (toGeom [this geommap] (g/Point. p)))
+
 ;; segment connecting two points
 (defrecord PointPointSegment [pt0 pt1] 
   IRefGeom
-  (deps [this] '(pt0 pt1))
+  (deps [this] [pt0 pt1])
   (geom-type [this] g/Segment)
   (toGeom [this geommap]
     (let [gpt0 (:p (geommap pt0))
@@ -24,7 +31,7 @@
 ;; line through 2 points
 (defrecord PointPointLine [pt0 pt1]
   IRefGeom
-  (deps [this] '(pt0 pt1))
+  (deps [this] [pt0 pt1])
   (geom-type [this] g/Line)
   (toGeom [this geommap]
     (let [p0 (v/toProjectiveVector (v/AffineVector. (:p (geommap pt0))))
@@ -35,7 +42,7 @@
 ;; line through a point perp to another line
 (defrecord PointPerpendicularLine [pt ln] 
   IRefGeom
-  (deps [this] '(pt ln))
+  (deps [this] [pt ln])
   (geom-type [this] g/Line)
   (toGeom [this geommap]
     (let [ptv  (v/toProjectiveVector (v/AffineVector. (:p (geommap pt))))
@@ -45,7 +52,7 @@
 ;; line through a point parallel to another line
 (defrecord PointParallelLine [pt ln] 
   IRefGeom
-  (deps [this] '(pt ln))
+  (deps [this] [pt ln])
   (geom-type [this] g/Line)
   (toGeom [this geommap]
     (let [ptv  (v/toProjectiveVector (v/AffineVector. (:p (geommap pt))))
@@ -55,7 +62,7 @@
 ;; intersection point of two lines
 (defrecord LineLinePoint [ln0 ln1]
   IRefGeom
-  (deps [this] '(ln0 ln1))
+  (deps [this] [ln0 ln1])
   (geom-type [this] g/Point)
   (toGeom [this geommap]
     (let [lnv0  (:u (geommap ln0))
@@ -75,6 +82,39 @@
 ;;
 (defn geommap [atoms]
   (reduce
-   (fn [gmap at] (assoc gmap at (if (satisfies? g/IGeom @at) @at (toGeom @at gmap))))
+   (fn [gmap at] (assoc gmap at (toGeom @at gmap)))
    {}
    atoms))
+
+;; return a map that represents the "inverse" graph
+(defn inverse [world]
+  (reduce
+   ;; Note: A 'dependent' depends on its 'dependees'
+   (fn [gmap dependent] (reduce
+                      (fn [gmap dependee]
+                        (assoc gmap dependee (conj (gmap dependee) dependent)))
+                      (assoc gmap dependent [])
+                      (deps @dependent)))
+   {}
+   world))
+
+;; return a sequence of nodes from a depth-first traversal of a graph
+;; `g` is a map storing the graph
+;; its keys are the graph nodes (they can be any data type)
+;; its value for each key (node) is the list of neighbors of that node
+;; `s` is the start node, or a sequence of start nodes
+;; returns a sequence of all nodes reachable from s
+(defn traverse-dfs [g s]
+  (if (not (sequential? s)) (recur g [s])
+      (loop [vertices [] explored (set s) frontier s]
+        (if (empty? frontier) vertices
+            (let [v (peek frontier)
+                  neighbors (g v)]
+              (recur
+               (conj vertices v)
+               (into explored neighbors)
+               (into (pop frontier) (remove explored neighbors))))))))
+
+;; return a seq of the atoms of all RefGeoms that depend on `at`
+;; `at` may be either a single atom, or a sequence of atoms
+(defn dependents [world at] (traverse-dfs (inverse world) at))
