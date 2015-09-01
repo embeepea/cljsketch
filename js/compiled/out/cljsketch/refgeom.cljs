@@ -86,22 +86,9 @@
    {}
    atoms))
 
-;; return a map that represents the "inverse" graph
-(defn inverse [world]
-  (reduce
-   ;; Note: A 'dependent' depends on its 'dependees'
-   (fn [gmap dependent] (reduce
-                      (fn [gmap dependee]
-                        (assoc gmap dependee (conj (gmap dependee) dependent)))
-                      (assoc gmap dependent [])
-                      (deps @dependent)))
-   {}
-   world))
-
 ;; return a sequence of nodes from a depth-first traversal of a graph
-;; `g` is a map storing the graph
-;; its keys are the graph nodes (they can be any data type)
-;; its value for each key (node) is the list of neighbors of that node
+;; `g` is a function that maps a node to a seq of its neighbor nodes
+;;     Note that in particular, g could be a map whose keys are nodes.
 ;; `s` is the start node, or a sequence of start nodes
 ;; returns a sequence of all nodes reachable from s
 (defn traverse-dfs [g s]
@@ -115,6 +102,32 @@
                (into explored neighbors)
                (into (pop frontier) (remove explored neighbors))))))))
 
-;; return a seq of the atoms of all RefGeoms that depend on `at`
-;; `at` may be either a single atom, or a sequence of atoms
+;; Return a seq of everything
+;; that `at` depends on, either directly or indirectly.
+;; `at` may be either a single atom, or a sequence of atoms.
+(defn dependencies [at] (traverse-dfs #(deps @%) at))
+
+
+;; Return a map that represents the "inverse" graph of the world,
+;; i.e. a graph with edges going from each node to the nodes that
+;; depend on it. The keys in the returned map will be atoms from
+;; the world list; the value for each key is a list of the nodes
+;; it depends on.
+(defn inverse [world]
+  (reduce
+   ;; Note: A 'dependent' depends on its 'dependees'
+   (fn [gmap dependent] (reduce
+                      (fn [gmap dependee]
+                        (assoc gmap dependee (conj (gmap dependee) dependent)))
+                      (assoc gmap dependent [])
+                      (deps @dependent)))
+   {}
+   world))
+
+;; The opposite of `dependencies`: return a seq of the atoms of
+;; all RefGeoms that depend on `at`, which may be either a single
+;; atom, or a sequence of atoms. We have to pass in the world list
+;; here since each refgeom only stores references to the refgeoms
+;; it depends on, not the other way around.
 (defn dependents [world at] (traverse-dfs (inverse world) at))
+
