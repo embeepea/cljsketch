@@ -4,9 +4,37 @@ goog.require('cljs.core');
 goog.require('cljsketch.vector');
 goog.require('cljsketch.geom');
 goog.require('cljsketch.refgeom');
+cljsketch.mouse_tools.gtype = (function cljsketch$mouse_tools$gtype(geom){
+if((function (){var G__29502 = cljs.core.deref.call(null,geom);
+if(G__29502){
+var bit__16743__auto__ = null;
+if(cljs.core.truth_((function (){var or__16069__auto__ = bit__16743__auto__;
+if(cljs.core.truth_(or__16069__auto__)){
+return or__16069__auto__;
+} else {
+return G__29502.cljsketch$refgeom$IRefGeom$;
+}
+})())){
+return true;
+} else {
+if((!G__29502.cljs$lang$protocol_mask$partition$)){
+return cljs.core.native_satisfies_QMARK_.call(null,cljsketch.refgeom.IRefGeom,G__29502);
+} else {
+return false;
+}
+}
+} else {
+return cljs.core.native_satisfies_QMARK_.call(null,cljsketch.refgeom.IRefGeom,G__29502);
+}
+})()){
+return cljsketch.refgeom.geom_type.call(null,cljs.core.deref.call(null,geom));
+} else {
+return cljs.core.type.call(null,cljs.core.deref.call(null,geom));
+}
+});
 
-cljsketch.mouse_tools.MouseTool = (function (){var obj27523 = {};
-return obj27523;
+cljsketch.mouse_tools.MouseTool = (function (){var obj29504 = {};
+return obj29504;
 })();
 
 /**
@@ -50,16 +78,16 @@ if(cljs.core.empty_QMARK_.call(null,gs)){
 return g;
 } else {
 var ng = cljs.core.first.call(null,gs);
-var G__27524 = (((cljsketch.geom.point_distance2.call(null,geommap.call(null,ng),mouse_pos) <= t))?(cljs.core.truth_((function (){var or__16069__auto__ = cljs.core.not.call(null,g);
+var G__29505 = (((cljsketch.geom.point_distance2.call(null,geommap.call(null,ng),mouse_pos) <= t))?(cljs.core.truth_((function (){var or__16069__auto__ = cljs.core.not.call(null,g);
 if(or__16069__auto__){
 return or__16069__auto__;
 } else {
-return cljsketch.mouse_tools.gtless.call(null,cljs.core.type.call(null,cljs.core.deref.call(null,ng)),cljs.core.type.call(null,cljs.core.deref.call(null,g)));
+return cljsketch.mouse_tools.gtless.call(null,cljsketch.mouse_tools.gtype.call(null,ng),cljsketch.mouse_tools.gtype.call(null,g));
 }
 })())?ng:g):g);
-var G__27525 = cljs.core.rest.call(null,gs);
-g = G__27524;
-gs = G__27525;
+var G__29506 = cljs.core.rest.call(null,gs);
+g = G__29505;
+gs = G__29506;
 continue;
 }
 break;
@@ -109,12 +137,12 @@ var self__ = this;
 while(true){
 var this$__$1 = this;
 if(cljs.core._EQ_.call(null,state,null)){
-var G__27556 = this$__$1;
-var G__27557 = event;
-var G__27558 = new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"button-state","button-state",-1211301176),new cljs.core.Keyword(null,"down","down",1565245570)], null);
-this$ = G__27556;
-event = G__27557;
-state = G__27558;
+var G__29537 = this$__$1;
+var G__29538 = event;
+var G__29539 = new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"button-state","button-state",-1211301176),new cljs.core.Keyword(null,"down","down",1565245570)], null);
+this$ = G__29537;
+event = G__29538;
+state = G__29539;
 continue;
 } else {
 var geom_under_mouse = ((function (this$,event,state,this$__$1){
@@ -133,51 +161,51 @@ return null;
 ;
 var each = ((function (this$,event,state,this$__$1){
 return (function cljsketch$mouse_tools$each(coll,f){
-var seq__27542 = cljs.core.seq.call(null,coll);
-var chunk__27543 = null;
-var count__27544 = (0);
-var i__27545 = (0);
+var seq__29523 = cljs.core.seq.call(null,coll);
+var chunk__29524 = null;
+var count__29525 = (0);
+var i__29526 = (0);
 while(true){
-if((i__27545 < count__27544)){
-var x = cljs.core._nth.call(null,chunk__27543,i__27545);
+if((i__29526 < count__29525)){
+var x = cljs.core._nth.call(null,chunk__29524,i__29526);
 f.call(null,x);
 
-var G__27559 = seq__27542;
-var G__27560 = chunk__27543;
-var G__27561 = count__27544;
-var G__27562 = (i__27545 + (1));
-seq__27542 = G__27559;
-chunk__27543 = G__27560;
-count__27544 = G__27561;
-i__27545 = G__27562;
+var G__29540 = seq__29523;
+var G__29541 = chunk__29524;
+var G__29542 = count__29525;
+var G__29543 = (i__29526 + (1));
+seq__29523 = G__29540;
+chunk__29524 = G__29541;
+count__29525 = G__29542;
+i__29526 = G__29543;
 continue;
 } else {
-var temp__4425__auto__ = cljs.core.seq.call(null,seq__27542);
+var temp__4425__auto__ = cljs.core.seq.call(null,seq__29523);
 if(temp__4425__auto__){
-var seq__27542__$1 = temp__4425__auto__;
-if(cljs.core.chunked_seq_QMARK_.call(null,seq__27542__$1)){
-var c__16854__auto__ = cljs.core.chunk_first.call(null,seq__27542__$1);
-var G__27563 = cljs.core.chunk_rest.call(null,seq__27542__$1);
-var G__27564 = c__16854__auto__;
-var G__27565 = cljs.core.count.call(null,c__16854__auto__);
-var G__27566 = (0);
-seq__27542 = G__27563;
-chunk__27543 = G__27564;
-count__27544 = G__27565;
-i__27545 = G__27566;
+var seq__29523__$1 = temp__4425__auto__;
+if(cljs.core.chunked_seq_QMARK_.call(null,seq__29523__$1)){
+var c__16854__auto__ = cljs.core.chunk_first.call(null,seq__29523__$1);
+var G__29544 = cljs.core.chunk_rest.call(null,seq__29523__$1);
+var G__29545 = c__16854__auto__;
+var G__29546 = cljs.core.count.call(null,c__16854__auto__);
+var G__29547 = (0);
+seq__29523 = G__29544;
+chunk__29524 = G__29545;
+count__29525 = G__29546;
+i__29526 = G__29547;
 continue;
 } else {
-var x = cljs.core.first.call(null,seq__27542__$1);
+var x = cljs.core.first.call(null,seq__29523__$1);
 f.call(null,x);
 
-var G__27567 = cljs.core.next.call(null,seq__27542__$1);
-var G__27568 = null;
-var G__27569 = (0);
-var G__27570 = (0);
-seq__27542 = G__27567;
-chunk__27543 = G__27568;
-count__27544 = G__27569;
-i__27545 = G__27570;
+var G__29548 = cljs.core.next.call(null,seq__29523__$1);
+var G__29549 = null;
+var G__29550 = (0);
+var G__29551 = (0);
+seq__29523 = G__29548;
+chunk__29524 = G__29549;
+count__29525 = G__29550;
+i__29526 = G__29551;
 continue;
 }
 } else {
@@ -188,12 +216,12 @@ break;
 }
 });})(this$,event,state,this$__$1))
 ;
-var pred__27546 = cljs.core.contains_QMARK_;
-var expr__27547 = new cljs.core.Keyword(null,"type","type",1174270348).cljs$core$IFn$_invoke$arity$1(event);
-if(cljs.core.truth_(pred__27546.call(null,new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"move","move",-2110884309),null], null), null),expr__27547))){
-var pred__27549 = cljs.core._EQ_;
-var expr__27550 = new cljs.core.Keyword(null,"button-state","button-state",-1211301176).cljs$core$IFn$_invoke$arity$1(state);
-if(cljs.core.truth_(pred__27549.call(null,new cljs.core.Keyword(null,"up","up",-269712113),expr__27550))){
+var pred__29527 = cljs.core.contains_QMARK_;
+var expr__29528 = new cljs.core.Keyword(null,"type","type",1174270348).cljs$core$IFn$_invoke$arity$1(event);
+if(cljs.core.truth_(pred__29527.call(null,new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"move","move",-2110884309),null], null), null),expr__29528))){
+var pred__29530 = cljs.core._EQ_;
+var expr__29531 = new cljs.core.Keyword(null,"button-state","button-state",-1211301176).cljs$core$IFn$_invoke$arity$1(state);
+if(cljs.core.truth_(pred__29530.call(null,new cljs.core.Keyword(null,"up","up",-269712113),expr__29531))){
 var geom = geom_under_mouse.call(null);
 self__.highlight_BANG_.call(null,geom);
 
@@ -201,7 +229,7 @@ self__.redraw_canvas.call(null);
 
 return state;
 } else {
-if(cljs.core.truth_(pred__27549.call(null,new cljs.core.Keyword(null,"down","down",1565245570),expr__27550))){
+if(cljs.core.truth_(pred__29530.call(null,new cljs.core.Keyword(null,"down","down",1565245570),expr__29531))){
 if(cljs.core.truth_((function (){var and__16057__auto__ = cljs.core.deref.call(null,self__.highlight);
 if(cljs.core.truth_(and__16057__auto__)){
 return cljs.core.not.call(null,self__.selected_QMARK_.call(null,cljs.core.deref.call(null,self__.highlight)));
@@ -211,19 +239,19 @@ return and__16057__auto__;
 })())){
 self__.select_BANG_.call(null,cljs.core.deref.call(null,self__.highlight));
 
-var G__27571 = this$__$1;
-var G__27572 = event;
-var G__27573 = cljs.core.assoc.call(null,state,new cljs.core.Keyword(null,"highlight-selected","highlight-selected",1581233776),true,new cljs.core.Keyword(null,"geom-drag-base","geom-drag-base",512691591),(((cljs.core.deref.call(null,cljs.core.deref.call(null,self__.highlight)) instanceof cljsketch.geom.Point))?cljs.core.assoc.call(null,new cljs.core.Keyword(null,"geom-drag-base","geom-drag-base",512691591).cljs$core$IFn$_invoke$arity$1(state),cljs.core.deref.call(null,self__.highlight),new cljs.core.Keyword(null,"p","p",151049309).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,cljs.core.deref.call(null,self__.highlight)))):new cljs.core.Keyword(null,"geom-drag-base","geom-drag-base",512691591).cljs$core$IFn$_invoke$arity$1(state)));
-this$ = G__27571;
-event = G__27572;
-state = G__27573;
+var G__29552 = this$__$1;
+var G__29553 = event;
+var G__29554 = cljs.core.assoc.call(null,state,new cljs.core.Keyword(null,"highlight-selected","highlight-selected",1581233776),true,new cljs.core.Keyword(null,"geom-drag-base","geom-drag-base",512691591),(((cljs.core.deref.call(null,cljs.core.deref.call(null,self__.highlight)) instanceof cljsketch.geom.Point))?cljs.core.assoc.call(null,new cljs.core.Keyword(null,"geom-drag-base","geom-drag-base",512691591).cljs$core$IFn$_invoke$arity$1(state),cljs.core.deref.call(null,self__.highlight),new cljs.core.Keyword(null,"p","p",151049309).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,cljs.core.deref.call(null,self__.highlight)))):new cljs.core.Keyword(null,"geom-drag-base","geom-drag-base",512691591).cljs$core$IFn$_invoke$arity$1(state)));
+this$ = G__29552;
+event = G__29553;
+state = G__29554;
 continue;
 } else {
 var offset = cljsketch.vector.vsub.call(null,new cljs.core.Keyword(null,"coords","coords",-599429112).cljs$core$IFn$_invoke$arity$1(event),new cljs.core.Keyword(null,"drag-base","drag-base",1288000678).cljs$core$IFn$_invoke$arity$1(state));
-each.call(null,cljs.core.deref.call(null,self__.selection),((function (this$,event,state,offset,pred__27549,expr__27550,pred__27546,expr__27547,this$__$1){
-return (function (p1__27526_SHARP_){
-return drag_geom_BANG_.call(null,p1__27526_SHARP_,offset);
-});})(this$,event,state,offset,pred__27549,expr__27550,pred__27546,expr__27547,this$__$1))
+each.call(null,cljs.core.deref.call(null,self__.selection),((function (this$,event,state,offset,pred__29530,expr__29531,pred__29527,expr__29528,this$__$1){
+return (function (p1__29507_SHARP_){
+return drag_geom_BANG_.call(null,p1__29507_SHARP_,offset);
+});})(this$,event,state,offset,pred__29530,expr__29531,pred__29527,expr__29528,this$__$1))
 );
 
 self__.redraw_canvas.call(null);
@@ -231,11 +259,11 @@ self__.redraw_canvas.call(null);
 return cljs.core.assoc.call(null,state,new cljs.core.Keyword(null,"dragged","dragged",208354265),true);
 }
 } else {
-throw (new Error([cljs.core.str("No matching clause: "),cljs.core.str(expr__27550)].join('')));
+throw (new Error([cljs.core.str("No matching clause: "),cljs.core.str(expr__29531)].join('')));
 }
 }
 } else {
-if(cljs.core.truth_(pred__27546.call(null,new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"down","down",1565245570),null], null), null),expr__27547))){
+if(cljs.core.truth_(pred__29527.call(null,new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"down","down",1565245570),null], null), null),expr__29528))){
 var geom = geom_under_mouse.call(null);
 self__.highlight_BANG_.call(null,geom);
 
@@ -246,17 +274,17 @@ self__.clear_selection_BANG_.call(null);
 
 self__.redraw_canvas.call(null);
 
-return new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"drag-base","drag-base",1288000678),new cljs.core.Keyword(null,"coords","coords",-599429112).cljs$core$IFn$_invoke$arity$1(event),new cljs.core.Keyword(null,"button-state","button-state",-1211301176),new cljs.core.Keyword(null,"down","down",1565245570),new cljs.core.Keyword(null,"dragged","dragged",208354265),false,new cljs.core.Keyword(null,"geom-drag-base","geom-drag-base",512691591),cljs.core.reduce.call(null,((function (this$,event,state,geom,pred__27546,expr__27547,this$__$1){
+return new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"drag-base","drag-base",1288000678),new cljs.core.Keyword(null,"coords","coords",-599429112).cljs$core$IFn$_invoke$arity$1(event),new cljs.core.Keyword(null,"button-state","button-state",-1211301176),new cljs.core.Keyword(null,"down","down",1565245570),new cljs.core.Keyword(null,"dragged","dragged",208354265),false,new cljs.core.Keyword(null,"geom-drag-base","geom-drag-base",512691591),cljs.core.reduce.call(null,((function (this$,event,state,geom,pred__29527,expr__29528,this$__$1){
 return (function (geom_drag_base,geom__$1){
 if((cljs.core.deref.call(null,geom__$1) instanceof cljsketch.geom.Point)){
 return cljs.core.assoc.call(null,geom_drag_base,geom__$1,new cljs.core.Keyword(null,"p","p",151049309).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,geom__$1)));
 } else {
 return geom_drag_base;
 }
-});})(this$,event,state,geom,pred__27546,expr__27547,this$__$1))
+});})(this$,event,state,geom,pred__29527,expr__29528,this$__$1))
 ,cljs.core.PersistentArrayMap.EMPTY,cljs.core.deref.call(null,self__.selection))], null);
 } else {
-if(cljs.core.truth_(pred__27546.call(null,new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"up","up",-269712113),null,new cljs.core.Keyword(null,"enter","enter",1792452624),null,new cljs.core.Keyword(null,"leave","leave",1022579443),null], null), null),expr__27547))){
+if(cljs.core.truth_(pred__29527.call(null,new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"up","up",-269712113),null,new cljs.core.Keyword(null,"enter","enter",1792452624),null,new cljs.core.Keyword(null,"leave","leave",1022579443),null], null), null),expr__29528))){
 if(cljs.core.truth_(new cljs.core.Keyword(null,"highlight-selected","highlight-selected",1581233776).cljs$core$IFn$_invoke$arity$1(state))){
 self__.unselect_BANG_.call(null,cljs.core.deref.call(null,self__.highlight));
 } else {
@@ -281,7 +309,7 @@ self__.redraw_canvas.call(null);
 
 return new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"button-state","button-state",-1211301176),new cljs.core.Keyword(null,"up","up",-269712113)], null);
 } else {
-throw (new Error([cljs.core.str("No matching clause: "),cljs.core.str(expr__27547)].join('')));
+throw (new Error([cljs.core.str("No matching clause: "),cljs.core.str(expr__29528)].join('')));
 }
 }
 }
@@ -296,11 +324,11 @@ var this__16664__auto____$1 = this;
 return cljs.core._lookup.call(null,this__16664__auto____$1,k__16665__auto__,null);
 });
 
-cljsketch.mouse_tools.SelectMoveTool.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k27528,else__16667__auto__){
+cljsketch.mouse_tools.SelectMoveTool.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k29509,else__16667__auto__){
 var self__ = this;
 var this__16666__auto____$1 = this;
-var G__27552 = (((k27528 instanceof cljs.core.Keyword))?k27528.fqn:null);
-switch (G__27552) {
+var G__29533 = (((k29509 instanceof cljs.core.Keyword))?k29509.fqn:null);
+switch (G__29533) {
 case "highlight":
 return self__.highlight;
 
@@ -342,7 +370,7 @@ return self__.highlight_BANG_;
 
 break;
 default:
-return cljs.core.get.call(null,self__.__extmap,k27528,else__16667__auto__);
+return cljs.core.get.call(null,self__.__extmap,k29509,else__16667__auto__);
 
 }
 });
@@ -421,42 +449,42 @@ return (new cljsketch.mouse_tools.SelectMoveTool(self__.app_state,self__.redraw_
 }
 });
 
-cljsketch.mouse_tools.SelectMoveTool.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__27527){
+cljsketch.mouse_tools.SelectMoveTool.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__29508){
 var self__ = this;
 var this__16671__auto____$1 = this;
-var pred__27553 = cljs.core.keyword_identical_QMARK_;
-var expr__27554 = k__16672__auto__;
-if(cljs.core.truth_(pred__27553.call(null,new cljs.core.Keyword(null,"app-state","app-state",-1509963278),expr__27554))){
-return (new cljsketch.mouse_tools.SelectMoveTool(G__27527,self__.redraw_canvas,self__.highlight_BANG_,self__.highlight,self__.selected_QMARK_,self__.select_BANG_,self__.unselect_BANG_,self__.toggle_selected_BANG_,self__.clear_selection_BANG_,self__.selection,self__.__meta,self__.__extmap,null));
+var pred__29534 = cljs.core.keyword_identical_QMARK_;
+var expr__29535 = k__16672__auto__;
+if(cljs.core.truth_(pred__29534.call(null,new cljs.core.Keyword(null,"app-state","app-state",-1509963278),expr__29535))){
+return (new cljsketch.mouse_tools.SelectMoveTool(G__29508,self__.redraw_canvas,self__.highlight_BANG_,self__.highlight,self__.selected_QMARK_,self__.select_BANG_,self__.unselect_BANG_,self__.toggle_selected_BANG_,self__.clear_selection_BANG_,self__.selection,self__.__meta,self__.__extmap,null));
 } else {
-if(cljs.core.truth_(pred__27553.call(null,new cljs.core.Keyword(null,"redraw-canvas","redraw-canvas",-679997483),expr__27554))){
-return (new cljsketch.mouse_tools.SelectMoveTool(self__.app_state,G__27527,self__.highlight_BANG_,self__.highlight,self__.selected_QMARK_,self__.select_BANG_,self__.unselect_BANG_,self__.toggle_selected_BANG_,self__.clear_selection_BANG_,self__.selection,self__.__meta,self__.__extmap,null));
+if(cljs.core.truth_(pred__29534.call(null,new cljs.core.Keyword(null,"redraw-canvas","redraw-canvas",-679997483),expr__29535))){
+return (new cljsketch.mouse_tools.SelectMoveTool(self__.app_state,G__29508,self__.highlight_BANG_,self__.highlight,self__.selected_QMARK_,self__.select_BANG_,self__.unselect_BANG_,self__.toggle_selected_BANG_,self__.clear_selection_BANG_,self__.selection,self__.__meta,self__.__extmap,null));
 } else {
-if(cljs.core.truth_(pred__27553.call(null,new cljs.core.Keyword(null,"highlight!","highlight!",-2009263393),expr__27554))){
-return (new cljsketch.mouse_tools.SelectMoveTool(self__.app_state,self__.redraw_canvas,G__27527,self__.highlight,self__.selected_QMARK_,self__.select_BANG_,self__.unselect_BANG_,self__.toggle_selected_BANG_,self__.clear_selection_BANG_,self__.selection,self__.__meta,self__.__extmap,null));
+if(cljs.core.truth_(pred__29534.call(null,new cljs.core.Keyword(null,"highlight!","highlight!",-2009263393),expr__29535))){
+return (new cljsketch.mouse_tools.SelectMoveTool(self__.app_state,self__.redraw_canvas,G__29508,self__.highlight,self__.selected_QMARK_,self__.select_BANG_,self__.unselect_BANG_,self__.toggle_selected_BANG_,self__.clear_selection_BANG_,self__.selection,self__.__meta,self__.__extmap,null));
 } else {
-if(cljs.core.truth_(pred__27553.call(null,new cljs.core.Keyword(null,"highlight","highlight",-800930873),expr__27554))){
-return (new cljsketch.mouse_tools.SelectMoveTool(self__.app_state,self__.redraw_canvas,self__.highlight_BANG_,G__27527,self__.selected_QMARK_,self__.select_BANG_,self__.unselect_BANG_,self__.toggle_selected_BANG_,self__.clear_selection_BANG_,self__.selection,self__.__meta,self__.__extmap,null));
+if(cljs.core.truth_(pred__29534.call(null,new cljs.core.Keyword(null,"highlight","highlight",-800930873),expr__29535))){
+return (new cljsketch.mouse_tools.SelectMoveTool(self__.app_state,self__.redraw_canvas,self__.highlight_BANG_,G__29508,self__.selected_QMARK_,self__.select_BANG_,self__.unselect_BANG_,self__.toggle_selected_BANG_,self__.clear_selection_BANG_,self__.selection,self__.__meta,self__.__extmap,null));
 } else {
-if(cljs.core.truth_(pred__27553.call(null,new cljs.core.Keyword(null,"selected?","selected?",-742502788),expr__27554))){
-return (new cljsketch.mouse_tools.SelectMoveTool(self__.app_state,self__.redraw_canvas,self__.highlight_BANG_,self__.highlight,G__27527,self__.select_BANG_,self__.unselect_BANG_,self__.toggle_selected_BANG_,self__.clear_selection_BANG_,self__.selection,self__.__meta,self__.__extmap,null));
+if(cljs.core.truth_(pred__29534.call(null,new cljs.core.Keyword(null,"selected?","selected?",-742502788),expr__29535))){
+return (new cljsketch.mouse_tools.SelectMoveTool(self__.app_state,self__.redraw_canvas,self__.highlight_BANG_,self__.highlight,G__29508,self__.select_BANG_,self__.unselect_BANG_,self__.toggle_selected_BANG_,self__.clear_selection_BANG_,self__.selection,self__.__meta,self__.__extmap,null));
 } else {
-if(cljs.core.truth_(pred__27553.call(null,new cljs.core.Keyword(null,"select!","select!",1013647471),expr__27554))){
-return (new cljsketch.mouse_tools.SelectMoveTool(self__.app_state,self__.redraw_canvas,self__.highlight_BANG_,self__.highlight,self__.selected_QMARK_,G__27527,self__.unselect_BANG_,self__.toggle_selected_BANG_,self__.clear_selection_BANG_,self__.selection,self__.__meta,self__.__extmap,null));
+if(cljs.core.truth_(pred__29534.call(null,new cljs.core.Keyword(null,"select!","select!",1013647471),expr__29535))){
+return (new cljsketch.mouse_tools.SelectMoveTool(self__.app_state,self__.redraw_canvas,self__.highlight_BANG_,self__.highlight,self__.selected_QMARK_,G__29508,self__.unselect_BANG_,self__.toggle_selected_BANG_,self__.clear_selection_BANG_,self__.selection,self__.__meta,self__.__extmap,null));
 } else {
-if(cljs.core.truth_(pred__27553.call(null,new cljs.core.Keyword(null,"unselect!","unselect!",1086899933),expr__27554))){
-return (new cljsketch.mouse_tools.SelectMoveTool(self__.app_state,self__.redraw_canvas,self__.highlight_BANG_,self__.highlight,self__.selected_QMARK_,self__.select_BANG_,G__27527,self__.toggle_selected_BANG_,self__.clear_selection_BANG_,self__.selection,self__.__meta,self__.__extmap,null));
+if(cljs.core.truth_(pred__29534.call(null,new cljs.core.Keyword(null,"unselect!","unselect!",1086899933),expr__29535))){
+return (new cljsketch.mouse_tools.SelectMoveTool(self__.app_state,self__.redraw_canvas,self__.highlight_BANG_,self__.highlight,self__.selected_QMARK_,self__.select_BANG_,G__29508,self__.toggle_selected_BANG_,self__.clear_selection_BANG_,self__.selection,self__.__meta,self__.__extmap,null));
 } else {
-if(cljs.core.truth_(pred__27553.call(null,new cljs.core.Keyword(null,"toggle-selected!","toggle-selected!",-112565816),expr__27554))){
-return (new cljsketch.mouse_tools.SelectMoveTool(self__.app_state,self__.redraw_canvas,self__.highlight_BANG_,self__.highlight,self__.selected_QMARK_,self__.select_BANG_,self__.unselect_BANG_,G__27527,self__.clear_selection_BANG_,self__.selection,self__.__meta,self__.__extmap,null));
+if(cljs.core.truth_(pred__29534.call(null,new cljs.core.Keyword(null,"toggle-selected!","toggle-selected!",-112565816),expr__29535))){
+return (new cljsketch.mouse_tools.SelectMoveTool(self__.app_state,self__.redraw_canvas,self__.highlight_BANG_,self__.highlight,self__.selected_QMARK_,self__.select_BANG_,self__.unselect_BANG_,G__29508,self__.clear_selection_BANG_,self__.selection,self__.__meta,self__.__extmap,null));
 } else {
-if(cljs.core.truth_(pred__27553.call(null,new cljs.core.Keyword(null,"clear-selection!","clear-selection!",-187700769),expr__27554))){
-return (new cljsketch.mouse_tools.SelectMoveTool(self__.app_state,self__.redraw_canvas,self__.highlight_BANG_,self__.highlight,self__.selected_QMARK_,self__.select_BANG_,self__.unselect_BANG_,self__.toggle_selected_BANG_,G__27527,self__.selection,self__.__meta,self__.__extmap,null));
+if(cljs.core.truth_(pred__29534.call(null,new cljs.core.Keyword(null,"clear-selection!","clear-selection!",-187700769),expr__29535))){
+return (new cljsketch.mouse_tools.SelectMoveTool(self__.app_state,self__.redraw_canvas,self__.highlight_BANG_,self__.highlight,self__.selected_QMARK_,self__.select_BANG_,self__.unselect_BANG_,self__.toggle_selected_BANG_,G__29508,self__.selection,self__.__meta,self__.__extmap,null));
 } else {
-if(cljs.core.truth_(pred__27553.call(null,new cljs.core.Keyword(null,"selection","selection",975998651),expr__27554))){
-return (new cljsketch.mouse_tools.SelectMoveTool(self__.app_state,self__.redraw_canvas,self__.highlight_BANG_,self__.highlight,self__.selected_QMARK_,self__.select_BANG_,self__.unselect_BANG_,self__.toggle_selected_BANG_,self__.clear_selection_BANG_,G__27527,self__.__meta,self__.__extmap,null));
+if(cljs.core.truth_(pred__29534.call(null,new cljs.core.Keyword(null,"selection","selection",975998651),expr__29535))){
+return (new cljsketch.mouse_tools.SelectMoveTool(self__.app_state,self__.redraw_canvas,self__.highlight_BANG_,self__.highlight,self__.selected_QMARK_,self__.select_BANG_,self__.unselect_BANG_,self__.toggle_selected_BANG_,self__.clear_selection_BANG_,G__29508,self__.__meta,self__.__extmap,null));
 } else {
-return (new cljsketch.mouse_tools.SelectMoveTool(self__.app_state,self__.redraw_canvas,self__.highlight_BANG_,self__.highlight,self__.selected_QMARK_,self__.select_BANG_,self__.unselect_BANG_,self__.toggle_selected_BANG_,self__.clear_selection_BANG_,self__.selection,self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__27527),null));
+return (new cljsketch.mouse_tools.SelectMoveTool(self__.app_state,self__.redraw_canvas,self__.highlight_BANG_,self__.highlight,self__.selected_QMARK_,self__.select_BANG_,self__.unselect_BANG_,self__.toggle_selected_BANG_,self__.clear_selection_BANG_,self__.selection,self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__29508),null));
 }
 }
 }
@@ -475,10 +503,10 @@ var this__16676__auto____$1 = this;
 return cljs.core.seq.call(null,cljs.core.concat.call(null,new cljs.core.PersistentVector(null, 10, 5, cljs.core.PersistentVector.EMPTY_NODE, [(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"app-state","app-state",-1509963278),self__.app_state],null)),(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"redraw-canvas","redraw-canvas",-679997483),self__.redraw_canvas],null)),(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"highlight!","highlight!",-2009263393),self__.highlight_BANG_],null)),(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"highlight","highlight",-800930873),self__.highlight],null)),(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"selected?","selected?",-742502788),self__.selected_QMARK_],null)),(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"select!","select!",1013647471),self__.select_BANG_],null)),(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"unselect!","unselect!",1086899933),self__.unselect_BANG_],null)),(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"toggle-selected!","toggle-selected!",-112565816),self__.toggle_selected_BANG_],null)),(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"clear-selection!","clear-selection!",-187700769),self__.clear_selection_BANG_],null)),(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"selection","selection",975998651),self__.selection],null))], null),self__.__extmap));
 });
 
-cljsketch.mouse_tools.SelectMoveTool.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__27527){
+cljsketch.mouse_tools.SelectMoveTool.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__29508){
 var self__ = this;
 var this__16663__auto____$1 = this;
-return (new cljsketch.mouse_tools.SelectMoveTool(self__.app_state,self__.redraw_canvas,self__.highlight_BANG_,self__.highlight,self__.selected_QMARK_,self__.select_BANG_,self__.unselect_BANG_,self__.toggle_selected_BANG_,self__.clear_selection_BANG_,self__.selection,G__27527,self__.__extmap,self__.__hash));
+return (new cljsketch.mouse_tools.SelectMoveTool(self__.app_state,self__.redraw_canvas,self__.highlight_BANG_,self__.highlight,self__.selected_QMARK_,self__.select_BANG_,self__.unselect_BANG_,self__.toggle_selected_BANG_,self__.clear_selection_BANG_,self__.selection,G__29508,self__.__extmap,self__.__hash));
 });
 
 cljsketch.mouse_tools.SelectMoveTool.prototype.cljs$core$ICollection$_conj$arity$2 = (function (this__16669__auto__,entry__16670__auto__){
@@ -509,8 +537,8 @@ cljsketch.mouse_tools.__GT_SelectMoveTool = (function cljsketch$mouse_tools$__GT
 return (new cljsketch.mouse_tools.SelectMoveTool(app_state,redraw_canvas,highlight_BANG_,highlight,selected_QMARK_,select_BANG_,unselect_BANG_,toggle_selected_BANG_,clear_selection_BANG_,selection,null,null,null));
 });
 
-cljsketch.mouse_tools.map__GT_SelectMoveTool = (function cljsketch$mouse_tools$map__GT_SelectMoveTool(G__27529){
-return (new cljsketch.mouse_tools.SelectMoveTool(new cljs.core.Keyword(null,"app-state","app-state",-1509963278).cljs$core$IFn$_invoke$arity$1(G__27529),new cljs.core.Keyword(null,"redraw-canvas","redraw-canvas",-679997483).cljs$core$IFn$_invoke$arity$1(G__27529),new cljs.core.Keyword(null,"highlight!","highlight!",-2009263393).cljs$core$IFn$_invoke$arity$1(G__27529),new cljs.core.Keyword(null,"highlight","highlight",-800930873).cljs$core$IFn$_invoke$arity$1(G__27529),new cljs.core.Keyword(null,"selected?","selected?",-742502788).cljs$core$IFn$_invoke$arity$1(G__27529),new cljs.core.Keyword(null,"select!","select!",1013647471).cljs$core$IFn$_invoke$arity$1(G__27529),new cljs.core.Keyword(null,"unselect!","unselect!",1086899933).cljs$core$IFn$_invoke$arity$1(G__27529),new cljs.core.Keyword(null,"toggle-selected!","toggle-selected!",-112565816).cljs$core$IFn$_invoke$arity$1(G__27529),new cljs.core.Keyword(null,"clear-selection!","clear-selection!",-187700769).cljs$core$IFn$_invoke$arity$1(G__27529),new cljs.core.Keyword(null,"selection","selection",975998651).cljs$core$IFn$_invoke$arity$1(G__27529),null,cljs.core.dissoc.call(null,G__27529,new cljs.core.Keyword(null,"app-state","app-state",-1509963278),new cljs.core.Keyword(null,"redraw-canvas","redraw-canvas",-679997483),new cljs.core.Keyword(null,"highlight!","highlight!",-2009263393),new cljs.core.Keyword(null,"highlight","highlight",-800930873),new cljs.core.Keyword(null,"selected?","selected?",-742502788),new cljs.core.Keyword(null,"select!","select!",1013647471),new cljs.core.Keyword(null,"unselect!","unselect!",1086899933),new cljs.core.Keyword(null,"toggle-selected!","toggle-selected!",-112565816),new cljs.core.Keyword(null,"clear-selection!","clear-selection!",-187700769),new cljs.core.Keyword(null,"selection","selection",975998651)),null));
+cljsketch.mouse_tools.map__GT_SelectMoveTool = (function cljsketch$mouse_tools$map__GT_SelectMoveTool(G__29510){
+return (new cljsketch.mouse_tools.SelectMoveTool(new cljs.core.Keyword(null,"app-state","app-state",-1509963278).cljs$core$IFn$_invoke$arity$1(G__29510),new cljs.core.Keyword(null,"redraw-canvas","redraw-canvas",-679997483).cljs$core$IFn$_invoke$arity$1(G__29510),new cljs.core.Keyword(null,"highlight!","highlight!",-2009263393).cljs$core$IFn$_invoke$arity$1(G__29510),new cljs.core.Keyword(null,"highlight","highlight",-800930873).cljs$core$IFn$_invoke$arity$1(G__29510),new cljs.core.Keyword(null,"selected?","selected?",-742502788).cljs$core$IFn$_invoke$arity$1(G__29510),new cljs.core.Keyword(null,"select!","select!",1013647471).cljs$core$IFn$_invoke$arity$1(G__29510),new cljs.core.Keyword(null,"unselect!","unselect!",1086899933).cljs$core$IFn$_invoke$arity$1(G__29510),new cljs.core.Keyword(null,"toggle-selected!","toggle-selected!",-112565816).cljs$core$IFn$_invoke$arity$1(G__29510),new cljs.core.Keyword(null,"clear-selection!","clear-selection!",-187700769).cljs$core$IFn$_invoke$arity$1(G__29510),new cljs.core.Keyword(null,"selection","selection",975998651).cljs$core$IFn$_invoke$arity$1(G__29510),null,cljs.core.dissoc.call(null,G__29510,new cljs.core.Keyword(null,"app-state","app-state",-1509963278),new cljs.core.Keyword(null,"redraw-canvas","redraw-canvas",-679997483),new cljs.core.Keyword(null,"highlight!","highlight!",-2009263393),new cljs.core.Keyword(null,"highlight","highlight",-800930873),new cljs.core.Keyword(null,"selected?","selected?",-742502788),new cljs.core.Keyword(null,"select!","select!",1013647471),new cljs.core.Keyword(null,"unselect!","unselect!",1086899933),new cljs.core.Keyword(null,"toggle-selected!","toggle-selected!",-112565816),new cljs.core.Keyword(null,"clear-selection!","clear-selection!",-187700769),new cljs.core.Keyword(null,"selection","selection",975998651)),null));
 });
 
 
@@ -545,9 +573,9 @@ cljsketch.mouse_tools.DrawPointTool.prototype.cljsketch$mouse_tools$MouseTool$ =
 cljsketch.mouse_tools.DrawPointTool.prototype.cljsketch$mouse_tools$MouseTool$handle_event$arity$3 = (function (this$,event,state){
 var self__ = this;
 var this$__$1 = this;
-var pred__27578 = cljs.core._EQ_;
-var expr__27579 = new cljs.core.Keyword(null,"type","type",1174270348).cljs$core$IFn$_invoke$arity$1(event);
-if(cljs.core.truth_(pred__27578.call(null,new cljs.core.Keyword(null,"down","down",1565245570),expr__27579))){
+var pred__29559 = cljs.core._EQ_;
+var expr__29560 = new cljs.core.Keyword(null,"type","type",1174270348).cljs$core$IFn$_invoke$arity$1(event);
+if(cljs.core.truth_(pred__29559.call(null,new cljs.core.Keyword(null,"down","down",1565245570),expr__29560))){
 var ageom = self__.add_point.call(null,new cljs.core.Keyword(null,"coords","coords",-599429112).cljs$core$IFn$_invoke$arity$1(event));
 self__.clear_selection_BANG_.call(null);
 
@@ -567,11 +595,11 @@ var this__16664__auto____$1 = this;
 return cljs.core._lookup.call(null,this__16664__auto____$1,k__16665__auto__,null);
 });
 
-cljsketch.mouse_tools.DrawPointTool.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k27576,else__16667__auto__){
+cljsketch.mouse_tools.DrawPointTool.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__16666__auto__,k29557,else__16667__auto__){
 var self__ = this;
 var this__16666__auto____$1 = this;
-var G__27581 = (((k27576 instanceof cljs.core.Keyword))?k27576.fqn:null);
-switch (G__27581) {
+var G__29562 = (((k29557 instanceof cljs.core.Keyword))?k29557.fqn:null);
+switch (G__29562) {
 case "app-state":
 return self__.app_state;
 
@@ -593,7 +621,7 @@ return self__.select_BANG_;
 
 break;
 default:
-return cljs.core.get.call(null,self__.__extmap,k27576,else__16667__auto__);
+return cljs.core.get.call(null,self__.__extmap,k29557,else__16667__auto__);
 
 }
 });
@@ -672,27 +700,27 @@ return (new cljsketch.mouse_tools.DrawPointTool(self__.app_state,self__.redraw_c
 }
 });
 
-cljsketch.mouse_tools.DrawPointTool.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__27575){
+cljsketch.mouse_tools.DrawPointTool.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__16671__auto__,k__16672__auto__,G__29556){
 var self__ = this;
 var this__16671__auto____$1 = this;
-var pred__27582 = cljs.core.keyword_identical_QMARK_;
-var expr__27583 = k__16672__auto__;
-if(cljs.core.truth_(pred__27582.call(null,new cljs.core.Keyword(null,"app-state","app-state",-1509963278),expr__27583))){
-return (new cljsketch.mouse_tools.DrawPointTool(G__27575,self__.redraw_canvas,self__.add_point,self__.clear_selection_BANG_,self__.select_BANG_,self__.__meta,self__.__extmap,null));
+var pred__29563 = cljs.core.keyword_identical_QMARK_;
+var expr__29564 = k__16672__auto__;
+if(cljs.core.truth_(pred__29563.call(null,new cljs.core.Keyword(null,"app-state","app-state",-1509963278),expr__29564))){
+return (new cljsketch.mouse_tools.DrawPointTool(G__29556,self__.redraw_canvas,self__.add_point,self__.clear_selection_BANG_,self__.select_BANG_,self__.__meta,self__.__extmap,null));
 } else {
-if(cljs.core.truth_(pred__27582.call(null,new cljs.core.Keyword(null,"redraw-canvas","redraw-canvas",-679997483),expr__27583))){
-return (new cljsketch.mouse_tools.DrawPointTool(self__.app_state,G__27575,self__.add_point,self__.clear_selection_BANG_,self__.select_BANG_,self__.__meta,self__.__extmap,null));
+if(cljs.core.truth_(pred__29563.call(null,new cljs.core.Keyword(null,"redraw-canvas","redraw-canvas",-679997483),expr__29564))){
+return (new cljsketch.mouse_tools.DrawPointTool(self__.app_state,G__29556,self__.add_point,self__.clear_selection_BANG_,self__.select_BANG_,self__.__meta,self__.__extmap,null));
 } else {
-if(cljs.core.truth_(pred__27582.call(null,new cljs.core.Keyword(null,"add-point","add-point",-1861575067),expr__27583))){
-return (new cljsketch.mouse_tools.DrawPointTool(self__.app_state,self__.redraw_canvas,G__27575,self__.clear_selection_BANG_,self__.select_BANG_,self__.__meta,self__.__extmap,null));
+if(cljs.core.truth_(pred__29563.call(null,new cljs.core.Keyword(null,"add-point","add-point",-1861575067),expr__29564))){
+return (new cljsketch.mouse_tools.DrawPointTool(self__.app_state,self__.redraw_canvas,G__29556,self__.clear_selection_BANG_,self__.select_BANG_,self__.__meta,self__.__extmap,null));
 } else {
-if(cljs.core.truth_(pred__27582.call(null,new cljs.core.Keyword(null,"clear-selection!","clear-selection!",-187700769),expr__27583))){
-return (new cljsketch.mouse_tools.DrawPointTool(self__.app_state,self__.redraw_canvas,self__.add_point,G__27575,self__.select_BANG_,self__.__meta,self__.__extmap,null));
+if(cljs.core.truth_(pred__29563.call(null,new cljs.core.Keyword(null,"clear-selection!","clear-selection!",-187700769),expr__29564))){
+return (new cljsketch.mouse_tools.DrawPointTool(self__.app_state,self__.redraw_canvas,self__.add_point,G__29556,self__.select_BANG_,self__.__meta,self__.__extmap,null));
 } else {
-if(cljs.core.truth_(pred__27582.call(null,new cljs.core.Keyword(null,"select!","select!",1013647471),expr__27583))){
-return (new cljsketch.mouse_tools.DrawPointTool(self__.app_state,self__.redraw_canvas,self__.add_point,self__.clear_selection_BANG_,G__27575,self__.__meta,self__.__extmap,null));
+if(cljs.core.truth_(pred__29563.call(null,new cljs.core.Keyword(null,"select!","select!",1013647471),expr__29564))){
+return (new cljsketch.mouse_tools.DrawPointTool(self__.app_state,self__.redraw_canvas,self__.add_point,self__.clear_selection_BANG_,G__29556,self__.__meta,self__.__extmap,null));
 } else {
-return (new cljsketch.mouse_tools.DrawPointTool(self__.app_state,self__.redraw_canvas,self__.add_point,self__.clear_selection_BANG_,self__.select_BANG_,self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__27575),null));
+return (new cljsketch.mouse_tools.DrawPointTool(self__.app_state,self__.redraw_canvas,self__.add_point,self__.clear_selection_BANG_,self__.select_BANG_,self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__16672__auto__,G__29556),null));
 }
 }
 }
@@ -706,10 +734,10 @@ var this__16676__auto____$1 = this;
 return cljs.core.seq.call(null,cljs.core.concat.call(null,new cljs.core.PersistentVector(null, 5, 5, cljs.core.PersistentVector.EMPTY_NODE, [(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"app-state","app-state",-1509963278),self__.app_state],null)),(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"redraw-canvas","redraw-canvas",-679997483),self__.redraw_canvas],null)),(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"add-point","add-point",-1861575067),self__.add_point],null)),(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"clear-selection!","clear-selection!",-187700769),self__.clear_selection_BANG_],null)),(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"select!","select!",1013647471),self__.select_BANG_],null))], null),self__.__extmap));
 });
 
-cljsketch.mouse_tools.DrawPointTool.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__27575){
+cljsketch.mouse_tools.DrawPointTool.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__16663__auto__,G__29556){
 var self__ = this;
 var this__16663__auto____$1 = this;
-return (new cljsketch.mouse_tools.DrawPointTool(self__.app_state,self__.redraw_canvas,self__.add_point,self__.clear_selection_BANG_,self__.select_BANG_,G__27575,self__.__extmap,self__.__hash));
+return (new cljsketch.mouse_tools.DrawPointTool(self__.app_state,self__.redraw_canvas,self__.add_point,self__.clear_selection_BANG_,self__.select_BANG_,G__29556,self__.__extmap,self__.__hash));
 });
 
 cljsketch.mouse_tools.DrawPointTool.prototype.cljs$core$ICollection$_conj$arity$2 = (function (this__16669__auto__,entry__16670__auto__){
@@ -740,9 +768,9 @@ cljsketch.mouse_tools.__GT_DrawPointTool = (function cljsketch$mouse_tools$__GT_
 return (new cljsketch.mouse_tools.DrawPointTool(app_state,redraw_canvas,add_point,clear_selection_BANG_,select_BANG_,null,null,null));
 });
 
-cljsketch.mouse_tools.map__GT_DrawPointTool = (function cljsketch$mouse_tools$map__GT_DrawPointTool(G__27577){
-return (new cljsketch.mouse_tools.DrawPointTool(new cljs.core.Keyword(null,"app-state","app-state",-1509963278).cljs$core$IFn$_invoke$arity$1(G__27577),new cljs.core.Keyword(null,"redraw-canvas","redraw-canvas",-679997483).cljs$core$IFn$_invoke$arity$1(G__27577),new cljs.core.Keyword(null,"add-point","add-point",-1861575067).cljs$core$IFn$_invoke$arity$1(G__27577),new cljs.core.Keyword(null,"clear-selection!","clear-selection!",-187700769).cljs$core$IFn$_invoke$arity$1(G__27577),new cljs.core.Keyword(null,"select!","select!",1013647471).cljs$core$IFn$_invoke$arity$1(G__27577),null,cljs.core.dissoc.call(null,G__27577,new cljs.core.Keyword(null,"app-state","app-state",-1509963278),new cljs.core.Keyword(null,"redraw-canvas","redraw-canvas",-679997483),new cljs.core.Keyword(null,"add-point","add-point",-1861575067),new cljs.core.Keyword(null,"clear-selection!","clear-selection!",-187700769),new cljs.core.Keyword(null,"select!","select!",1013647471)),null));
+cljsketch.mouse_tools.map__GT_DrawPointTool = (function cljsketch$mouse_tools$map__GT_DrawPointTool(G__29558){
+return (new cljsketch.mouse_tools.DrawPointTool(new cljs.core.Keyword(null,"app-state","app-state",-1509963278).cljs$core$IFn$_invoke$arity$1(G__29558),new cljs.core.Keyword(null,"redraw-canvas","redraw-canvas",-679997483).cljs$core$IFn$_invoke$arity$1(G__29558),new cljs.core.Keyword(null,"add-point","add-point",-1861575067).cljs$core$IFn$_invoke$arity$1(G__29558),new cljs.core.Keyword(null,"clear-selection!","clear-selection!",-187700769).cljs$core$IFn$_invoke$arity$1(G__29558),new cljs.core.Keyword(null,"select!","select!",1013647471).cljs$core$IFn$_invoke$arity$1(G__29558),null,cljs.core.dissoc.call(null,G__29558,new cljs.core.Keyword(null,"app-state","app-state",-1509963278),new cljs.core.Keyword(null,"redraw-canvas","redraw-canvas",-679997483),new cljs.core.Keyword(null,"add-point","add-point",-1861575067),new cljs.core.Keyword(null,"clear-selection!","clear-selection!",-187700769),new cljs.core.Keyword(null,"select!","select!",1013647471)),null));
 });
 
 
-//# sourceMappingURL=mouse_tools.js.map?rel=1441066395758
+//# sourceMappingURL=mouse_tools.js.map?rel=1441069392698

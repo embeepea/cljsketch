@@ -7,6 +7,11 @@
   (point-distance2 [this [x y]] "return the square of the distance from this object to point [x y]")
 )
 
+(defrecord Null []
+  IGeom
+  (render [this ctx highlighted?])
+  (point-distance2 [this [x y]] 1e25))
+
 (defrecord Point [p]
   IGeom
   (render [this ctx highlighted?]
