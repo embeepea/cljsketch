@@ -8,12 +8,12 @@
               [om-tools.dom :as d :include-macros true]
               [cljs.core.async :refer [put! chan <!]]
               [goog.events :as events]
-              [cljsketch.util :as u]
               [cljsketch.canvas-graphics :as gr]
               [cljsketch.vector :as v]
               [cljsketch.mouse-tools :as mt]
               [cljsketch.ui :as ui]
               [cljsketch.geom :as g]
+              [cljsketch.refgeom :as rg]
               [cljsketch.construction-tools :as c]
               ))
 
@@ -52,7 +52,7 @@
   :mouse-tool :draw-point
   :mouse-tools [{:key :select     :label "Select"}
                 {:key :draw-point :label "Draw Point"}]
-  :world [] ; vector of atoms containing geoms
+  :world [] ; vector of atoms containing refgeoms
   }))
 
 ; An object becomes the highlight object when the mouse is over it.
@@ -106,27 +106,9 @@
 
 (defn redraw-canvas []
   (gr/clear-canvas @ctx)
-  (doseq [geom (@app-state :world)]
-    (cond
-      (instance? g/Point @geom)
-      (let [[x y] (:p @geom)]
-        (gr/draw-point @ctx x y 3)
-        (if (or (highlight? geom) (selected? geom))
-          (gr/draw-circle @ctx x y 5 1)))
-
-      (= (:type @geom) :segment)
-      (let [[e0 e1] (:endpoints @geom)
-            [x0 y0] (:p @e0)
-            [x1 y1] (:p @e1)]
-        (gr/draw-line @ctx x0 y0 x1 y1 
-                     (if (or (highlight? geom) (selected? geom)) 3 1)))
-
-      (= (:type @geom) :line)
-      (draw-line (u/compute-line @geom)
-                 (if (or (highlight? geom) (selected? geom)) 3 1))
-
-
-      )))
+  (let [geommap (rg/geommap (@app-state :world))]
+    (doseq [at (@app-state :world)]
+      (g/render (geommap at) @ctx (or (highlight? at) (selected? at))))))
 
 ;; geom is NOT an atom
 ;; add an atom referring to it to the world
