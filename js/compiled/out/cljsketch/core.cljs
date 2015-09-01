@@ -31,20 +31,15 @@
   :items [{:key :delete               :label "Delete"}
           {:key :clear-selection      :label "Clear Selection"}]}
  {:title "Construct"
-  :items [{:key :segment              :label "Segment"
-           :className "disabled"}
-          {:key :line                 :label "Line"
-           :className "disabled"}
-          {:key :parallel-line        :label "Parallel Line"
-           :className "disabled"}
-          {:key :perpendicular-line   :label "Perpendicular Line"
-           :className "disabled"}
-          {:key :intersection-point   :label "Intersection Point"
-           :className "disabled"}
+  :items [{:key :segment              :label "Segment"             :className "disabled"}
+          {:key :line                 :label "Line"                :className "disabled"}
+          {:key :parallel-line        :label "Parallel Line"       :className "disabled"}
+          {:key :perpendicular-line   :label "Perpendicular Line"  :className "disabled"}
+          {:key :intersection-point   :label "Intersection Point"  :className "disabled"}
+          {:key :midpoint             :label "Midpoint"            :className "disabled"}
           ;{:divider? true}
           ;{:key :ray                  :label "Ray"}
           ;{:key :point-on-obj         :label "Point on Object"}
-          ;{:key :midpoint             :label "Midpoint"}
           ]}
 ])
 
@@ -133,6 +128,7 @@
    :parallel-line      (c/ParallelLineConstructionTool.)
    :perpendicular-line (c/PerpendicularLineConstructionTool.)
    :intersection-point (c/LineIntersectionConstructionTool.)
+   :midpoint           (c/SegmentMidPointConstructionTool.)
    })
 
 ;; return the index of the first item x in collection coll for which
@@ -199,6 +195,9 @@
 
 (defmethod menu-item-handler :intersection-point [key]
   (construct-and-redraw (construction-tools :intersection-point)))
+
+(defmethod menu-item-handler :midpoint [key]
+  (construct-and-redraw (construction-tools :midpoint)))
 
 (defmethod menu-item-handler :draw-point [key]
   (swap! app-state assoc :mouse-tool :draw-point))

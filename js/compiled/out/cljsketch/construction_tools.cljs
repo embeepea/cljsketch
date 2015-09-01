@@ -8,8 +8,15 @@
 
 ;; return the first object in a collection which is of the given type
 ;; geoms should be a collection of atoms wrapping objects
-(defn first-object-of-type [typ geoms]
-  (some #(if (= (rg/geom-type @%) typ) % nil) geoms))
+;; typ can be either a single IGeom type, or a seq of them
+;;   (if it's a seq, returns the first atom matching any of them)
+(defn first-object-of-type [typ atoms]
+  (if (not (sequential? typ)) (recur [typ] atoms)
+      (some
+       #(if
+            ((set typ) (rg/geom-type @%))
+          % nil)
+       atoms)))
 
 (defprotocol IConstructionTool
   ;; NOTE: `selected` should be a collection of atoms wrapping objects;
@@ -41,20 +48,22 @@
   IConstructionTool
   (selection-fits [this selected]
     (and (= 2 (count selected))
-         (= (set (types selected)) #{g/Point g/Line})))
+         (contains? #{#{g/Point g/Line}
+                      #{g/Point g/Segment}} (set (types selected)))))
   (construct [this selected]
     (let [pt (first-object-of-type g/Point selected)
-          ln (first-object-of-type g/Line selected)]
+          ln (first-object-of-type [g/Line g/Segment] selected)]
       (rg/PointParallelLine. pt ln))))
 
 (defrecord PerpendicularLineConstructionTool []
   IConstructionTool
   (selection-fits [this selected]
     (and (= 2 (count selected))
-         (= (set (types selected)) #{g/Point g/Line})))
+         (contains? #{#{g/Point g/Line}
+                      #{g/Point g/Segment}} (set (types selected)))))
   (construct [this selected]
     (let [pt (first-object-of-type g/Point selected)
-          ln (first-object-of-type g/Line selected)]
+          ln (first-object-of-type [g/Line g/Segment] selected)]
       (rg/PointPerpendicularLine. pt ln))))
 
 (defrecord LineIntersectionConstructionTool []
@@ -64,3 +73,11 @@
          (= (set (types selected)) #{g/Line})))
   (construct [this selected]
     (rg/LineLinePoint. (first selected) (second selected))))
+
+(defrecord SegmentMidPointConstructionTool []
+  IConstructionTool
+  (selection-fits [this selected]
+    (and (= 1 (count selected))
+         (= (set (types selected)) #{g/Segment})))
+  (construct [this selected]
+    (rg/SegmentMidPoint. (first selected))))
