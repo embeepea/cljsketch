@@ -12,6 +12,7 @@
               [cljsketch.vector :as v]
               [cljsketch.mouse-tools :as mt]
               [cljsketch.ui :as ui]
+              [cljsketch.ui-scratch :as ui-scratch]
               [cljsketch.geom :as g]
               [cljsketch.refgeom :as rg]
               [cljsketch.construction-tools :as c]
@@ -45,11 +46,14 @@
 ])
 
 (defonce app-state (atom
- {:navbar-menu navbar-menu
+ {;:navbar-menu navbar-menu
+  :enabled-tools #{}
+  :color "#000"
   :mouse-tool :draw-point
   :mouse-tools [{:key :select     :label "Select"}
                 {:key :draw-point :label "Draw Point"}]
   :world [] ; vector of atoms containing refgeoms
+  :styles {}
   }))
 
 ; An object becomes the highlight object when the mouse is over it.
@@ -106,13 +110,15 @@
   (gr/clear-canvas @ctx)
   (let [geommap (rg/geommap (@app-state :world))]
     (doseq [at (@app-state :world)]
-      (g/render (geommap at) @ctx (or (highlight? at) (selected? at))))))
+      (g/render (geommap at) @ctx (or (highlight? at) (selected? at)) ((@app-state :styles) at)
+))))
 
 ;; geom is NOT an atom
 ;; add an atom referring to it to the world
 ;; return the new atom that wraps the newly added geom
 (defn add-geom [geom]
   (let [ageom (atom geom)]
+    (swap! app-state assoc-in [:styles ageom] { :color (@app-state :color) })
     (swap! app-state assoc :world (conj (@app-state :world) ageom))
     ageom))
 
@@ -138,18 +144,23 @@
 (defn index-of-first [pred coll]
   (first (keep-indexed (fn [i x] (when (pred x) i)) coll)))
 
+;(defn enable-fitting-tools []
+;  (let [construction-menu-ks  [:navbar-menu
+;                               (index-of-first #(= (:title %) "Construct")
+;                                               (@app-state :navbar-menu))
+;                               :items]
+;        construction-menu-len (count (get-in @app-state construction-menu-ks))]
+;    (doseq [i (range construction-menu-len)]
+;      (let [key       (get-in @app-state (conj construction-menu-ks i :key))
+;            className (if (c/selection-fits (construction-tools key) @selection)
+;                        "" "disabled")]
+;        (swap! app-state assoc-in (conj construction-menu-ks i :className)
+;               className)))))
+
 (defn enable-fitting-tools []
-  (let [construction-menu-ks  [:navbar-menu
-                               (index-of-first #(= (:title %) "Construct")
-                                               (@app-state :navbar-menu))
-                               :items]
-        construction-menu-len (count (get-in @app-state construction-menu-ks))]
-    (doseq [i (range construction-menu-len)]
-      (let [key       (get-in @app-state (conj construction-menu-ks i :key))
-            className (if (c/selection-fits (construction-tools key) @selection)
-                        "" "disabled")]
-        (swap! app-state assoc-in (conj construction-menu-ks i :className)
-               className)))))
+  (swap! app-state assoc :enabled-tools
+         (set (filter #(c/selection-fits (construction-tools %) @selection)
+                      (keys construction-tools)))))
 
 ;; Call construct-redraw to execute a tool and then redraw the canvas; this
 ;; is what the menu handlers call when the user picks a construction
@@ -204,6 +215,9 @@
 (defmethod menu-item-handler :circle [key]
   (construct-and-redraw (construction-tools :circle)))
 
+(defmethod menu-item-handler :color [key color]
+  (swap! app-state assoc :color color))
+
 (defmethod menu-item-handler :draw-point [key]
   (swap! app-state assoc :mouse-tool :draw-point))
 
@@ -218,7 +232,7 @@
   (gr/clear-canvas @ctx)
   (go (loop []
         (let [action (<! menu-channel)]
-          (menu-item-handler action)
+          (apply menu-item-handler action)
           (recur))))
   (go (loop [state nil]
         (let [mouse-event (<! mouse-channel)]

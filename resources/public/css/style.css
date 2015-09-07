@@ -17,3 +17,11 @@ div.button-bar {
     width: 100%;
     position: absolute;
 }
+
+div.color-swatch {
+  display: inline-block;
+  margin-bottom: -2px;
+  margin-left: 5px;
+  width: 15px;
+  height: 15px;
+}

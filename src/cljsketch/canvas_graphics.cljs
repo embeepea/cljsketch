@@ -7,6 +7,10 @@
     (.fillRect ctx 0 0 w h)
     (set! (.-fillStyle ctx) "#000000")))
 
+(defn set-color [ctx color]
+  (set! (.-strokeStyle ctx) color)
+  (set! (.-fillStyle ctx)  color))
+
 (defn draw-point [ctx x y r]
   (.beginPath ctx)
   (.arc ctx x y r 0 (* 2 js/Math.PI))
