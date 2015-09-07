@@ -1,14 +1,17 @@
 // Compiled by ClojureScript 0.0-3297 {}
 goog.provide('cljsketch.canvas_graphics');
 goog.require('cljs.core');
-cljsketch.canvas_graphics.clear_canvas = (function cljsketch$canvas_graphics$clear_canvas(ctx){
+cljsketch.canvas_graphics.clear_canvas = (function cljsketch$canvas_graphics$clear_canvas(ctx,color){
 var w = ctx.canvas.width;
 var h = ctx.canvas.height;
-ctx.fillStyle = "#cccccc";
+ctx.fillStyle = color;
 
-ctx.fillRect((0),(0),w,h);
+return ctx.fillRect((0),(0),w,h);
+});
+cljsketch.canvas_graphics.set_color = (function cljsketch$canvas_graphics$set_color(ctx,color){
+ctx.strokeStyle = color;
 
-return ctx.fillStyle = "#000000";
+return ctx.fillStyle = color;
 });
 cljsketch.canvas_graphics.draw_point = (function cljsketch$canvas_graphics$draw_point(ctx,x,y,r){
 ctx.beginPath();
@@ -40,55 +43,55 @@ return ctx.stroke();
 cljsketch.canvas_graphics.random_points = (function cljsketch$canvas_graphics$random_points(ctx,n,r){
 var w = ctx.canvas.width;
 var h = ctx.canvas.height;
-var seq__59525 = cljs.core.seq.call(null,cljs.core.range.call(null,n));
-var chunk__59526 = null;
-var count__59527 = (0);
-var i__59528 = (0);
+var seq__28753 = cljs.core.seq.call(null,cljs.core.range.call(null,n));
+var chunk__28754 = null;
+var count__28755 = (0);
+var i__28756 = (0);
 while(true){
-if((i__59528 < count__59527)){
-var _ = cljs.core._nth.call(null,chunk__59526,i__59528);
-var x_59529 = (w * Math.random());
-var y_59530 = (h * Math.random());
-cljsketch.canvas_graphics.draw_point.call(null,ctx,x_59529,y_59530,r);
+if((i__28756 < count__28755)){
+var _ = cljs.core._nth.call(null,chunk__28754,i__28756);
+var x_28757 = (w * Math.random());
+var y_28758 = (h * Math.random());
+cljsketch.canvas_graphics.draw_point.call(null,ctx,x_28757,y_28758,r);
 
-var G__59531 = seq__59525;
-var G__59532 = chunk__59526;
-var G__59533 = count__59527;
-var G__59534 = (i__59528 + (1));
-seq__59525 = G__59531;
-chunk__59526 = G__59532;
-count__59527 = G__59533;
-i__59528 = G__59534;
+var G__28759 = seq__28753;
+var G__28760 = chunk__28754;
+var G__28761 = count__28755;
+var G__28762 = (i__28756 + (1));
+seq__28753 = G__28759;
+chunk__28754 = G__28760;
+count__28755 = G__28761;
+i__28756 = G__28762;
 continue;
 } else {
-var temp__4425__auto__ = cljs.core.seq.call(null,seq__59525);
+var temp__4425__auto__ = cljs.core.seq.call(null,seq__28753);
 if(temp__4425__auto__){
-var seq__59525__$1 = temp__4425__auto__;
-if(cljs.core.chunked_seq_QMARK_.call(null,seq__59525__$1)){
-var c__16854__auto__ = cljs.core.chunk_first.call(null,seq__59525__$1);
-var G__59535 = cljs.core.chunk_rest.call(null,seq__59525__$1);
-var G__59536 = c__16854__auto__;
-var G__59537 = cljs.core.count.call(null,c__16854__auto__);
-var G__59538 = (0);
-seq__59525 = G__59535;
-chunk__59526 = G__59536;
-count__59527 = G__59537;
-i__59528 = G__59538;
+var seq__28753__$1 = temp__4425__auto__;
+if(cljs.core.chunked_seq_QMARK_.call(null,seq__28753__$1)){
+var c__16854__auto__ = cljs.core.chunk_first.call(null,seq__28753__$1);
+var G__28763 = cljs.core.chunk_rest.call(null,seq__28753__$1);
+var G__28764 = c__16854__auto__;
+var G__28765 = cljs.core.count.call(null,c__16854__auto__);
+var G__28766 = (0);
+seq__28753 = G__28763;
+chunk__28754 = G__28764;
+count__28755 = G__28765;
+i__28756 = G__28766;
 continue;
 } else {
-var _ = cljs.core.first.call(null,seq__59525__$1);
-var x_59539 = (w * Math.random());
-var y_59540 = (h * Math.random());
-cljsketch.canvas_graphics.draw_point.call(null,ctx,x_59539,y_59540,r);
+var _ = cljs.core.first.call(null,seq__28753__$1);
+var x_28767 = (w * Math.random());
+var y_28768 = (h * Math.random());
+cljsketch.canvas_graphics.draw_point.call(null,ctx,x_28767,y_28768,r);
 
-var G__59541 = cljs.core.next.call(null,seq__59525__$1);
-var G__59542 = null;
-var G__59543 = (0);
-var G__59544 = (0);
-seq__59525 = G__59541;
-chunk__59526 = G__59542;
-count__59527 = G__59543;
-i__59528 = G__59544;
+var G__28769 = cljs.core.next.call(null,seq__28753__$1);
+var G__28770 = null;
+var G__28771 = (0);
+var G__28772 = (0);
+seq__28753 = G__28769;
+chunk__28754 = G__28770;
+count__28755 = G__28771;
+i__28756 = G__28772;
 continue;
 }
 } else {
@@ -101,65 +104,65 @@ break;
 cljsketch.canvas_graphics.random_points_colors = (function cljsketch$canvas_graphics$random_points_colors(ctx,n,radius){
 var w = ctx.canvas.width;
 var h = ctx.canvas.height;
-var seq__59549 = cljs.core.seq.call(null,cljs.core.range.call(null,n));
-var chunk__59550 = null;
-var count__59551 = (0);
-var i__59552 = (0);
+var seq__28777 = cljs.core.seq.call(null,cljs.core.range.call(null,n));
+var chunk__28778 = null;
+var count__28779 = (0);
+var i__28780 = (0);
 while(true){
-if((i__59552 < count__59551)){
-var _ = cljs.core._nth.call(null,chunk__59550,i__59552);
-var x_59553 = (w * Math.random());
-var y_59554 = (h * Math.random());
-var r_59555 = Math.round(((255) * Math.random()));
-var g_59556 = Math.round(((255) * Math.random()));
-var b_59557 = Math.round(((255) * Math.random()));
-ctx.fillStyle = [cljs.core.str("rgb("),cljs.core.str(r_59555),cljs.core.str(","),cljs.core.str(g_59556),cljs.core.str(","),cljs.core.str(b_59557),cljs.core.str(")")].join('');
+if((i__28780 < count__28779)){
+var _ = cljs.core._nth.call(null,chunk__28778,i__28780);
+var x_28781 = (w * Math.random());
+var y_28782 = (h * Math.random());
+var r_28783 = Math.round(((255) * Math.random()));
+var g_28784 = Math.round(((255) * Math.random()));
+var b_28785 = Math.round(((255) * Math.random()));
+ctx.fillStyle = [cljs.core.str("rgb("),cljs.core.str(r_28783),cljs.core.str(","),cljs.core.str(g_28784),cljs.core.str(","),cljs.core.str(b_28785),cljs.core.str(")")].join('');
 
-cljsketch.canvas_graphics.draw_point.call(null,ctx,x_59553,y_59554,radius);
+cljsketch.canvas_graphics.draw_point.call(null,ctx,x_28781,y_28782,radius);
 
-var G__59558 = seq__59549;
-var G__59559 = chunk__59550;
-var G__59560 = count__59551;
-var G__59561 = (i__59552 + (1));
-seq__59549 = G__59558;
-chunk__59550 = G__59559;
-count__59551 = G__59560;
-i__59552 = G__59561;
+var G__28786 = seq__28777;
+var G__28787 = chunk__28778;
+var G__28788 = count__28779;
+var G__28789 = (i__28780 + (1));
+seq__28777 = G__28786;
+chunk__28778 = G__28787;
+count__28779 = G__28788;
+i__28780 = G__28789;
 continue;
 } else {
-var temp__4425__auto__ = cljs.core.seq.call(null,seq__59549);
+var temp__4425__auto__ = cljs.core.seq.call(null,seq__28777);
 if(temp__4425__auto__){
-var seq__59549__$1 = temp__4425__auto__;
-if(cljs.core.chunked_seq_QMARK_.call(null,seq__59549__$1)){
-var c__16854__auto__ = cljs.core.chunk_first.call(null,seq__59549__$1);
-var G__59562 = cljs.core.chunk_rest.call(null,seq__59549__$1);
-var G__59563 = c__16854__auto__;
-var G__59564 = cljs.core.count.call(null,c__16854__auto__);
-var G__59565 = (0);
-seq__59549 = G__59562;
-chunk__59550 = G__59563;
-count__59551 = G__59564;
-i__59552 = G__59565;
+var seq__28777__$1 = temp__4425__auto__;
+if(cljs.core.chunked_seq_QMARK_.call(null,seq__28777__$1)){
+var c__16854__auto__ = cljs.core.chunk_first.call(null,seq__28777__$1);
+var G__28790 = cljs.core.chunk_rest.call(null,seq__28777__$1);
+var G__28791 = c__16854__auto__;
+var G__28792 = cljs.core.count.call(null,c__16854__auto__);
+var G__28793 = (0);
+seq__28777 = G__28790;
+chunk__28778 = G__28791;
+count__28779 = G__28792;
+i__28780 = G__28793;
 continue;
 } else {
-var _ = cljs.core.first.call(null,seq__59549__$1);
-var x_59566 = (w * Math.random());
-var y_59567 = (h * Math.random());
-var r_59568 = Math.round(((255) * Math.random()));
-var g_59569 = Math.round(((255) * Math.random()));
-var b_59570 = Math.round(((255) * Math.random()));
-ctx.fillStyle = [cljs.core.str("rgb("),cljs.core.str(r_59568),cljs.core.str(","),cljs.core.str(g_59569),cljs.core.str(","),cljs.core.str(b_59570),cljs.core.str(")")].join('');
+var _ = cljs.core.first.call(null,seq__28777__$1);
+var x_28794 = (w * Math.random());
+var y_28795 = (h * Math.random());
+var r_28796 = Math.round(((255) * Math.random()));
+var g_28797 = Math.round(((255) * Math.random()));
+var b_28798 = Math.round(((255) * Math.random()));
+ctx.fillStyle = [cljs.core.str("rgb("),cljs.core.str(r_28796),cljs.core.str(","),cljs.core.str(g_28797),cljs.core.str(","),cljs.core.str(b_28798),cljs.core.str(")")].join('');
 
-cljsketch.canvas_graphics.draw_point.call(null,ctx,x_59566,y_59567,radius);
+cljsketch.canvas_graphics.draw_point.call(null,ctx,x_28794,y_28795,radius);
 
-var G__59571 = cljs.core.next.call(null,seq__59549__$1);
-var G__59572 = null;
-var G__59573 = (0);
-var G__59574 = (0);
-seq__59549 = G__59571;
-chunk__59550 = G__59572;
-count__59551 = G__59573;
-i__59552 = G__59574;
+var G__28799 = cljs.core.next.call(null,seq__28777__$1);
+var G__28800 = null;
+var G__28801 = (0);
+var G__28802 = (0);
+seq__28777 = G__28799;
+chunk__28778 = G__28800;
+count__28779 = G__28801;
+i__28780 = G__28802;
 continue;
 }
 } else {
@@ -170,4 +173,4 @@ break;
 }
 });
 
-//# sourceMappingURL=canvas_graphics.js.map?rel=1440855783266
+//# sourceMappingURL=canvas_graphics.js.map?rel=1441599678396

@@ -12,6 +12,29 @@
 (defn current-window-size []
   [(.-innerWidth js/window) (.-innerHeight js/window)])
 
+;;(defn navbar-menu-dom [navbar-menu menu-channel]
+;;  (letfn [(menu-dom [menu]
+;;            (apply b/dropdown {:title (menu :title)}
+;;                   (map menu-item-dom (menu :items))))
+;;          (menu-item-dom [menu-item]
+;;            (if (:divider? menu-item)
+;;              (b/menu-item {:divider? true})
+;;              (b/menu-item
+;;               (assoc (dissoc menu-item :label)
+;;                      :on-select #(put! menu-channel %))
+;;               (menu-item :label))))]
+;;    (map menu-dom navbar-menu)))
+;;
+;;(defn app-navbar [app-state-cursor component]
+;;  (reify
+;;    om/IRenderState
+;;    (render-state [this state]
+;;      (n/navbar
+;;       {:brand (d/a {:href "#"} "CljSketch")}
+;;       (apply n/nav
+;;        {:collapsible? true}
+;;        (navbar-menu-dom app-state-cursor (:menu-channel state)))))))
+
 (defn navbar-menu-dom [navbar-menu menu-channel]
   (letfn [(menu-dom [menu]
             (apply b/dropdown {:title (menu :title)}
@@ -25,15 +48,69 @@
                (menu-item :label))))]
     (map menu-dom navbar-menu)))
 
+(defn pf [msg x] (println msg) (println x) x)
+
+(defn tool-disabled [key app-state-cursor]
+  (when (not ((:enabled-tools app-state-cursor) key)) "disabled"))
+
 (defn app-navbar [app-state-cursor component]
   (reify
     om/IRenderState
     (render-state [this state]
-      (n/navbar
-       {:brand (d/a {:href "#"} "CljSketch")}
-       (apply n/nav
-        {:collapsible? true}
-        (navbar-menu-dom app-state-cursor (:menu-channel state)))))))
+      (let [menu-channel (:menu-channel state)]
+        (n/navbar
+         {:brand (d/a {:href "#"} "CljSketch")}
+         (n/nav
+          {:collapsible? true}
+          (b/dropdown {:title "File"}
+                      (b/menu-item {:on-select #(put! menu-channel [%])
+                                    :key :new-sketch} "New Sketch")
+                      (b/menu-item {:on-select #(put! menu-channel [%]) :className "disabled"
+                                    :key :open} "Open..."))
+          (b/dropdown {:title "Edit"}
+                      (b/menu-item {:on-select #(put! menu-channel [%])
+                                    :key :delete}          "Delete")
+                      (b/menu-item {:on-select #(put! menu-channel [%])
+                                    :key :clear-selection} "Clear Selection"))
+          (b/dropdown {:title "Construct"}
+                      (b/menu-item {:on-select #(put! menu-channel [%])
+                                    :className (tool-disabled :segment app-state-cursor)
+                                    :key :segment}                 "Segment")
+                      (b/menu-item {:on-select #(put! menu-channel [%])
+                                    :className (tool-disabled :line app-state-cursor)
+                                    :key :line}                    "Line")
+                      (b/menu-item {:on-select #(put! menu-channel [%])
+                                    :className (tool-disabled :parallel-line app-state-cursor)
+                                    :key :parallel-line}           "Parallel Line")
+                      (b/menu-item {:on-select #(put! menu-channel [%])
+                                    :className (tool-disabled :perpendicular-line app-state-cursor)
+                                    :key :perpendicular-line}      "Perpendicular Line")
+                      (b/menu-item {:on-select #(put! menu-channel [%])
+                                    :className (tool-disabled :intersection-point app-state-cursor)
+                                    :key :intersection-point}      "Intersection Point")
+                      (b/menu-item {:on-select #(put! menu-channel [%])
+                                    :className (tool-disabled :midpoint app-state-cursor)
+                                    :key :midpoint}                "Midpoint")
+                      (b/menu-item {:on-select #(put! menu-channel [%])
+                                    :className (tool-disabled :circle app-state-cursor)
+                                    :key :circle}                  "Circle"))
+          (apply b/dropdown {:title (d/span {} (d/span {} "Color") (d/div {:className "color-swatch"
+                                                                           :style {:background-color
+                                                                                   (:color app-state-cursor)}}))}
+                 (map (fn [color] (b/menu-item {:on-select #(put! menu-channel [% color])
+                                                :key :color} (d/div {:className "color-swatch"
+                                                                     :style {:background-color color}})))
+                      ["#000000" "#ffffff" "#a6cee3" "#1f78b4" "#b2df8a" "#33a02c" "#fb9a99"
+                       "#e31a1c" "#fdbf6f" "#ff7f00" "#cab2d6" "#6a3d9a" "#ffff99" "#b15928"]))
+          (apply b/dropdown {:title (d/span {} (d/span {} "Background") (d/div {:className "color-swatch"
+                                                                           :style {:background-color
+                                                                                   (:background-color app-state-cursor)}}))}
+                 (map (fn [color] (b/menu-item {:on-select #(put! menu-channel [% color])
+                                                :key :background-color} (d/div {:className "color-swatch"
+                                                                                :style {:background-color color}})))
+                      ["#000000" "#ffffff" "#a6cee3" "#1f78b4" "#b2df8a" "#33a02c" "#fb9a99" 
+                       "#e31a1c" "#fdbf6f" "#ff7f00" "#cab2d6" "#6a3d9a" "#ffff99" "#b15928"]))
+))))))
 
 (defn app-buttonbar [app-state-cursor component]
   (reify
@@ -52,7 +129,7 @@
              (b/button
               {:on-click
                (fn [e]
-                 (put! (:menu-channel state) (mouse-tool :key))
+                 (put! (:menu-channel state) [(mouse-tool :key)])
                  nil ; returning nil here quiets a browser warning about
                      ; returning false from an event handler being deprecated
                  )
@@ -78,7 +155,7 @@
            (render-state [_ state]
              (d/div {:class "wrapper"}
                     (d/div #js {:ref "navbar-wrapper"}
-                           (om/build app-navbar (app-state :navbar-menu)
+                           (om/build app-navbar app-state
                                      {:init-state state}))
                     (om/build app-buttonbar app-state {:init-state state})
                     (d/canvas #js {:ref "canvas"})))

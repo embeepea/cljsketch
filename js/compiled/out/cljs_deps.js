@@ -4,7 +4,6 @@ goog.addDependency("../cljsketch/canvas_graphics.js", ['cljsketch.canvas_graphic
 goog.addDependency("../cljsketch/vector.js", ['cljsketch.vector'], ['cljs.core']);
 goog.addDependency("../cljsketch/geom.js", ['cljsketch.geom'], ['cljs.core', 'cljsketch.canvas_graphics', 'cljsketch.vector']);
 goog.addDependency("../cljsketch/refgeom.js", ['cljsketch.refgeom'], ['cljsketch.geom', 'cljs.core', 'cljsketch.vector']);
-goog.addDependency("../cljsketch/construction_tools.js", ['cljsketch.construction_tools'], ['cljsketch.geom', 'cljs.core', 'cljsketch.refgeom']);
 goog.addDependency("../clojure/string.js", ['clojure.string'], ['goog.string', 'cljs.core', 'goog.string.StringBuffer']);
 goog.addDependency("../schema/utils.js", ['schema.utils'], ['goog.string', 'cljs.core', 'goog.string.format']);
 goog.addDependency("../schema/core.js", ['schema.core'], ['cljs.core', 'clojure.string', 'schema.utils']);
@@ -37,8 +36,9 @@ goog.addDependency("../cljsketch/mouse_tools.js", ['cljsketch.mouse_tools'], ['c
 goog.addDependency("../om_bootstrap/nav.js", ['om_bootstrap.nav'], ['schema.core', 'om_tools.dom', 'om_tools.core', 'cljs.core', 'om_bootstrap.util', 'om.core', 'clojure.string', 'om_bootstrap.types']);
 goog.addDependency("../cljsketch/ui.js", ['cljsketch.ui'], ['om_tools.dom', 'cljs.core', 'om.dom', 'cljs.core.async', 'om_bootstrap.nav', 'om.core', 'om_bootstrap.button', 'goog.events']);
 goog.addDependency("../om_bootstrap/grid.js", ['om_bootstrap.grid'], ['schema.core', 'om_tools.dom', 'cljs.core', 'om_bootstrap.util', 'om_bootstrap.types']);
-goog.addDependency("../cljsketch/core.js", ['cljsketch.core'], ['cljsketch.geom', 'cljsketch.ui', 'om_tools.dom', 'om_bootstrap.grid', 'cljs.core', 'om.dom', 'cljs.core.async', 'om_bootstrap.nav', 'cljsketch.construction_tools', 'cljsketch.canvas_graphics', 'cljsketch.mouse_tools', 'cljsketch.vector', 'cljsketch.refgeom', 'om.core', 'om_bootstrap.button', 'goog.events']);
+goog.addDependency("../cljsketch/construction_tools.js", ['cljsketch.construction_tools'], ['cljsketch.geom', 'cljs.core', 'cljsketch.refgeom']);
+goog.addDependency("../cljsketch/ui_scratch.js", ['cljsketch.ui_scratch'], ['om_tools.dom', 'om_bootstrap.grid', 'cljs.core', 'om.dom', 'cljs.core.async', 'om_bootstrap.nav', 'om.core', 'om_bootstrap.button', 'goog.events']);
+goog.addDependency("../cljsketch/core.js", ['cljsketch.core'], ['cljsketch.geom', 'cljsketch.ui', 'om_tools.dom', 'om_bootstrap.grid', 'cljs.core', 'om.dom', 'cljs.core.async', 'om_bootstrap.nav', 'cljsketch.construction_tools', 'cljsketch.ui_scratch', 'cljsketch.canvas_graphics', 'cljsketch.mouse_tools', 'cljsketch.vector', 'cljsketch.refgeom', 'om.core', 'om_bootstrap.button', 'goog.events']);
 goog.addDependency("../cljs/repl.js", ['cljs.repl'], ['cljs.core']);
 goog.addDependency("../figwheel/client.js", ['figwheel.client'], ['goog.Uri', 'cljs.core', 'cljs.core.async', 'figwheel.client.file_reloading', 'figwheel.client.utils', 'cljs.repl', 'figwheel.client.heads_up', 'figwheel.client.socket', 'clojure.string']);
 goog.addDependency("../figwheel/connect.js", ['figwheel.connect'], ['cljs.core', 'figwheel.client', 'cljsketch.core', 'figwheel.client.utils']);
-goog.addDependency("../cljsketch/ui_scratch.js", ['cljsketch.ui_scratch'], ['om_tools.dom', 'cljs.core', 'om.dom', 'cljs.core.async', 'om_bootstrap.nav', 'om.core', 'om_bootstrap.button', 'goog.events']);
