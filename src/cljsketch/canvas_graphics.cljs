@@ -1,11 +1,10 @@
 (ns cljsketch.canvas-graphics)
 
-(defn clear-canvas [ctx]
+(defn clear-canvas [ctx color]
   (let [w (-> ctx .-canvas .-width)
         h (-> ctx .-canvas .-height)]
-    (set! (.-fillStyle ctx) "#cccccc")
-    (.fillRect ctx 0 0 w h)
-    (set! (.-fillStyle ctx) "#000000")))
+    (set! (.-fillStyle ctx) color)
+    (.fillRect ctx 0 0 w h)))
 
 (defn set-color [ctx color]
   (set! (.-strokeStyle ctx) color)

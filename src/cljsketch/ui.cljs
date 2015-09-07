@@ -94,22 +94,22 @@
                       (b/menu-item {:on-select #(put! menu-channel [%])
                                     :className (tool-disabled :circle app-state-cursor)
                                     :key :circle}                  "Circle"))
-          (b/dropdown {:title (d/span {} (d/span {} "Color") (d/div {:className "color-swatch"
-                                                                      :style {:background-color
-                                                                              (:color app-state-cursor)}}))}
-                      (b/menu-item {:on-select #(put! menu-channel [% "#f00"])
-                                    :key :color} 
-                                   (d/div {:className "color-swatch" :style {:background-color "#f00"}}))
-                      (b/menu-item {:on-select #(put! menu-channel [% "#0f0"])
-                                    :key :color} 
-                                   (d/div {:className "color-swatch" :style {:background-color "#0f0"}}))
-                      (b/menu-item {:on-select #(put! menu-channel [% "#00f"])
-                                    :key :color} 
-                                   (d/div {:className "color-swatch" :style {:background-color "#00f"}}))
-                      (b/menu-item {:on-select #(put! menu-channel [% "#000"])
-                                    :key :color} 
-                                   (d/div {:className "color-swatch" :style {:background-color "#000"}})))
-
+          (apply b/dropdown {:title (d/span {} (d/span {} "Color") (d/div {:className "color-swatch"
+                                                                           :style {:background-color
+                                                                                   (:color app-state-cursor)}}))}
+                 (map (fn [color] (b/menu-item {:on-select #(put! menu-channel [% color])
+                                                :key :color} (d/div {:className "color-swatch"
+                                                                     :style {:background-color color}})))
+                      ["#000000" "#ffffff" "#a6cee3" "#1f78b4" "#b2df8a" "#33a02c" "#fb9a99"
+                       "#e31a1c" "#fdbf6f" "#ff7f00" "#cab2d6" "#6a3d9a" "#ffff99" "#b15928"]))
+          (apply b/dropdown {:title (d/span {} (d/span {} "Background") (d/div {:className "color-swatch"
+                                                                           :style {:background-color
+                                                                                   (:background-color app-state-cursor)}}))}
+                 (map (fn [color] (b/menu-item {:on-select #(put! menu-channel [% color])
+                                                :key :background-color} (d/div {:className "color-swatch"
+                                                                                :style {:background-color color}})))
+                      ["#000000" "#ffffff" "#a6cee3" "#1f78b4" "#b2df8a" "#33a02c" "#fb9a99" 
+                       "#e31a1c" "#fdbf6f" "#ff7f00" "#cab2d6" "#6a3d9a" "#ffff99" "#b15928"]))
 ))))))
 
 (defn app-buttonbar [app-state-cursor component]

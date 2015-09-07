@@ -48,7 +48,8 @@
 (defonce app-state (atom
  {;:navbar-menu navbar-menu
   :enabled-tools #{}
-  :color "#000"
+  :color "#fff"
+  :background-color "#000"
   :mouse-tool :draw-point
   :mouse-tools [{:key :select     :label "Select"}
                 {:key :draw-point :label "Draw Point"}]
@@ -107,7 +108,7 @@
         (gr/draw-line @ctx e0x e0y e1x e1y t)))))
 
 (defn redraw-canvas []
-  (gr/clear-canvas @ctx)
+  (gr/clear-canvas @ctx (@app-state :background-color))
   (let [geommap (rg/geommap (@app-state :world))]
     (doseq [at (@app-state :world)]
       (g/render (geommap at) @ctx (or (highlight? at) (selected? at)) ((@app-state :styles) at)
@@ -218,6 +219,9 @@
 (defmethod menu-item-handler :color [key color]
   (swap! app-state assoc :color color))
 
+(defmethod menu-item-handler :background-color [key color]
+  (swap! app-state assoc :background-color color))
+
 (defmethod menu-item-handler :draw-point [key]
   (swap! app-state assoc :mouse-tool :draw-point))
 
@@ -229,7 +233,7 @@
 
 (defn run-app [_ctx menu-channel mouse-channel]
   (reset! ctx _ctx)
-  (gr/clear-canvas @ctx)
+  (gr/clear-canvas @ctx (@app-state :background-color))
   (go (loop []
         (let [action (<! menu-channel)]
           (apply menu-item-handler action)

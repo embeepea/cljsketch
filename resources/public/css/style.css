@@ -20,6 +20,7 @@ div.button-bar {
 
 div.color-swatch {
   display: inline-block;
+  border: 1px solid black;
   margin-bottom: -2px;
   margin-left: 5px;
   width: 15px;
