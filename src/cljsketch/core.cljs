@@ -217,7 +217,10 @@
   (construct-and-redraw (construction-tools :circle)))
 
 (defmethod menu-item-handler :color [key color]
-  (swap! app-state assoc :color color))
+  (doseq [at @selection]
+    (swap! app-state assoc-in [:styles at] { :color color }))
+  (swap! app-state assoc :color color)
+  (redraw-canvas))
 
 (defmethod menu-item-handler :background-color [key color]
   (swap! app-state assoc :background-color color))
