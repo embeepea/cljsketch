@@ -16,6 +16,7 @@
               [cljsketch.geom :as g]
               [cljsketch.refgeom :as rg]
               [cljsketch.construction-tools :as c]
+              [cognitect.transit :as t]
               ))
 
 (enable-console-print!)
@@ -248,6 +249,51 @@
 )
 
 (ui/launch app-state "app" run-app)
+
+;; (.ajax js/$ #js{
+;;                 "url" "/who",
+;;                 "dataType" "text",
+;;                 "success" (fn [data] (.log js/console data)),
+;;                 "error" (fn [data] (.log js/console "epic fail!"))
+;;                 })
+
+
+(defn serialize [app-state]
+  (let [world   (:world app-state)
+        atommap (zipmap world (range (count world)))
+        styles  (:styles app-state)
+        geoms   (vec (map
+                      (fn [at]
+                        {:geom (rg/serialize @at atommap)
+                         :style (styles at)})
+                      world))]
+    {:background-color (:background-color app-state)
+     :color            (:color app-state)
+     :geoms            geoms}))
+
+;; to make a JSON object for saving the app state:
+;;   (t/write (t/writer :json) (serialize @app-state))
+
+(defn unserialize [serial]
+  (swap! app-state (fn [app-state]
+                     (let [app-state0 (reduce
+                                       (fn [app-state g]
+                                         (let [atom        (atom (rg/unserialize (:geom g) (app-state :world)))
+                                               app-state1  (assoc app-state :world (conj (app-state :world) atom))]
+                                           (if (:style g)
+                                             (assoc app-state1 :styles (assoc (app-state :styles) atom (:style g)))
+                                             app-state1)))
+                                       (assoc app-state :world [] :styles {})
+                                       (:geoms serial))]
+                       (assoc app-state0
+                              :background-color (:background-color serial)
+                              :color            (:color serial)))))
+  (highlight! nil)
+  (clear-selection!)
+  (redraw-canvas))
+
+;; to restore the app using a JSON STRING created as above:
+;;    (unserialize (t/read (t/reader :json) STRING))
 
 (defn on-js-reload []
   (redraw-canvas)

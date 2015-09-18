@@ -8,15 +8,24 @@
   (toGeom [this geommap] "return a geom for this refgeom")
   (deps [this] "return a sequence of atoms referring to the objects
     (Geoms or RefGeoms) that this RefGeom depends on")
-  (geom-type [this] "")
+  (geom-type [this] "return the underlying IGeom type for this IRefGeom object")
+  (serialize [this atommap] "return a serial representation of this IRefGeom; atommap
+    should be a map whose keys are IRefGeom atoms, and whose values are integer indices corresponding
+    to them")
 )
+
+(defmulti unserialize (fn [& args] (first (first args))))
 
 ;; a point
 (defrecord Point [p] 
   IRefGeom
   (deps [this] ())
   (geom-type [this] g/Point)
-  (toGeom [this geommap] (g/Point. p)))
+  (toGeom [this geommap] (g/Point. p))
+  (serialize [this atommap]
+        (let [[x y] p] [:point x  y]))
+  )
+(defmethod unserialize :point [[type x y] atoms] (Point. [x y]))
 
 ;; segment connecting two points
 (defrecord PointPointSegment [pt0 pt1] 
@@ -26,7 +35,10 @@
   (toGeom [this geommap]
     (let [gpt0 (:p (geommap pt0))
           gpt1 (:p (geommap pt1))]
-      (g/Segment. (gpt0 0) (gpt0 1) (gpt1 0) (gpt1 1)))))
+      (g/Segment. (gpt0 0) (gpt0 1) (gpt1 0) (gpt1 1))))
+  (serialize [this atommap] [:segment (atommap pt0) (atommap pt1)])
+  )
+(defmethod unserialize :segment [[type pt0 pt1] atoms] (PointPointSegment. (atoms pt0) (atoms pt1)))
 
 ;; line through 2 points
 (defrecord PointPointLine [pt0 pt1]
@@ -36,8 +48,10 @@
   (toGeom [this geommap]
     (let [p0 (v/toProjectiveVector (v/AffineVector. (:p (geommap pt0))))
           p1 (v/toProjectiveVector (v/AffineVector. (:p (geommap pt1))))]
-      (g/Line. (v/point-point-line p0 p1)))))
-
+      (g/Line. (v/point-point-line p0 p1))))
+  (serialize [this atommap] [:point-point-line (atommap pt0) (atommap pt1)])
+  )
+(defmethod unserialize :point-point-line [[type pt0 pt1] atoms] (PointPointLine. (atoms pt0) (atoms pt1)))
 
 ;; take a refgeom `rg` that is either a refgeom/Line or refgeom/Segment, and
 ;; return a ProjectiveVector representing the line containing it
@@ -57,7 +71,10 @@
   (toGeom [this geommap]
     (let [ptv  (v/toProjectiveVector (v/AffineVector. (:p (geommap pt))))
           lnv  (lineal-projective-vector geommap ln-sg)]
-      (g/Line. (v/point-line-perpendicular ptv lnv)))))
+      (g/Line. (v/point-line-perpendicular ptv lnv))))
+  (serialize [this atommap] [:point-perpendicular-line (atommap pt) (atommap ln-sg)])
+  )
+(defmethod unserialize :point-perpendicular-line [[type pt ln-sg] atoms] (PointPerpendicularLine. (atoms pt) (atoms ln-sg)))
 
 ;; line through a point parallel to another line or segment
 (defrecord PointParallelLine [pt ln-sg] 
@@ -67,7 +84,10 @@
   (toGeom [this geommap]
     (let [ptv  (v/toProjectiveVector (v/AffineVector. (:p (geommap pt))))
           lnv  (lineal-projective-vector geommap ln-sg)]
-      (g/Line. (v/point-line-parallel ptv lnv)))))
+      (g/Line. (v/point-line-parallel ptv lnv))))
+  (serialize [this atommap] [:point-parallel-line (atommap pt) (atommap ln-sg)])
+  )
+(defmethod unserialize :point-parallel-line [[type pt ln-sg] atoms] (PointParallelLine. (atoms pt) (atoms ln-sg)))
 
 ;; intersection point of two lines
 (defrecord LineLinePoint [ln0 ln1]
@@ -78,7 +98,10 @@
     (let [lnv0  (:u (geommap ln0))
           lnv1  (:u (geommap ln1))
           c     (v/line-line-intersection lnv0 lnv1)]
-      (if (= (last c.u) 0) (g/Null.) (g/Point. (:u (v/toAffineVector c)))))))
+      (if (= (last c.u) 0) (g/Null.) (g/Point. (:u (v/toAffineVector c))))))
+  (serialize [this atommap] [:line-line-point (atommap ln0) (atommap ln1)])
+  )
+(defmethod unserialize :line-line-point [[type ln0 ln1] atoms] (LineLinePoint. (atoms ln0) (atoms ln1)))
 
 ;; midpoint of a segment
 (defrecord SegmentMidPoint [sg]
@@ -91,7 +114,9 @@
           y0  (:y0 s)
           x1  (:x1 s)
           y1  (:y1 s)]
-      (g/Point. (v/vmul (v/vadd [x0 y0] [x1 y1]) 0.5)))))
+      (g/Point. (v/vmul (v/vadd [x0 y0] [x1 y1]) 0.5))))
+  (serialize [this atommap] [:segment-midpoint (atommap sg)]))
+(defmethod unserialize :segment-midpoint [[type sg] atoms] (SegmentMidPoint. (atoms sg)))
 
 ;; circle centered at point 'c' passing through point 'p'
 (defrecord CenterPointCircle [c p]
@@ -101,7 +126,9 @@
   (toGeom [this geommap]
     (let [[cx cy] (:p (geommap c))
           [px py] (:p (geommap p))]
-      (g/Circle. cx cy (v/vl2dist [cx cy] [px py])))))
+      (g/Circle. cx cy (v/vl2dist [cx cy] [px py]))))
+  (serialize [this atommap] [:center-point-circle (atommap c)  (atommap p)]))
+(defmethod unserialize :center-point-circle [[type c p] atoms] (CenterPointCircle. (atoms c) (atoms p)))
 
 ;; Take a list of atoms refering to either Geoms or RefGeoms,
 ;; and return a map which associates to each of those atoms
@@ -163,4 +190,3 @@
 ;; here since each refgeom only stores references to the refgeoms
 ;; it depends on, not the other way around.
 (defn dependents [world at] (traverse-dfs (inverse world) at))
-
