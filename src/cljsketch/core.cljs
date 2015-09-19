@@ -21,34 +21,12 @@
 
 (enable-console-print!)
 
-(declare enable-fitting-tools)
+(declare enable-fitting-tools serialize unserialize)
 
 (def ctx (atom {}))
 
-(def navbar-menu [
- {:title "File"
-  :items [{:key :new-sketch           :label "New Sketch"}
-          {:key :open                 :laebl "Open..."}]}
- {:title "Edit"
-  :items [{:key :delete               :label "Delete"}
-          {:key :clear-selection      :label "Clear Selection"}]}
- {:title "Construct"
-  :items [{:key :segment              :label "Segment"             :className "disabled"}
-          {:key :line                 :label "Line"                :className "disabled"}
-          {:key :parallel-line        :label "Parallel Line"       :className "disabled"}
-          {:key :perpendicular-line   :label "Perpendicular Line"  :className "disabled"}
-          {:key :intersection-point   :label "Intersection Point"  :className "disabled"}
-          {:key :midpoint             :label "Midpoint"            :className "disabled"}
-          {:key :circle               :label "Circle"              :className "disabled"}
-          ;{:divider? true}
-          ;{:key :ray                  :label "Ray"}
-          ;{:key :point-on-obj         :label "Point on Object"}
-          ]}
-])
-
 (defonce app-state (atom
- {;:navbar-menu navbar-menu
-  :enabled-tools #{}
+ {:enabled-tools #{}
   :color "#fff"
   :background-color "#000"
   :mouse-tool :draw-point
@@ -146,19 +124,6 @@
 (defn index-of-first [pred coll]
   (first (keep-indexed (fn [i x] (when (pred x) i)) coll)))
 
-;(defn enable-fitting-tools []
-;  (let [construction-menu-ks  [:navbar-menu
-;                               (index-of-first #(= (:title %) "Construct")
-;                                               (@app-state :navbar-menu))
-;                               :items]
-;        construction-menu-len (count (get-in @app-state construction-menu-ks))]
-;    (doseq [i (range construction-menu-len)]
-;      (let [key       (get-in @app-state (conj construction-menu-ks i :key))
-;            className (if (c/selection-fits (construction-tools key) @selection)
-;                        "" "disabled")]
-;        (swap! app-state assoc-in (conj construction-menu-ks i :className)
-;               className)))))
-
 (defn enable-fitting-tools []
   (swap! app-state assoc :enabled-tools
          (set (filter #(c/selection-fits (construction-tools %) @selection)
@@ -185,6 +150,21 @@
   (clear-selection!)
   (clear-geoms)
   (redraw-canvas))
+
+  #_(let [data #js{"name" "mysketch"
+                 "sketch" (t/write (t/writer :json) (serialize @app-state)) }]
+    (.ajax js/$ #js{
+                    "url" "/save-sketch"
+                    "data" data
+                    "dataType" "json"
+                    "method" "POST"
+                    "success"  (fn [data status])
+                    })
+    )
+
+(defmethod menu-item-handler :save [key]
+  (swap! app-state assoc :saving true)
+  )
 
 (defmethod menu-item-handler :clear-selection [key]
   (clear-selection!)
@@ -246,16 +226,19 @@
         (let [mouse-event (<! mouse-channel)]
           (recur (mt/handle-event
                   (mouse-tools (@app-state :mouse-tool)) mouse-event state)))))
-)
+  )
 
-(ui/launch app-state "app" run-app)
+(defn save-sketch [name]
+  (println (str "saved as " name)))
 
-;; (.ajax js/$ #js{
-;;                 "url" "/who",
-;;                 "dataType" "text",
-;;                 "success" (fn [data] (.log js/console data)),
-;;                 "error" (fn [data] (.log js/console "epic fail!"))
-;;                 })
+(ui/launch app-state "app" run-app save-sketch)
+
+(.ajax js/$ #js{
+                "url" "/who",
+                "dataType" "text",
+                "success" (fn [data] (swap! app-state assoc :user (if data data nil)))
+                "error" (fn [data] (swap! app-state assoc :user "can't login"))
+                })
 
 
 (defn serialize [app-state]

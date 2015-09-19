@@ -5,6 +5,8 @@
               [om-bootstrap.button :as b]
               [om-bootstrap.nav :as n]
               [om-tools.dom :as d :include-macros true]
+              [om-bootstrap.modal :as md]
+              [om-bootstrap.input :as i]
               [cljs.core.async :refer [put! chan <!]]
               [goog.events :as events]
               ))
@@ -59,14 +61,20 @@
     (render-state [this state]
       (let [menu-channel (:menu-channel state)]
         (n/navbar
-         {:brand (d/a {:href "#"} "CljSketch")}
+         {:brand (d/a {:href "#"}
+                      (if (:user app-state-cursor)
+                        (:user app-state-cursor)
+                        "CljSketch")
+                      )}
          (n/nav
           {:collapsible? true}
           (b/dropdown {:title "File"}
                       (b/menu-item {:on-select #(put! menu-channel [%])
                                     :key :new-sketch} "New Sketch")
                       (b/menu-item {:on-select #(put! menu-channel [%]) :className "disabled"
-                                    :key :open} "Open..."))
+                                    :key :open} "Open...")
+                      (b/menu-item {:on-select #(put! menu-channel [%])
+                                    :key :save} "Save..."))
           (b/dropdown {:title "Edit"}
                       (b/menu-item {:on-select #(put! menu-channel [%])
                                     :key :delete}          "Delete")
@@ -144,7 +152,11 @@
                    :coords [(.-offsetX event) (.-offsetY event)]
                    :event  event})))
 
-(defn launch [app-state id run-app]
+(defn handle-sketch-name-input-change [owner app-state]
+  (let [node (om/get-node owner "input")]
+    (om/transact! app-state :sketch-name (fn [] (.-value node)))))
+
+(defn launch [app-state id run-app save-sketch]
   (letfn
       [(app [app-state component]
          (reify
@@ -154,11 +166,35 @@
            om/IRenderState
            (render-state [_ state]
              (d/div {:class "wrapper"}
+                    (md/modal {:header (d/h4 "Enter a name for this sketch")
+                               :footer
+                               (d/div
+                                (b/button
+                                 {:on-click (fn [] (om/transact!
+                                                    app-state :saving (fn [] false)
+                                                    ))} "Cancel")
+                                (b/button
+                                 {:on-click (fn []
+                                              (save-sketch (app-state :sketch-name))
+                                              (om/transact!
+                                               app-state :saving (fn [] false)
+                                               ))} "Save"))
+                               :close-button? false
+                               :style (when (app-state :saving) {:display "block"})
+                               :visible? (app-state :saving)}
+                              (i/input
+                               {:feedback? true
+                                :type "text"
+                                :value (app-state :sketch-name)
+                                :placeholder "Enter sketch name"
+                                :on-change #(handle-sketch-name-input-change component app-state)
+                                }))
                     (d/div #js {:ref "navbar-wrapper"}
                            (om/build app-navbar app-state
                                      {:init-state state}))
                     (om/build app-buttonbar app-state {:init-state state})
-                    (d/canvas #js {:ref "canvas"})))
+                    (d/canvas #js {:ref "canvas"})
+                    ))
            om/IDidMount
            (did-mount [c]
              (let [canvas                (om/get-node component "canvas")
