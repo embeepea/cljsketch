@@ -179,6 +179,7 @@
                                (unserialize (t/read (t/reader :json) data))
                                (swap! app-state assoc
                                       :sketch-name sketch-name
+                                      :mouse-tool :select
                                       :opening false))
                   }))
 
