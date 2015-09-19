@@ -268,7 +268,7 @@
                 "url" "/who",
                 "dataType" "text",
                 "success" (fn [data] (swap! app-state assoc :user (if data data nil)))
-                "error" (fn [data] (swap! app-state assoc :user "can't login"))
+                "error" (fn [data] (println "can't login"))
                 })
 
 

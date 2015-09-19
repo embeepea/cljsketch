@@ -72,8 +72,10 @@
                       (b/menu-item {:on-select #(put! menu-channel [%])
                                     :key :new-sketch} "New Sketch")
                       (b/menu-item {:on-select #(put! menu-channel [%])
+                                    :className (when (not (:user app-state-cursor)) "disabled")
                                     :key :open} "Open...")
                       (b/menu-item {:on-select #(put! menu-channel [%])
+                                    :className (when (not (:user app-state-cursor)) "disabled")
                                     :key :save} "Save..."))
           (b/dropdown {:title "Edit"}
                       (b/menu-item {:on-select #(put! menu-channel [%])
