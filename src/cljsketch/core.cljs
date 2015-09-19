@@ -151,20 +151,54 @@
   (clear-geoms)
   (redraw-canvas))
 
-  #_(let [data #js{"name" "mysketch"
+(defmethod menu-item-handler :open [key]
+  (.ajax js/$ #js{
+                  "url" "/list-sketches"
+                  "data" #js{}
+                  "dataType" "json"
+                  "method" "POST"
+                  "success"  (fn [data status]
+                               ;; on success, status will be the string "success", and data
+                               ;; will be #js [ <sketch names> ]
+                               (swap! app-state assoc
+                                      :opening true
+                                      :open-sketch-names (js->clj data)))
+                  }))
+
+(defmethod menu-item-handler :cancel-open [key] (swap! app-state assoc :opening false))
+
+(defmethod menu-item-handler :confirm-open [key sketch-name]
+  (.ajax js/$ #js{
+                  "url" "/get-sketch"
+                  "data" #js{:name sketch-name}
+                  "dataType" "json"
+                  "method" "POST"
+                  "success"  (fn [data status]
+                               ;; on success, status will be the string "success", and data
+                               ;; will be ...
+                               (unserialize (t/read (t/reader :json) data))
+                               (swap! app-state assoc
+                                      :sketch-name sketch-name
+                                      :opening false))
+                  }))
+
+(defmethod menu-item-handler :save [key] (swap! app-state assoc :saving true))
+
+(defmethod menu-item-handler :cancel-save [key] (swap! app-state assoc :saving false))
+
+(defmethod menu-item-handler :confirm-save [key]
+  (let [data #js{"name" (:sketch-name @app-state)
                  "sketch" (t/write (t/writer :json) (serialize @app-state)) }]
     (.ajax js/$ #js{
                     "url" "/save-sketch"
                     "data" data
                     "dataType" "json"
                     "method" "POST"
-                    "success"  (fn [data status])
-                    })
-    )
-
-(defmethod menu-item-handler :save [key]
-  (swap! app-state assoc :saving true)
-  )
+                    "success"  (fn [data status]
+                                 ;; on success, status will be the string "success", and data
+                                 ;; will be #js { :status "OK" }
+                                 (swap! app-state assoc :saving false))
+                    })))
 
 (defmethod menu-item-handler :clear-selection [key]
   (clear-selection!)
@@ -228,10 +262,7 @@
                   (mouse-tools (@app-state :mouse-tool)) mouse-event state)))))
   )
 
-(defn save-sketch [name]
-  (println (str "saved as " name)))
-
-(ui/launch app-state "app" run-app save-sketch)
+(ui/launch app-state "app" run-app)
 
 (.ajax js/$ #js{
                 "url" "/who",

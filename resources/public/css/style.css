@@ -27,3 +27,12 @@ div.color-swatch {
   height: 15px;
 }
 
+div.sketch-item {
+    padding: 10px;
+    border: 1px solid #eee;
+    cursor: pointer;
+}
+
+div.sketch-item:hover {
+    background-color: #cfc;
+}

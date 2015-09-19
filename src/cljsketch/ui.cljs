@@ -71,7 +71,7 @@
           (b/dropdown {:title "File"}
                       (b/menu-item {:on-select #(put! menu-channel [%])
                                     :key :new-sketch} "New Sketch")
-                      (b/menu-item {:on-select #(put! menu-channel [%]) :className "disabled"
+                      (b/menu-item {:on-select #(put! menu-channel [%])
                                     :key :open} "Open...")
                       (b/menu-item {:on-select #(put! menu-channel [%])
                                     :key :save} "Save..."))
@@ -156,7 +156,7 @@
   (let [node (om/get-node owner "input")]
     (om/transact! app-state :sketch-name (fn [] (.-value node)))))
 
-(defn launch [app-state id run-app save-sketch]
+(defn launch [app-state id run-app]
   (letfn
       [(app [app-state component]
          (reify
@@ -166,19 +166,14 @@
            om/IRenderState
            (render-state [_ state]
              (d/div {:class "wrapper"}
+
                     (md/modal {:header (d/h4 "Enter a name for this sketch")
                                :footer
                                (d/div
                                 (b/button
-                                 {:on-click (fn [] (om/transact!
-                                                    app-state :saving (fn [] false)
-                                                    ))} "Cancel")
+                                 {:on-click (fn [] (put! (:menu-channel state) [:cancel-save]))} "Cancel")
                                 (b/button
-                                 {:on-click (fn []
-                                              (save-sketch (app-state :sketch-name))
-                                              (om/transact!
-                                               app-state :saving (fn [] false)
-                                               ))} "Save"))
+                                 {:on-click (fn [] (put! (:menu-channel state) [:confirm-save]))} "Save"))
                                :close-button? false
                                :style (when (app-state :saving) {:display "block"})
                                :visible? (app-state :saving)}
@@ -189,11 +184,31 @@
                                 :placeholder "Enter sketch name"
                                 :on-change #(handle-sketch-name-input-change component app-state)
                                 }))
+
+                    (md/modal {:header (d/h4 "Click on a sketch to open")
+                               :footer
+                               (d/div
+                                (b/button
+                                 {:on-click (fn [] (put! (:menu-channel state) [:cancel-open]))} "Cancel"))
+                               :close-button? false
+                               :style (when (app-state :opening) {:display "block"})
+                               :visible? (app-state :opening)}
+
+                              (apply (partial d/div nil)
+                                     (map #(d/div {:class "sketch-item"
+                                                   :on-click (fn []
+                                                               (put! (:menu-channel state)
+                                                                     [:confirm-open %]))}
+                                                  %) (app-state :open-sketch-names)))
+
+                              )
+
                     (d/div #js {:ref "navbar-wrapper"}
                            (om/build app-navbar app-state
                                      {:init-state state}))
                     (om/build app-buttonbar app-state {:init-state state})
-                    (d/canvas #js {:ref "canvas"})
+                    (d/canvas #js {:ref "canvas"}
+                    )
                     ))
            om/IDidMount
            (did-mount [c]
