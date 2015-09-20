@@ -267,9 +267,14 @@
 
 (.ajax js/$ #js{
                 "url" "/who",
-                "dataType" "text",
-                "success" (fn [data] (swap! app-state assoc :user (if data data nil)))
-                "error" (fn [data] (println "can't login"))
+                "dataType" "json",
+                "success"  (fn [data status]
+                             ;; on success, status will be the string "success", and data
+                             ;; will be #js { :name XXX :auth-provider YYY :id ZZZ }
+                             (let [user (js->clj data)]
+                               (if (seq user) (swap! app-state assoc :user user)
+                                   (swap! app-state assoc :user nil))))
+                "error" (fn [data] (swap! app-state assoc :user nil))
                 })
 
 

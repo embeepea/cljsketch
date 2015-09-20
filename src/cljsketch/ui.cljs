@@ -61,11 +61,7 @@
     (render-state [this state]
       (let [menu-channel (:menu-channel state)]
         (n/navbar
-         {:brand (d/a {:href "#"}
-                      (if (:user app-state-cursor)
-                        (:user app-state-cursor)
-                        "CljSketch")
-                      )}
+         {:brand (d/a {:href "#"} "Cljsketch")}
          (n/nav
           {:collapsible? true}
           (b/dropdown {:title "File"}
@@ -120,6 +116,17 @@
                                                                                 :style {:background-color color}})))
                       ["#000000" "#ffffff" "#a6cee3" "#1f78b4" "#b2df8a" "#33a02c" "#fb9a99" 
                        "#e31a1c" "#fdbf6f" "#ff7f00" "#cab2d6" "#6a3d9a" "#ffff99" "#b15928"]))
+
+
+          (if (:user app-state-cursor)
+            (b/dropdown {:title (get-in app-state-cursor [:user "name"])}
+                        (b/menu-item {:href "/logout"} "Logout"))
+            (b/dropdown {:title "Login"}
+                        (b/menu-item {:href "/auth/google"} "Login with Google")))
+
+          ;;(n/nav-item {:key 1 :href "/auth/google"} "Login")
+
+
 ))))))
 
 (defn app-buttonbar [app-state-cursor component]
