@@ -1,3 +1,5 @@
+![CljSketch Image](cljsketch.png)
+
 # CljSketch
 
 CljSketch is a 2D geometry sketchpad program written in ClojureScript.
