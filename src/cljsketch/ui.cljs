@@ -216,8 +216,10 @@
                            (om/build app-navbar app-state
                                      {:init-state state}))
                     (om/build app-buttonbar app-state {:init-state state})
-                    (d/canvas #js {:ref "canvas"}
-                    )
+                    (d/div {:className "canvas-wrapper"}
+                           (d/canvas #js {:className "canvas" :ref "canvas"})
+                           (d/div {:className "ui-message"} (:ui-message app-state)))
+
                     ))
            om/IDidMount
            (did-mount [c]

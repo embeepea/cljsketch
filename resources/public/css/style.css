@@ -36,3 +36,14 @@ div.sketch-item {
 div.sketch-item:hover {
     background-color: #cfc;
 }
+
+div.canvas-wrapper div.ui-message {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    font-size: 14pt;
+    font-weight: bold;
+    color: #ffff00;
+}
+
