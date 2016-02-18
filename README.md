@@ -26,9 +26,13 @@ At the moment only the following basics are implemented:
 
 To run CljSketch, it's online at
 
-http://embeepea.github.com/cljsketch
+http://sketch.geomtech.com
   
-just point your browser to that URL.  Or, to run a local copy:
+just point your browser to that URL.  If you login with your Google
+account you can save any diagrams you create and return to the site
+later and load them.
+
+If you want to run a local copy:
 
   1. clone the repo
   2. point your browser to `resources/public/index.html`
