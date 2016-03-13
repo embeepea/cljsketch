@@ -14,12 +14,12 @@
 ;;
 ;; Each IRefGeom is associated with a specific kind of IGeom, and it can be
 ;; converted at any point to an instance of that IGeom record by calling its
-;; 'toGeom' method.
+;; 'geom' method.
 
 (defprotocol IRefGeom
   ;; geommap is a map associating refgeoms to geoms; use it to get the
   ;; geoms for this refgeom's dependencies
-  (toGeom [this geommap] "return a geom for this refgeom")
+  (geom [this geommap] "return a geom for this refgeom")
   (deps [this] "return a sequence of atoms referring to the objects
     (Geoms or RefGeoms) that this RefGeom depends on")
   (geom-type [this] "return the underlying IGeom type for this IRefGeom object")
@@ -35,7 +35,7 @@
   IRefGeom
   (deps [this] ())
   (geom-type [this] g/Point)
-  (toGeom [this geommap] (g/Point. p))
+  (geom [this geommap] (g/Point. p))
   (serialize [this atommap]
         (let [[x y] p] [:point x  y]))
   )
@@ -46,7 +46,7 @@
   IRefGeom
   (deps [this] [pt0 pt1])
   (geom-type [this] g/Segment)
-  (toGeom [this geommap]
+  (geom [this geommap]
     (let [gpt0 (:p (geommap pt0))
           gpt1 (:p (geommap pt1))]
       (g/Segment. (gpt0 0) (gpt0 1) (gpt1 0) (gpt1 1))))
@@ -59,7 +59,7 @@
   IRefGeom
   (deps [this] [pt0 pt1])
   (geom-type [this] g/Line)
-  (toGeom [this geommap]
+  (geom [this geommap]
     (let [p0 (v/toProjectiveVector (v/AffineVector. (:p (geommap pt0))))
           p1 (v/toProjectiveVector (v/AffineVector. (:p (geommap pt1))))]
       (g/Line. (v/point-point-line p0 p1))))
@@ -82,7 +82,7 @@
   IRefGeom
   (deps [this] [pt ln-sg])
   (geom-type [this] g/Line)
-  (toGeom [this geommap]
+  (geom [this geommap]
     (let [ptv  (v/toProjectiveVector (v/AffineVector. (:p (geommap pt))))
           lnv  (lineal-projective-vector geommap ln-sg)]
       (g/Line. (v/point-line-perpendicular ptv lnv))))
@@ -95,7 +95,7 @@
   IRefGeom
   (deps [this] [pt ln-sg])
   (geom-type [this] g/Line)
-  (toGeom [this geommap]
+  (geom [this geommap]
     (let [ptv  (v/toProjectiveVector (v/AffineVector. (:p (geommap pt))))
           lnv  (lineal-projective-vector geommap ln-sg)]
       (g/Line. (v/point-line-parallel ptv lnv))))
@@ -108,7 +108,7 @@
   IRefGeom
   (deps [this] [ln0 ln1])
   (geom-type [this] g/Point)
-  (toGeom [this geommap]
+  (geom [this geommap]
     (let [lnv0  (:u (geommap ln0))
           lnv1  (:u (geommap ln1))
           c     (v/line-line-intersection lnv0 lnv1)]
@@ -122,7 +122,7 @@
   IRefGeom
   (deps [this] [sg])
   (geom-type [this] g/Point)
-  (toGeom [this geommap]
+  (geom [this geommap]
     (let [s   (geommap sg)
           x0  (:x0 s)
           y0  (:y0 s)
@@ -137,7 +137,7 @@
   IRefGeom
   (deps [this] [c p])
   (geom-type [this] g/Circle)
-  (toGeom [this geommap]
+  (geom [this geommap]
     (let [[cx cy] (:p (geommap c))
           [px py] (:p (geommap p))]
       (g/Circle. cx cy (v/vl2dist [cx cy] [px py]))))
@@ -156,7 +156,7 @@
 ;;
 (defn geommap [atoms]
   (reduce
-   (fn [gmap at] (assoc gmap at (toGeom @at gmap)))
+   (fn [gmap at] (assoc gmap at (geom @at gmap)))
    {}
    atoms))
 
