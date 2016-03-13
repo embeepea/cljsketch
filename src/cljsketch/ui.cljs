@@ -77,7 +77,11 @@
                       (b/menu-item {:on-select #(put! menu-channel [%])
                                     :key :delete}          "Delete")
                       (b/menu-item {:on-select #(put! menu-channel [%])
-                                    :key :clear-selection} "Clear Selection"))
+                                    :key :clear-selection} "Clear Selection")
+                      (b/menu-item {:on-select #(put! menu-channel [%])
+                                    :key :hide} "Hide")
+                      (b/menu-item {:on-select #(put! menu-channel [%])
+                                    :key :unhide-all} "Unhide All"))
           (b/dropdown {:title "Construct"}
                       (b/menu-item {:on-select #(put! menu-channel [%])
                                     :className (tool-disabled :segment app-state-cursor)

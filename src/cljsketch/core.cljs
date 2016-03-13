@@ -90,8 +90,9 @@
   (gr/clear-canvas @ctx (@app-state :background-color))
   (let [geommap (rg/geommap (@app-state :world))]
     (doseq [at (@app-state :world)]
-      (g/render (geommap at) @ctx (or (highlight? at) (selected? at)) ((@app-state :styles) at)
-))))
+      (let [style ((@app-state :styles) at)]
+        (when (not (:hidden style))
+          (g/render (geommap at) @ctx (or (highlight? at) (selected? at)) style))))))
 
 ;; geom is NOT an atom
 ;; add an atom referring to it to the world
@@ -210,6 +211,16 @@
     (swap! app-state assoc :world (vec (remove (set trash) (@app-state :world))))
     (clear-selection!)
     (redraw-canvas)))
+
+(defmethod menu-item-handler :hide [key]
+  (doseq [at @selection]
+    (swap! app-state assoc-in [:styles at :hidden] true))
+  (redraw-canvas))
+
+(defmethod menu-item-handler :unhide-all [key]
+  (doseq [at (:world @app-state)]
+    (swap! app-state assoc-in [:styles at :hidden] false))
+  (redraw-canvas))
 
 (defmethod menu-item-handler :segment [key]
   (construct-and-redraw (construction-tools :segment)))
