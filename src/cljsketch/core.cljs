@@ -27,13 +27,14 @@
 
 (defonce app-state (atom
  {:enabled-tools #{}
-  :color "#fff"
+  :color "#fff" ;; color to be given to newly constructed objects
   :background-color "#000"
   :mouse-tool :draw-point
   :mouse-tools [{:key :select     :label "Select"}
                 {:key :draw-point :label "Draw Point"}]
   :world [] ; vector of atoms containing refgeoms
-  :styles {}
+  :style {} ;; global style settings to be applied to every geom
+  :styles {} ;; map of specific style settings; keys are atoms, each value is a style map
   }))
 
 ; An object becomes the highlight object when the mouse is over it.
@@ -90,7 +91,7 @@
   (gr/clear-canvas @ctx (@app-state :background-color))
   (let [geommap (rg/geommap (@app-state :world))]
     (doseq [at (@app-state :world)]
-      (let [style ((@app-state :styles) at)]
+      (let [style (into (@app-state :style) ((@app-state :styles) at))]
         (when (not (:hidden style))
           (g/render (geommap at) @ctx (or (highlight? at) (selected? at)) style))))))
 
