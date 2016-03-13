@@ -217,6 +217,7 @@
 (defmethod menu-item-handler :hide [key]
   (doseq [at (@app-state :selection)]
     (swap! app-state assoc-in [:styles at :hidden] true))
+  (clear-selection!)
   (redraw-canvas))
 
 (defmethod menu-item-handler :unhide-all [key]
