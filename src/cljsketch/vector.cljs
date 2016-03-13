@@ -232,3 +232,26 @@
             perp-ln (point-line-perpendicular a ln)       ; perl-ln is the line perp to ln, through a
             d       (line-line-intersection ln perp-ln)]  ; d is the point on ln closest to a
         (l2dist2 (toAffineVector a) (toAffineVector d))))))
+
+;; compute the intersection of a line and a circle
+;; `ln` is a projective vector representing the  line
+;; c is an AffineVector representing the center of the circle
+;; r is the radius of the circle
+;; from https://en.wikipedia.org/wiki/Intersection_(Euclidean_geometry)#A_line_and_a_circle
+(defn line-circle-intersection [ln c r]
+  (let [[x0 y0] c.u
+        [a b c] (vadd ln.u [0 0 (vdot c.u [x0 y0])])
+        r2      (square r)
+        a2      (square a)
+        b2      (square b)
+        c2      (square c)
+        a2b2sum (+ a2 b2)
+        d2      (- (* r2 a2b2sum) c2)]
+    (map
+     (fn [[x y]] [(+ x x0) (+ y y0)])
+     (cond
+       (> d2 0)  (let [d (Math.sqrt d2)]
+                   [[(/ (+ (* a c) (* b d)) a2b2sum)   (/ (- (* b c) (* a d)) a2b2sum)]
+                    [(/ (- (* a c) (* b d)) a2b2sum)   (/ (+ (* b c) (* a d)) a2b2sum)]])
+       (= d2 0)  [[(/ (* a c) a2b2sum)  (/ (* b c) a2b2sum)]]
+       :else     []))))
