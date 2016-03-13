@@ -2,27 +2,43 @@
     (:require [cljsketch.vector :as v]
               [cljsketch.geom :as g]))
 
-;; IRefGeom protocol -- geometric primitives with dependencies
+;; IRefGeom protocol -- geometric objects with referential dependencies
 ;;
 ;; Provides a mechanism for representing geometric objects that
 ;; are defined in terms of (i.e. "refer to", or depend on) other geometric objects.
 ;;
-;; Each IRefGeom record has fields that hold its dependencies, each dependency being
-;; an atom whose value is an instance of an IRefGeom record.  For example, the
-;; PointPointSegment record has two fields, pt0 and pt1, storing atoms whose values
-;; are Point records giving the endpoints of a line segment.
-;;
-;; Each IRefGeom is associated with a specific kind of IGeom, and it can be
+;; Each IRefGeom record implements a rule for constructing a specific kind of geometric
+;; object in terms of other geometric objects.
+;; Each IRefGeom record is associated with a specific kind of IGeom, and it can be
 ;; converted at any point to an instance of that IGeom record by calling its
-;; 'geom' method.
+;; 'geom' method; this IGeom instance gives the "current" position of the IRefGeom
+;; object, taking into account the current position of all its dependents.
 
+
+;; each dependency being an atom whose value is an instance of an IRefGeom record.  For
+;; example, the PointPointSegment record has two fields, pt0 and pt1, storing atoms
+;; whose values are Point records giving the endpoints of a line segment.
+;;
+;; Think of each IRefGeom record as an 
+
+;; Each IRefGeom record is associated with a specific kind of IGeom record and it can be
+;; converted at any point to an instance of that IGeom record by calling its
+;; 'geom' method.  The particular value of that underlying IGeom object can change over
+;; time, depending on the locations (values) of its dependent objects.  Think of the
+;; 'geom' method as a way to 
+
+;; The IRefGeom protocol has the following methods:
 (defprotocol IRefGeom
+
+  (geom-type [this] "return the underlying IGeom type for this IRefGeom")
+
+  (geom [this geommap] "return an IGeom record instance 
+for this refgeom")
   ;; geommap is a map associating refgeoms to geoms; use it to get the
   ;; geoms for this refgeom's dependencies
-  (geom [this geommap] "return a geom for this refgeom")
+  ;; Return an
   (deps [this] "return a sequence of atoms referring to the objects
     (Geoms or RefGeoms) that this RefGeom depends on")
-  (geom-type [this] "return the underlying IGeom type for this IRefGeom object")
   (serialize [this atommap] "return a serial representation of this IRefGeom; atommap
     should be a map whose keys are IRefGeom atoms, and whose values are integer indices corresponding
     to them")
