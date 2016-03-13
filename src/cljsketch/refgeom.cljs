@@ -4,49 +4,66 @@
 
 ;; IRefGeom protocol -- geometric objects with referential dependencies
 ;;
-;; Provides a mechanism for representing geometric objects that
-;; are defined in terms of (i.e. "refer to", or depend on) other geometric objects.
+;; Provides a mechanism for representing geometric objects that are
+;; defined in terms of (i.e. "refer to", or depend on) other geometric
+;; objects.
 ;;
-;; Each IRefGeom record implements a rule for constructing a specific kind of geometric
-;; object in terms of other geometric objects.
-;; Each IRefGeom record is associated with a specific kind of IGeom, and it can be
-;; converted at any point to an instance of that IGeom record by calling its
-;; 'geom' method; this IGeom instance gives the "current" position of the IRefGeom
-;; object, taking into account the current position of all its dependents.
-
-
-;; each dependency being an atom whose value is an instance of an IRefGeom record.  For
-;; example, the PointPointSegment record has two fields, pt0 and pt1, storing atoms
-;; whose values are Point records giving the endpoints of a line segment.
+;; Each IRefGeom record implements a rule for constructing a geometric
+;; object from other geometric objects.  Each IRefGeom record is
+;; associated with a specific kind of IGeom, and it can be converted
+;; at any point to an instance of that IGeom record by calling its
+;; 'geom' method; this IGeom instance gives the "current" position of
+;; the IRefGeom object, taking into account the current position of
+;; all its dependents.
 ;;
-;; Think of each IRefGeom record as an 
+;; Each IRefGeom record has fields which store that object's
+;; dependencies; each dependency field is an atom whose value is an
+;; instance of an IRefGeom record.  For example, the PointPointSegment
+;; record has two fields, pt0 and pt1, storing atoms whose values are
+;; Point records giving the endpoints of a line segment.
 
-;; Each IRefGeom record is associated with a specific kind of IGeom record and it can be
-;; converted at any point to an instance of that IGeom record by calling its
-;; 'geom' method.  The particular value of that underlying IGeom object can change over
-;; time, depending on the locations (values) of its dependent objects.  Think of the
-;; 'geom' method as a way to 
-
-;; The IRefGeom protocol has the following methods:
 (defprotocol IRefGeom
 
   (geom-type [this] "return the underlying IGeom type for this IRefGeom")
+  ;; return value is the record type from the cljsketch.geom namespace
 
-  (geom [this geommap] "return an IGeom record instance 
-for this refgeom")
-  ;; geommap is a map associating refgeoms to geoms; use it to get the
-  ;; geoms for this refgeom's dependencies
-  ;; Return an
+  (geom [this geommap] "return an IGeom record instance for this refgeom")
+  ;; geommap is a map associating IRefGeoms to IGeoms, used to translate this
+  ;; object's dependencies into IGeoms.  See comment below.
+
   (deps [this] "return a sequence of atoms referring to the objects
     (Geoms or RefGeoms) that this RefGeom depends on")
+  
   (serialize [this atommap] "return a serial representation of this IRefGeom; atommap
     should be a map whose keys are IRefGeom atoms, and whose values are integer indices corresponding
     to them")
+  ;; returns a vector of the form [KEYWORD VALUE [...]] where KEYWORD indicates the
+  ;; IRefGeom type, and the VALUEs refer to the dependencies.
 )
 
+;; Note that the IRefGeom's 'geom' method needs to have the IGeom corresponding
+;; to the object's dependencies in order to compute the current object's IGeom.
+;; This means that conceptually the 'geom' method should work recursively, acting
+;; on each of an object's dependencies before acting on the object itself.  Since
+;; this conversion operation needs to happen many times, however, in the course of
+;; drawing the screen, detecting mouse hits, etc, the 'geom' method is implemented
+;; with the following optimization: it takes an argument 'geommap' which is a map
+;; that gives the IGeom values for any dependencies.  So rather than calling itself
+;; recursively to get the IGeom values for dependents, the 'geom' method simply
+;; looks up the dependencys' IGeom values in this map.  This obviously depends on
+;; this map having been correctly populated for all of an object's dependent objects
+;; before that object's 'geom' method can be called, but this is possible because
+;; the dependency graph cannot contain cycles.  The 'geommap' function defined towards
+;; the end of this file does this.
+
+;; unserialize converts a serialized representation of an IRefGeom into an actual
+;; IRefGeom instance.  It's implemented as a multimethod rather than a IRefGeom
+;; protocol method because it *produces* IRefGeom instances, rather than operating
+;; on them.
 (defmulti unserialize (fn [& args] (first (first args))))
 
-;; a point
+;; Point is the only IRefGeom that has no IRefGeom dependencies.  Its one field 'p' is
+;; a vector [x y] giving the coordinates of a point.
 (defrecord Point [p] 
   IRefGeom
   (deps [this] ())
@@ -160,10 +177,10 @@ for this refgeom")
   (serialize [this atommap] [:center-point-circle (atommap c)  (atommap p)]))
 (defmethod unserialize :center-point-circle [[type c p] atoms] (CenterPointCircle. (atoms c) (atoms p)))
 
-;; Take a list of atoms refering to either Geoms or RefGeoms,
+;; Take a list of atoms refering to RefGeoms,
 ;; and return a map which associates to each of those atoms
 ;; a Geom corresponding to it.  In the returned map, the keys
-;; are atoms, and the values are Geoms.
+;; are atoms, and the values are IGeoms.
 ;;
 ;; NOTE: This implementation depends critically on the assumption
 ;;       that the atoms in the incoming list are sorted topologically,
@@ -196,7 +213,6 @@ for this refgeom")
 ;; that `at` depends on, either directly or indirectly.
 ;; `at` may be either a single atom, or a sequence of atoms.
 (defn dependencies [at] (traverse-dfs #(deps @%) at))
-
 
 ;; Return a map that represents the "inverse" graph of the world,
 ;; i.e. a graph with edges going from each node to the nodes that
