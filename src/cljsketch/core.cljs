@@ -33,6 +33,7 @@
   :mouse-tools [{:key :select     :label "Select"}
                 {:key :draw-point :label "Draw Point"}]
   :world [] ; vector of atoms containing refgeoms
+  :selection [] ;; vector of currently selected objects (refgeom atoms from world vector)
   :style {} ;; global style settings to be applied to every geom
   :styles {} ;; map of specific style settings; keys are atoms, each value is a style map
   }))
@@ -50,21 +51,18 @@
 ; return true iff geom is the current highlight
 (defn highlight? [geom] (= geom @highlight))
 
-; Selection is an atom whose value is a vector of the currently
-; selected geom atoms.
-(defonce selection (atom []))
-
 ; return true iff geom is currently in the selection
-(defn selected? [geom] (some #{geom} @selection))
+(defn selected? [geom] (some #{geom} (@app-state :selection)))
 
 ; add geom to the selection, if it is not already in it
 (defn select! [geom]
-  (if (not (selected? geom)) (swap! selection #(conj % geom)))
+  (if (not (selected? geom))
+    (swap! app-state assoc :selection (conj (@app-state :selection) geom)))
   (enable-fitting-tools))
 
 ; remove geom from the selection
 (defn unselect! [geom]
-  (swap! selection (fn [selection] (vec (filter #(not (= % geom)) selection))))
+  (swap! app-state assoc :selection (vec (filter #(not (= % geom)) (@app-state :selection))))
   (enable-fitting-tools))
 
 ; toggle geom's membership in the selection
@@ -73,7 +71,10 @@
   (enable-fitting-tools))
 
 (defn clear-selection! []
-  (reset! selection [])
+  
+  ;;(reset! selection [])
+  (swap! app-state assoc :selection [])
+  
   (enable-fitting-tools))
 
 (defn draw-line [pvec t]
@@ -128,15 +129,15 @@
 
 (defn enable-fitting-tools []
   (swap! app-state assoc :enabled-tools
-         (set (filter #(c/selection-fits (construction-tools %) @selection)
+         (set (filter #(c/selection-fits (construction-tools %) (@app-state :selection))
                       (keys construction-tools)))))
 
 ;; Call construct-redraw to execute a tool and then redraw the canvas; this
 ;; is what the menu handlers call when the user picks a construction
 ;; from the menu.
 (defn construct-and-redraw [tool]
-  (when (c/selection-fits tool @selection)
-    (add-geom (c/construct tool @selection))
+  (when (c/selection-fits tool (@app-state :selection))
+    (add-geom (c/construct tool (@app-state :selection)))
     (redraw-canvas)))
 
 (defn clear-geoms [] (swap! app-state assoc :world []))
@@ -144,7 +145,7 @@
 (def mouse-tools
   {:draw-point (mt/->DrawPointTool  app-state redraw-canvas add-point clear-selection! select!)
    :select     (mt/->SelectMoveTool app-state redraw-canvas highlight! highlight
-                                    selected? select! unselect! toggle-selected! clear-selection! selection)})
+                                    selected? select! unselect! toggle-selected! clear-selection!)})
 
 (defmulti menu-item-handler identity)
 
@@ -208,13 +209,13 @@
   (redraw-canvas))
 
 (defmethod menu-item-handler :delete [key]
-  (let [trash (rg/dependents (@app-state :world) @selection)]
+  (let [trash (rg/dependents (@app-state :world) (@app-state :selection))]
     (swap! app-state assoc :world (vec (remove (set trash) (@app-state :world))))
     (clear-selection!)
     (redraw-canvas)))
 
 (defmethod menu-item-handler :hide [key]
-  (doseq [at @selection]
+  (doseq [at (@app-state :selection)]
     (swap! app-state assoc-in [:styles at :hidden] true))
   (redraw-canvas))
 
@@ -245,7 +246,7 @@
   (construct-and-redraw (construction-tools :circle)))
 
 (defmethod menu-item-handler :color [key color]
-  (doseq [at @selection]
+  (doseq [at (@app-state :selection)]
     (swap! app-state assoc-in [:styles at] { :color color }))
   (swap! app-state assoc :color color)
   (redraw-canvas))

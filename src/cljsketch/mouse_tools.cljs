@@ -38,7 +38,7 @@
              (rest gs)))))))
 
 (defrecord SelectMoveTool [app-state redraw-canvas highlight! highlight
-                           selected? select! unselect! toggle-selected! clear-selection! selection]
+                           selected? select! unselect! toggle-selected! clear-selection!]
   MouseTool
   (handle-event [this event state]
     (if (= state nil) (recur this event {:button-state :down})
@@ -76,7 +76,7 @@
                                                  :highlight-selected true
                                                  :geom-drag-base (geom-drag-base (rg/dependencies @highlight) (:geom-drag-base state)))))
                                  (let [offset (v/vsub (:coords event) (:drag-base state))
-                                       ds (rg/dependencies @selection)
+                                       ds (rg/dependencies (@app-state :selection))
                                        ]
                                    (each ds #(drag-geom! % offset))
                                    (redraw-canvas)
@@ -89,7 +89,7 @@
                         {:drag-base (:coords event)
                          :button-state :down
                          :dragged false
-                         :geom-drag-base  (geom-drag-base (rg/dependencies @selection) {})})
+                         :geom-drag-base  (geom-drag-base (rg/dependencies (@app-state :selection)) {})})
 
             #{:up
               :enter
