@@ -55,6 +55,14 @@
 (defn tool-disabled [key app-state-cursor]
   (when (not ((:enabled-tools app-state-cursor) key)) "disabled"))
 
+(defn disabled-if-selection-empty [app-state-cursor]
+  (if (empty? (app-state-cursor :selection))
+    "disabled" ""))
+
+(defn disabled-if-nothing-hidden [app-state-cursor]
+  (if (some (fn [[k v]] (:hidden v)) (app-state-cursor :styles))
+    "" "disabled"))
+
 (defn app-navbar [app-state-cursor component]
   (reify
     om/IRenderState
@@ -75,12 +83,16 @@
                                     :key :save} "Save..."))
           (b/dropdown {:title "Edit"}
                       (b/menu-item {:on-select #(put! menu-channel [%])
+                                    :className (disabled-if-selection-empty app-state-cursor)
                                     :key :delete}          "Delete")
                       (b/menu-item {:on-select #(put! menu-channel [%])
+                                    :className (disabled-if-selection-empty app-state-cursor)
                                     :key :clear-selection} "Clear Selection")
                       (b/menu-item {:on-select #(put! menu-channel [%])
+                                    :className (disabled-if-selection-empty app-state-cursor)
                                     :key :hide} "Hide")
                       (b/menu-item {:on-select #(put! menu-channel [%])
+                                    :className (disabled-if-nothing-hidden app-state-cursor)
                                     :key :unhide-all} "Unhide All"))
           (b/dropdown {:title "Construct"}
                       (b/menu-item {:on-select #(put! menu-channel [%])
