@@ -1,5 +1,8 @@
 (ns cljsketch.canvas-graphics)
 
+;; This namespace provides several cljs-friendly convenience
+;; functions for working with the HTML5 Canvas API.
+
 (defn clear-canvas [ctx color]
   (let [w (-> ctx .-canvas .-width)
         h (-> ctx .-canvas .-height)]

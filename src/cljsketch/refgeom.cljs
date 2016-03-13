@@ -2,6 +2,20 @@
     (:require [cljsketch.vector :as v]
               [cljsketch.geom :as g]))
 
+;; IRefGeom protocol -- geometric primitives with dependencies
+;;
+;; Provides a mechanism for representing geometric objects that
+;; are defined in terms of (i.e. "refer to", or depend on) other geometric objects.
+;;
+;; Each IRefGeom record has fields that hold its dependencies, each dependency being
+;; an atom whose value is an instance of an IRefGeom record.  For example, the
+;; PointPointSegment record has two fields, pt0 and pt1, storing atoms whose values
+;; are Point records giving the endpoints of a line segment.
+;;
+;; Each IRefGeom is associated with a specific kind of IGeom, and it can be
+;; converted at any point to an instance of that IGeom record by calling its
+;; 'toGeom' method.
+
 (defprotocol IRefGeom
   ;; geommap is a map associating refgeoms to geoms; use it to get the
   ;; geoms for this refgeom's dependencies

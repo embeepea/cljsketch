@@ -2,15 +2,25 @@
     (:require [cljsketch.vector :as v]
               [cljsketch.canvas-graphics :as gr]))
 
+;; IGeom protocol -- low level geometric primitives
+;;
+;; Provides a basic mechanism for representing and drawing
+;; geometric objects in the plane.  At this level, objects do not depend
+;; on other objects --- each object just has numeric coordinates that define
+;; it, and a 'render' method for drawing it in a canvas, and a 'point-distance2'
+;; method for computing the distance (squared) between it and a given point.
+
 (defprotocol IGeom
   (render [this ctx highlighted? style] "render this geom in the given graphics context")
   (point-distance2 [this [x y]] "return the square of the distance from this object to point [x y]")
 )
 
+;; the null object -- used to represent nonexistent points (e.g. intersection
+;; of two lines that don't intersect)
 (defrecord Null []
   IGeom
-  (render [this ctx highlighted? style])
-  (point-distance2 [this [x y]] 1e25))
+  (render [this ctx highlighted? style]) ;; empty render function
+  (point-distance2 [this [x y]] 1e25))   ;; "infinite" distance from everything
 
 (defrecord Point [p]
   IGeom
