@@ -56,12 +56,12 @@
   (when (not ((:enabled-tools app-state-cursor) key)) "disabled"))
 
 (defn disabled-if-selection-empty [app-state-cursor]
-  (if (empty? (app-state-cursor :selection))
-    "disabled" ""))
+  (when (empty? (app-state-cursor :selection))
+    "disabled"))
 
 (defn disabled-if-nothing-hidden [app-state-cursor]
-  (if (some (fn [[k v]] (:hidden v)) (app-state-cursor :styles))
-    "" "disabled"))
+  (if (not (some (fn [[k v]] (:hidden v)) (app-state-cursor :styles)))
+    "disabled"))
 
 (defn app-navbar [app-state-cursor component]
   (reify

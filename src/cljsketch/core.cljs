@@ -220,10 +220,18 @@
   (clear-selection!)
   (redraw-canvas))
 
+(defn hidden-objects []
+  (let [styles (@app-state :styles)]
+    (filter #(:hidden (styles %)) (keys styles))))
+
 (defmethod menu-item-handler :unhide-all [key]
-  (doseq [at (:world @app-state)]
-    (swap! app-state assoc-in [:styles at :hidden] false))
-  (redraw-canvas))
+  (let [hiddens (hidden-objects)]
+    (println hiddens)
+    (clear-selection!)
+    (doall (map select! hiddens))
+    (doseq [at hiddens]
+      (swap! app-state assoc-in [:styles at :hidden] false))
+  (redraw-canvas)))
 
 (defmethod menu-item-handler :segment [key]
   (construct-and-redraw (construction-tools :segment)))
