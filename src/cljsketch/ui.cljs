@@ -220,13 +220,18 @@
                                :visible? (app-state :opening)}
 
                               (apply (partial d/div nil)
-                                     (map #(d/div {:class "sketch-item"
-                                                   :on-click (fn []
-                                                               (put! (:menu-channel state)
-                                                                     [:confirm-open %]))}
-                                                  %) (app-state :open-sketch-names)))
-
-                              )
+                                     (map
+                                      #(d/div (d/div {:class "sketch-item"
+                                                      :on-click (fn []
+                                                                  (put! (:menu-channel state)
+                                                                        [:confirm-open %]))}
+                                                     %)
+                                              (b/button
+                                               {:class "delete-sketch"
+                                                :on-click (fn [e] (put! (:menu-channel state) [:delete-sketch %]))}
+                                               (d/span {:class "glyphicon glyphicon-remove"})))
+                                      (app-state :open-sketch-names)
+                                      )))
 
                     (d/div #js {:ref "navbar-wrapper"}
                            (om/build app-navbar app-state

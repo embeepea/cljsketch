@@ -186,6 +186,16 @@
                                       :opening false))
                   }))
 
+(defmethod menu-item-handler :delete-sketch [key sketch-name]
+  (.ajax js/$ #js{
+                  "url" "/delete-sketch"
+                  "data" #js{:name sketch-name}
+                  "dataType" "json"
+                  "method" "POST"
+                  "success"  (fn [data status]
+                               (menu-item-handler :open))
+                  }))
+
 (defmethod menu-item-handler :save [key] (swap! app-state assoc :saving true))
 
 (defmethod menu-item-handler :cancel-save [key] (swap! app-state assoc :saving false))
