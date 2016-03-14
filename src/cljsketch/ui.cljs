@@ -181,6 +181,17 @@
   (let [node (om/get-node owner "input")]
     (om/transact! app-state :sketch-name (fn [] (.-value node)))))
 
+
+(defn get-size []
+  (let [navbar-wrapper-height (.-offsetHeight
+                               (aget (.getElementsByClassName js/document "navbar-wrapper") 0))
+        [w h]                 (current-window-size)]
+    [w (- h navbar-wrapper-height)]))
+
+(defn set-wh! [obj [w h]]
+  (set! (.-width obj) w)
+  (set! (.-height obj) h))
+
 (defn launch [app-state id run-app]
   (letfn
       [(app [app-state component]
@@ -233,7 +244,7 @@
                                       (app-state :open-sketch-names)
                                       )))
 
-                    (d/div #js {:ref "navbar-wrapper"}
+                    (d/div #js {:ref "navbar-wrapper" :className "navbar-wrapper"}
                            (om/build app-navbar app-state
                                      {:init-state state}))
                     (om/build app-buttonbar app-state {:init-state state})
@@ -245,6 +256,7 @@
            om/IDidMount
            (did-mount [c]
              (let [canvas                (om/get-node component "canvas")
+                   ctx                   (.getContext canvas "2d")
                    navbar-wrapper-height (.-offsetHeight
                                           (om/get-node component "navbar-wrapper"))
                    [w h]                 (current-window-size)
@@ -265,11 +277,18 @@
                (events/listen
                 canvas events/EventType.MOUSELEAVE
                 (mouse-handler :leave mouse-channel))
-               (set! (.-width canvas) w)
-               (set! (.-height canvas) (- h navbar-wrapper-height))
-               (run-app (.getContext canvas "2d")
-                        menu-channel
-                        mouse-channel)
-               ))
-           ))]
+               ;;(set! (.-width canvas) w)
+               ;;(set! (.-height canvas) (- h navbar-wrapper-height))
+               ;;(set-size canvas)
+               (set-wh! canvas (get-size))
+               (let [redraw-canvas (run-app ctx
+                                            menu-channel
+                                            mouse-channel)]
+                 (.addEventListener js/window "resize"
+                                    (fn []
+                                      (let [[w h] (get-size)]
+                                        (set-wh! canvas [w h])
+                                        (set-wh! ctx [w h])
+                                        (redraw-canvas)
+                                        ))))))))]
     (om/root app app-state {:target (. js/document (getElementById id))})))

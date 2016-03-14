@@ -293,6 +293,9 @@
         (let [mouse-event (<! mouse-channel)]
           (recur (mt/handle-event
                   (mouse-tools (@app-state :mouse-tool)) mouse-event state)))))
+  redraw-canvas
+  ;; run-app returns the redraw-canvas method so that the ui (who
+  ;; invokes run-app) can call it when the screen size changes
   )
 
 (ui/launch app-state "app" run-app)
