@@ -69,7 +69,7 @@
     (render-state [this state]
       (let [menu-channel (:menu-channel state)]
         (n/navbar
-         {:brand (d/a {:href "#"} "Cljsketch")}
+         {:brand (d/a {:href "#"} (app-state-cursor :sketch-name))}
          (n/nav
           {:collapsible? true}
           (b/dropdown {:title "File"}

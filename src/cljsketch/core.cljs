@@ -140,7 +140,7 @@
     (add-geom (c/construct tool (@app-state :selection)))
     (redraw-canvas)))
 
-(defn clear-geoms [] (swap! app-state assoc :world []))
+(defn clear-geoms [] (swap! app-state assoc :world [] :styles {} :sketch-name nil))
 
 (def mouse-tools
   {:draw-point (mt/->DrawPointTool  app-state redraw-canvas add-point clear-selection! select!)
