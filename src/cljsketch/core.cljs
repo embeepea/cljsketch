@@ -99,13 +99,20 @@
             [e1x e1y] (:u e1)]
         (gr/draw-line @ctx e0x e0y e1x e1y t)))))
 
+(defn render-geom [a geommap]
+  (let [style (into (@app-state :style) ((@app-state :styles) a))]
+    (when (not (:hidden style))
+      (g/render (geommap a) @ctx (or (highlight? a) (selected? a)) style))))
+
+
 (defn redraw-canvas []
   (gr/clear-canvas @ctx (@app-state :background-color))
   (let [geommap (rg/geommap (@app-state :world))]
-    (doseq [at (@app-state :world)]
-      (let [style (into (@app-state :style) ((@app-state :styles) at))]
-        (when (not (:hidden style))
-          (g/render (geommap at) @ctx (or (highlight? at) (selected? at)) style))))))
+    ;; first doseq draws all the non-points, second one draws the points; we draw the points last
+    ;; to make sure they appear on top
+    (doseq [a (filter #(not= (rg/geom-type @%) g/Point) (@app-state :world)) ] (render-geom a geommap))
+    (doseq [a (filter #(=    (rg/geom-type @%) g/Point) (@app-state :world)) ] (render-geom a geommap))
+    ))
 
 ;; geom is NOT an atom
 ;; add an atom referring to it to the world
