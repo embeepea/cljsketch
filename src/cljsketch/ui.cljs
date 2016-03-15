@@ -301,8 +301,10 @@
                                         (put! menu-channel [:minus])
                                         (= (.-charCode e) 127)
                                         (put! menu-channel [:delete])
-                                        ;;:else
-                                        ;;(.log js/console e)
+                                        (= (.-charCode e) 100)
+                                        (put! menu-channel [:delete])
+;;                                        :else
+;;                                        (.log js/console e)
                                         )))
 
 
