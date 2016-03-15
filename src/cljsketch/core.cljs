@@ -25,6 +25,12 @@
 
 (def ctx (atom {}))
 
+(def style-size-keywords [:point-fill-radius
+                          :point-highlight-circle-radius
+                          :point-highlight-circle-thickness
+                          :line-thickness
+                          :line-highlight-thickness])
+
 (defonce app-state (atom
  {:enabled-tools #{}
   :color "#fff" ;; color to be given to newly constructed objects
@@ -34,7 +40,12 @@
                 {:key :draw-point :label "Draw Point"}]
   :world [] ; vector of atoms containing refgeoms
   :selection [] ;; vector of currently selected objects (refgeom atoms from world vector)
-  :style {} ;; global style settings to be applied to every geom
+  :style { ;; global style settings to be applied to every geom
+          :point-fill-radius                4
+          :point-highlight-circle-radius    7
+          :point-highlight-circle-thickness 1
+          :line-thickness                   1
+          :line-highlight-thickness         3}
   :styles {} ;; map of specific style settings; keys are atoms, each value is a style map
   }))
 
@@ -278,6 +289,19 @@
 
 (defmethod menu-item-handler :select [key]
   (swap! app-state assoc :mouse-tool :select))
+
+(defmethod menu-item-handler :minus [key]
+  (let [style (@app-state :style)]
+    (when (> (apply min (map #(style %) style-size-keywords)) 0)
+      (doseq [k style-size-keywords]
+        (swap! app-state assoc-in [:style k] (dec (style k))))
+      (redraw-canvas))))
+
+(defmethod menu-item-handler :plus [key]
+  (let [style (@app-state :style)]
+    (doseq [k style-size-keywords]
+      (swap! app-state assoc-in [:style k] (inc (style k)))))
+  (redraw-canvas))
 
 (defmethod menu-item-handler :default [key]
   (println (str "menu-item " key)))

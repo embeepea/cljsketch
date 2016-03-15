@@ -290,5 +290,18 @@
                                         (set-wh! canvas [w h])
                                         (set-wh! ctx [w h])
                                         (redraw-canvas)
-                                        ))))))))]
+                                        )))
+
+                 (.addEventListener js/window "keypress"
+                                    (fn [e]
+                                      (cond
+                                        (= (.-charCode e) 43)
+                                        (put! menu-channel [:plus])
+                                        (= (.-charCode e) 45)
+                                        (put! menu-channel [:minus]))))
+;;                                        :else
+;;                                        (.log js/console e)))dd)
+
+
+                 )))))]
     (om/root app app-state {:target (. js/document (getElementById id))})))

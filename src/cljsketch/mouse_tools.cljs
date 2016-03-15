@@ -7,7 +7,7 @@
   (handle-event [this event state] "Handle a mouse event")
 )
 
-(def mouse-threshold 24)
+(def mouse-threshold 36)
 
 ;; The g< function defines an ordering among geom types that's used
 ;; in deciding which geom to favor in situations where there are multiple
