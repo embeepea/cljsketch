@@ -298,9 +298,12 @@
                                         (= (.-charCode e) 43)
                                         (put! menu-channel [:plus])
                                         (= (.-charCode e) 45)
-                                        (put! menu-channel [:minus]))))
-;;                                        :else
-;;                                        (.log js/console e)))dd)
+                                        (put! menu-channel [:minus])
+                                        (= (.-charCode e) 127)
+                                        (put! menu-channel [:delete])
+                                        ;;:else
+                                        ;;(.log js/console e)
+                                        )))
 
 
                  )))))]
